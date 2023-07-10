@@ -1,10 +1,7 @@
 import asyncHandler from "express-async-handler";
-import { PrismaClient } from "@prisma/client";
-
 import { loginUserSchema, registerUserSchema } from "../models/userModel.js";
 import { generateToken, hashPassword, unHashPassword } from "../utils/index.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "./index.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = registerUserSchema.parse(
