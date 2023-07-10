@@ -213,6 +213,10 @@ Content-Type: application/json
 
 N'hésitez pas à utiliser ces exemples pour tester l'API SGFL et explorer ses fonctionnalités.
 
+## Déploiement de l'API
+
+L'API SGFL est également déployée et accessible via le lien suivant : [https://sgfl.onrender.com](https://sgfl.onrender.com). Vous pouvez utiliser cette version déployée pour tester l'API sans avoir à configurer localement le serveur.
+
 ## Conclusion
 
 Félicitations ! Vous avez maintenant accès à l'API de l'application SGFL et vous savez comment la configurer et l'utiliser pour développer la partie frontend. N'hésitez pas à consulter les fichiers de code source du projet SGFL pour plus d'exemples et de détails sur les fonctionnalités de l'API.
