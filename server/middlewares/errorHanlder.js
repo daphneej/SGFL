@@ -11,7 +11,7 @@ export function notFound(req, res, next) {
 export function zodErrorHandler(err, req, res, next) {
   if (err instanceof z.ZodError) {
     res.status(400).json({
-      message: err.issues.at(0).message,
+      message: err.issues[0].message,
     });
   } else {
     next(err);
