@@ -1,4 +1,3 @@
-// middlewares.js
 import { z } from "zod";
 
 // 404 Not Found middleware
@@ -12,8 +11,7 @@ export function notFound(req, res, next) {
 export function zodErrorHandler(err, req, res, next) {
   if (err instanceof z.ZodError) {
     res.status(400).json({
-      message: "Validation Error",
-      errors: err.errors.map((error) => error.message),
+      message: err.issues[0].message,
     });
   } else {
     next(err);
