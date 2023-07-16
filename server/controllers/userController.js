@@ -1,27 +1,39 @@
 import asyncHandler from "express-async-handler";
-import { loginUserSchema, registerUserSchema } from "../models/userModel.js";
+
+import {
+  loginUserSchema,
+  registerUserSchema,
+  updateUserSchema,
+} from "../models/userModel.js";
+
 import { generateToken, hashPassword, unHashPassword } from "../utils/index.js";
+
 import { prisma } from "./index.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password } = registerUserSchema.parse(
-    req.body
-  );
+  const { email, password } = registerUserSchema.parse(req.body);
 
-  const hashedPassword = await hashPassword(password);
+  if (
+    await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    })
+  ) {
+    res.status(409);
+    throw new Error("Le compte existe déjà");
+  }
 
   const user = await prisma.user.create({
     data: {
-      firstName,
-      lastName,
       email,
-      password: hashedPassword,
+      password: await hashPassword(password),
     },
   });
 
   delete user.password;
 
-  const token = generateToken({ id: user.id });
+  const token = generateToken({ id: user.id, role: user.role });
 
   res
     .cookie("jwt", token, {
@@ -46,7 +58,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   delete user.password;
 
-  const token = generateToken({ id: user.id });
+  const token = generateToken({ id: user.id, role: user.role });
 
   res
     .cookie("jwt", token, {
@@ -70,11 +82,10 @@ export const logOutUser = asyncHandler(async (req, res) => {
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-  // Retrieve the user ID from the protected route middleware
-  const userId = req.id;
+  const { id } = req.credentials;
 
   const user = await prisma.user.findFirst({
-    where: { id: userId },
+    where: { id },
   });
 
   if (!user) {
@@ -88,11 +99,20 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const updateUser = asyncHandler(async (req, res) => {
-  const userId = req.id;
+  const { id } = req.credentials;
 
-  const { firstName, lastName, email, password } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    gender,
+    address,
+    phone,
+    status,
+  } = updateUserSchema.parse(req.body);
 
-  const user = await prisma.user.findFirst({ where: { id: userId } });
+  const user = await prisma.user.findFirst({ where: { id } });
 
   if (!user) {
     res.status(404);
@@ -105,6 +125,10 @@ export const updateUser = asyncHandler(async (req, res) => {
       firstName: firstName ? firstName : user.firstName,
       lastName: lastName ? lastName : user.lastName,
       email: email ? email : user.email,
+      gender: gender ? gender : user.gender,
+      address: address ? address : user.address,
+      phone: phone ? phone : user.phone,
+      status: status ? status : user.status,
       password: password ? await hashPassword(password) : user.password,
     },
   });
@@ -115,9 +139,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {
-  const userId = req.id;
+  const { id } = req.credentials;
 
-  const user = await prisma.user.findFirst({ where: { id: userId } });
+  const user = await prisma.user.findFirst({ where: { id } });
 
   if (!user) {
     res.status(404);
