@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext.jsx";
+import { apiUrl } from "./index.js";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,7 @@ const useAuth = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/register`, {
+      const response = await fetch(`${apiUrl}/api/users/register`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -42,7 +43,7 @@ const useAuth = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/login`, {
+      const response = await fetch(`${apiUrl}/api/users/login`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -73,7 +74,7 @@ const useAuth = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/logout`, {
+      const response = await fetch(`${apiUrl}/api/users/logout`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -96,7 +97,7 @@ const useAuth = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/update`, {
+      const response = await fetch(`${apiUrl}/api/users/update`, {
         method: "PUT",
         headers: {
           accept: "application/json",

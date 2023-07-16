@@ -53,8 +53,8 @@ const Profile = () => {
   }, [errorMessage, successMessage]);
 
   return (
-    <div className="flex-1 flex justify-center">
-      <div className="flex flex-col mt-8">
+    <div className="w-screen min-h-[36rem] md:h-screen flex flex-col p-4 py-8">
+      <div className="flex flex-col items-center mt-4 md:mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Profile</h1>
 
         <form className="w-96 flex flex-col gap-3" onSubmit={handleUpdateUser}>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { apiUrl } from "./index.js";
 
 const useCourse = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +11,7 @@ const useCourse = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/courses`, {
+      const response = await fetch(`${apiUrl}/api/courses`, {
         method: "GET",
         headers: {
           accept: "application/json",
