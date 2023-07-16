@@ -10,7 +10,9 @@ export const protectRoutes = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    req.credentials = jwt.verify(token, process.env.JWT_SECRET);
+    const credentials = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.credentials = credentials;
 
     next();
   } catch (error) {
