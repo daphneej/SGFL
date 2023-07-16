@@ -35,15 +35,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   const token = generateToken({ id: user.id, role: user.role });
 
-  res
-    .cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    })
-    .status(201)
-    .json(user);
+  res.status(201).json({ user, token });
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -60,25 +52,11 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const token = generateToken({ id: user.id, role: user.role });
 
-  res
-    .cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    })
-    .status(200)
-    .json(user);
+  res.status(200).json({ user, token });
 });
 
 export const logOutUser = asyncHandler(async (req, res) => {
-  res
-    .cookie("jwt", "", {
-      httpOnly: true,
-      expires: new Date(0),
-    })
-    .status(200)
-    .send();
+  res.status(200).send();
 });
 
 export const getUser = asyncHandler(async (req, res) => {

@@ -49,10 +49,10 @@ const Home = () => {
                       <iframe
                         width="100%"
                         height="100%"
-                        src="https://www.youtube.com/embed/GEogN8Kd6-s"
+                        // src="https://www.youtube.com/embed/GEogN8Kd6-s"
                         title="Speak American English in 30 Minutes: Advanced Pronunciation Lesson"
                         frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
                         allowFullScreen={true}
                         loading={"lazy"}
                       ></iframe>

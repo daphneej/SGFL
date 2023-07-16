@@ -67,7 +67,7 @@ const Register = () => {
         <h1 className="font-bold text-2xl uppercase my-4">Inscription</h1>
 
         <form
-          className="flex flex-col w-96 gap-3"
+          className="flex flex-col w-full md:w-96 gap-3"
           onSubmit={handleRegisterUser}
         >
           <input

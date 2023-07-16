@@ -28,8 +28,11 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: "SET_USER", payload: data.user });
+
+        dispatch({ type: "SET_TOKEN", payload: data.token });
+        localStorage.setItem("token", JSON.stringify(data.token));
         setSuccessMessage("Votre compte a été crée avec succès");
       }
     } catch (error) {
@@ -59,8 +62,11 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: "SET_USER", payload: data.user });
+
+        dispatch({ type: "SET_TOKEN", payload: data.token });
+        localStorage.setItem("token", JSON.stringify(data.token));
         setSuccessMessage("L'utilisateur a été authentifié avec succès");
       }
     } catch (error) {
@@ -70,7 +76,7 @@ const useAuth = () => {
     }
   };
 
-  const logoutUser = async () => {
+  const logoutUser = async (token) => {
     setIsLoading(true);
 
     try {
@@ -79,12 +85,16 @@ const useAuth = () => {
         headers: {
           accept: "application/json",
           "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.ok) {
         localStorage.removeItem("user");
         dispatch({ type: "SET_USER", payload: null });
+
+        localStorage.removeItem("token");
+        dispatch({ type: "SET_TOKEN", payload: null });
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -93,7 +103,7 @@ const useAuth = () => {
     }
   };
 
-  const updateUser = async (user) => {
+  const updateUser = async (user, token) => {
     setIsLoading(true);
 
     try {
@@ -102,6 +112,7 @@ const useAuth = () => {
         headers: {
           accept: "application/json",
           "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(user),
       });

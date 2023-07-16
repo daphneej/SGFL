@@ -66,7 +66,10 @@ const Login = () => {
       <div className="flex flex-col items-center mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Connexion</h1>
 
-        <form className="flex flex-col w-96 gap-3" onSubmit={handleLoginUser}>
+        <form
+          className="flex flex-col w-full md:w-96 gap-3"
+          onSubmit={handleLoginUser}
+        >
           <input
             value={inputs.email}
             onChange={(e) =>

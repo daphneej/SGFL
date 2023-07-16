@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 
 export const protectRoutes = asyncHandler(async (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.headers.authorization.split(" ")[1];
 
   if (!token) {
     res.status(401);

@@ -3,11 +3,11 @@ import { useAppContext } from "../context/AppContext.jsx";
 import useAuth from "../hooks/useAuth.js";
 
 const Navbar = () => {
-  const { user } = useAppContext();
+  const { user, token } = useAppContext();
   const { logoutUser } = useAuth();
 
   const handleLogOutUser = async () => {
-    await logoutUser();
+    await logoutUser(token);
   };
 
   return (

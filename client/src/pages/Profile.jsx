@@ -10,7 +10,7 @@ const GENDERS = ["M", "F"];
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { user } = useAppContext();
+  const { user, token } = useAppContext();
   const { isLoading, errorMessage, successMessage, updateUser } = useAuth();
 
   const [inputs, setInputs] = useState({
@@ -31,7 +31,7 @@ const Profile = () => {
 
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-    await updateUser(inputs);
+    await updateUser(inputs, token);
 
     if (errorMessage) {
       toast.error(errorMessage);
@@ -57,7 +57,10 @@ const Profile = () => {
       <div className="flex flex-col items-center mt-4 md:mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Profile</h1>
 
-        <form className="w-96 flex flex-col gap-3" onSubmit={handleUpdateUser}>
+        <form
+          className="w-full md:w-96 flex flex-col gap-3"
+          onSubmit={handleUpdateUser}
+        >
           <input
             value={inputs.firstName}
             onChange={(e) =>
