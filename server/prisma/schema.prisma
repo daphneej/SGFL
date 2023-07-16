@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,25 +8,9 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-  id             Int      @id @default(autoincrement())
-  firstName      String
-  lastName       String
-  email          String   @unique
-  password       String
-  role           Role     @default(USER)
-  courses        Course[] @relation("StudentCourses")
-  createdCourses Course[] @relation("TrainerCourses")
-}
-
-model Course {
-  id          Int    @id @default(autoincrement())
-  title       String
-  description String
-  price       Float
-  trainer     User   @relation("TrainerCourses", fields: [trainerId], references: [id])
-  trainerId   Int
-  students    User[] @relation("StudentCourses")
+enum Status {
+  ACTIVE
+  INACTIVE
 }
 
 enum Role {
@@ -37,4 +18,31 @@ enum Role {
   STUDENT
   TRAINER
   ADMIN
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  firstName       String?
+  lastName        String?
+  email           String   @unique
+  password        String
+  gender          String?
+  address         String?
+  phone           String?  @unique
+  status          Status   @default(ACTIVE)
+  role            Role     @default(USER)
+  createdCourses  Course[] @relation("TrainerCourses")
+  enrolledCourses Course[] @relation("StudentCourses")
+}
+
+model Course {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  trainerId   Int?
+  trainer     User?  @relation("TrainerCourses", fields: [trainerId], references: [id])
+  students    User[] @relation("StudentCourses")
+
+  @@index([trainerId])
 }

@@ -17,7 +17,16 @@ export const createCourse = asyncHandler(async function (req, res) {
 });
 
 export const getCourses = asyncHandler(async function (req, res) {
-  const courses = await prisma.course.findMany();
+  const courses = await prisma.course.findMany({
+    include: {
+      trainer: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
   res.status(200).json(courses);
 });
 

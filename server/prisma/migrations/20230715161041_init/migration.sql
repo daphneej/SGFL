@@ -1,13 +1,18 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `firstName` VARCHAR(191) NOT NULL,
-    `lastName` VARCHAR(191) NOT NULL,
+    `firstName` VARCHAR(191) NULL,
+    `lastName` VARCHAR(191) NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
+    `gender` VARCHAR(191) NULL,
+    `address` VARCHAR(191) NULL,
+    `phone` VARCHAR(191) NULL,
+    `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
     `role` ENUM('USER', 'STUDENT', 'TRAINER', 'ADMIN') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `User_phone_key`(`phone`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -19,6 +24,7 @@ CREATE TABLE `Course` (
     `price` DOUBLE NOT NULL,
     `trainerId` INTEGER NOT NULL,
 
+    INDEX `Course_trainerId_idx`(`trainerId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -30,12 +36,3 @@ CREATE TABLE `_StudentCourses` (
     UNIQUE INDEX `_StudentCourses_AB_unique`(`A`, `B`),
     INDEX `_StudentCourses_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- AddForeignKey
-ALTER TABLE `Course` ADD CONSTRAINT `Course_trainerId_fkey` FOREIGN KEY (`trainerId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_StudentCourses` ADD CONSTRAINT `_StudentCourses_A_fkey` FOREIGN KEY (`A`) REFERENCES `Course`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_StudentCourses` ADD CONSTRAINT `_StudentCourses_B_fkey` FOREIGN KEY (`B`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

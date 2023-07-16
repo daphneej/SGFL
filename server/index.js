@@ -42,5 +42,5 @@ app.use(errorHandler);
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+  console.log(`Server is listening on http://localhost:${port}`);
 });

@@ -13,7 +13,7 @@ const router = Router();
 
 // Define routes
 router.post("/", protectRoutes, createCourse);
-router.get("/", protectRoutes, getCourses);
+router.get("/", getCourses);
 router.get("/:id", protectRoutes, getCourse);
 router.put("/:id", protectRoutes, updateCourse);
 router.delete("/:id", protectRoutes, deleteCourse);
