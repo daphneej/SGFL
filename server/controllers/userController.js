@@ -95,6 +95,8 @@ export const getUser = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
+  const parsedUser = updateUserSchema.parse(req.body);
+
   const {
     firstName,
     lastName,
@@ -104,7 +106,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     address,
     phone,
     status,
-  } = updateUserSchema.parse(req.body);
+  } = parsedUser;
 
   const user = await prisma.user.findFirst({ where: { id } });
 
@@ -135,14 +137,17 @@ export const updateUser = asyncHandler(async (req, res) => {
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
     data: {
-      firstName: firstName ? firstName : user.firstName,
-      lastName: lastName ? lastName : user.lastName,
-      email: email ? email : user.email,
-      gender: gender ? gender : user.gender,
-      address: address ? address : user.address,
-      phone: phone ? phone : user.phone,
-      status: status ? status : user.status,
-      password: password ? await hashPassword(password) : user.password,
+      firstName: firstName && firstName.length > 0 ? firstName : user.firstName,
+      lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
+      email: email && email.length > 0 ? email : user.email,
+      gender: gender && gender.length > 0 ? gender : user.gender,
+      address: address && address.length > 0 ? address : user.address,
+      phone: phone && phone.length > 0 ? phone : user.phone,
+      status: status && status.length > 0 ? status : user.status,
+      password:
+        password && password.length > 0
+          ? await hashPassword(password)
+          : user.password,
     },
   });
 

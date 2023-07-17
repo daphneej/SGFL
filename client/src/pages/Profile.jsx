@@ -153,7 +153,7 @@ const Profile = () => {
             disabled={isLoading}
           >
             {isLoading ? (
-              <CircleLoader size={25} />
+              <CircleLoader size={25} color={"white"} />
             ) : (
               <span>Update Profile</span>
             )}

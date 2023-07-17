@@ -103,7 +103,11 @@ const Login = () => {
             className="btn btn-primary w-full"
             disabled={emptyInput}
           >
-            {isLoading ? <CircleLoader size={25} /> : <span>Connexion</span>}
+            {isLoading ? (
+              <CircleLoader size={25} color={"white"} />
+            ) : (
+              <span>Connexion</span>
+            )}
           </button>
         </form>
       </div>

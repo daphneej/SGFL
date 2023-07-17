@@ -124,7 +124,11 @@ const Register = () => {
             className="btn btn-primary w-full"
             disabled={emptyInput}
           >
-            {isLoading ? <CircleLoader size={25} /> : <span>Inscription</span>}
+            {isLoading ? (
+              <CircleLoader size={25} color={"white"} />
+            ) : (
+              <span>Inscription</span>
+            )}
           </button>
         </form>
       </div>
