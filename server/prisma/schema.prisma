@@ -20,13 +20,18 @@ enum Role {
   ADMIN
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model User {
   id              Int      @id @default(autoincrement())
   firstName       String?
   lastName        String?
   email           String   @unique
   password        String
-  gender          String?
+  gender          Gender?
   address         String?
   phone           String?  @unique
   status          Status   @default(ACTIVE)

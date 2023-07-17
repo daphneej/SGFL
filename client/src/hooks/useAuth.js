@@ -4,11 +4,13 @@ import { apiUrl } from "./index.js";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const { dispatch } = useAppContext();
 
   const registerUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
@@ -30,10 +32,7 @@ const useAuth = () => {
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         dispatch({ type: "SET_USER", payload: data.user });
-
-        dispatch({ type: "SET_TOKEN", payload: data.token });
-        localStorage.setItem("token", JSON.stringify(data.token));
-        setSuccessMessage("Votre compte a été crée avec succès");
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -43,6 +42,8 @@ const useAuth = () => {
   };
 
   const loginUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
@@ -64,10 +65,7 @@ const useAuth = () => {
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         dispatch({ type: "SET_USER", payload: data.user });
-
-        dispatch({ type: "SET_TOKEN", payload: data.token });
-        localStorage.setItem("token", JSON.stringify(data.token));
-        setSuccessMessage("L'utilisateur a été authentifié avec succès");
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -76,7 +74,9 @@ const useAuth = () => {
     }
   };
 
-  const logoutUser = async (token) => {
+  const logoutUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
@@ -85,16 +85,16 @@ const useAuth = () => {
         headers: {
           accept: "application/json",
           "content-type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       });
 
-      if (response.ok) {
-        localStorage.removeItem("user");
-        dispatch({ type: "SET_USER", payload: null });
+      const data = await response.json();
 
-        localStorage.removeItem("token");
-        dispatch({ type: "SET_TOKEN", payload: null });
+      if (response.ok) {
+        dispatch({ type: "SET_USER", payload: data.user });
+        localStorage.removeItem("user");
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -103,7 +103,9 @@ const useAuth = () => {
     }
   };
 
-  const updateUser = async (user, token) => {
+  const updateUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
@@ -112,7 +114,7 @@ const useAuth = () => {
         headers: {
           accept: "application/json",
           "content-type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(user),
       });
@@ -124,11 +126,9 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
-        setSuccessMessage(
-          "Les informations utilisateur ont été modifiées avec succès"
-        );
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: "SET_USER", payload: data.user });
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);

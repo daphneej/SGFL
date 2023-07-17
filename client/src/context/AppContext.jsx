@@ -5,9 +5,6 @@ const INITIAL_VALUE = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null,
-  token: localStorage.getItem("token")
-    ? JSON.parse(localStorage.getItem("token"))
-    : null,
   courses: [],
 };
 
@@ -17,8 +14,6 @@ const appReducer = (state, action) => {
   switch (type) {
     case "SET_USER":
       return { ...state, user: payload };
-    case "SET_TOKEN":
-      return { ...state, token: payload };
     case "SET_COURSES":
       return { ...state, courses: payload };
     default:

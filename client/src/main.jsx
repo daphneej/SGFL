@@ -12,7 +12,7 @@ import {
 
 import { ToastContainer } from "react-toastify";
 
-import { AppContextProvider } from "./context/AppContext.jsx";
+import { AppContextProvider, useAppContext } from "./context/AppContext.jsx";
 
 import Home from "./pages/Home.jsx";
 import Register from "./pages/Register.jsx";

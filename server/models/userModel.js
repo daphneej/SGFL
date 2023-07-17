@@ -4,15 +4,17 @@ const registerUserSchema = object({
   email: string({
     required_error: "L'adresse email est requise",
   }).email({
-    message: "Format de l'email invalide",
+    message: "Le format de l'email est invalide",
   }),
   password: string({
-    invalid_type_error: "Type de mot de passe invalide",
+    invalid_type_error: "Le type de mot de passe est invalide",
     required_error: "Le mot de passe est requis",
   }).min(8, {
     message: "Le mot de passe doit contenir au moins 8 caractères",
   }),
   confirmPassword: string({
+    invalid_type_error:
+      "Le type de la confirmation du mot de passe est invalide",
     required_error: "La confirmation du mot de passe est requise",
   }),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -21,10 +23,15 @@ const registerUserSchema = object({
 });
 
 const loginUserSchema = object({
-  email: string().email({
-    message: "Format de l'adresse email invalide",
+  email: string({
+    required_error: "L'adresse email est requise",
+  }).email({
+    message: "Le format de l'adresse email est invalide",
   }),
-  password: string().min(8, {
+  password: string({
+    invalid_type_error: "Le type de mot de passe est invalide",
+    required_error: "Le mot de passe est requis",
+  }).min(8, {
     message: "Le mot de passe doit contenir au moins 8 caractères",
   }),
 });
@@ -43,7 +50,6 @@ const updateUserSchema = object({
     .optional(),
   password: string({
     invalid_type_error: "Le type du mot de passe est invalide",
-    required_error: "Le mot de passe est requis",
   })
     .min(8, {
       message: "Le mot de passe doit contenir au moins 8 caractères",
