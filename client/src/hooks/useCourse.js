@@ -17,6 +17,7 @@ const useCourse = () => {
           accept: "application/json",
           "content-type": "application/json",
         },
+        cache: "force-cache",
       });
 
       const data = await response.json();
