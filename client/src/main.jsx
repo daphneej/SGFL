@@ -21,14 +21,17 @@ import Profile from "./pages/Profile.jsx";
 import PrivateRoutes from "./components/PrivateRoutes.jsx";
 
 import "react-toastify/dist/ReactToastify.css";
+import AuthRoutes from "./components/AuthRoutes.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/profile" element={<PrivateRoutes />}>
+      <Route path="/" element={<AuthRoutes />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+      <Route path="/" element={<PrivateRoutes />}>
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Route>

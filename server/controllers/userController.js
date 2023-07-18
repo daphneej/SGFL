@@ -95,7 +95,14 @@ export const getUser = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
-  const parsedUser = updateUserSchema.parse(req.body);
+  const user = await prisma.user.findFirst({ where: { id } });
+
+  if (!user) {
+    res.status(404);
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+    );
+  }
 
   const {
     firstName,
@@ -106,31 +113,25 @@ export const updateUser = asyncHandler(async (req, res) => {
     address,
     phone,
     status,
-  } = parsedUser;
-
-  const user = await prisma.user.findFirst({ where: { id } });
-
-  if (!user) {
-    res.status(404);
-    throw new Error(
-      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
-    );
-  }
-
-  if (email && email === user.email) {
-    res.status(400);
-    throw new Error(
-      "Email inchangé. Veuillez saisir une adresse email différente."
-    );
-  }
+  } = updateUserSchema.parse(req.body);
 
   if (
     email &&
-    (await prisma.user.findFirst({ where: { email: req.body.email } }))
+    (await prisma.user.findFirst({ where: { AND: [{ email, NOT: { id } }] } }))
   ) {
     res.status(409);
     throw new Error(
       "Désolé, cet e-mail est déjà associé à un compte existant."
+    );
+  }
+
+  if (
+    phone &&
+    (await prisma.user.findFirst({ where: { AND: [{ phone, NOT: { id } }] } }))
+  ) {
+    res.status(409);
+    throw new Error(
+      "Désolé, ce numéro de téléphone est déjà associé à un compte existant."
     );
   }
 

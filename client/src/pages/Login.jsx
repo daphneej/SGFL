@@ -17,12 +17,6 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      navigate("/profile");
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
     let hasEmptyInput = false;
 
     const values = Object.values(inputs);
