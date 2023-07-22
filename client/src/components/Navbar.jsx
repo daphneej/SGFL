@@ -20,12 +20,18 @@ const Navbar = () => {
 
   return (
     <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-white p-4 gap-4">
-      <Link to={"/"}>NTB NoFake</Link>
+      <Link
+        to={"/"}
+        className="flex items-center p-2 rounded-lg hover:bg-stone-700"
+      >
+        <span className="text-3xl font-black">NTB</span>
+        <span className="">NoFake</span>
+      </Link>
 
       {user ? (
-        <div className="flex justify-between items-center gap-4">
+        <div className="w-full md:w-auto flex justify-center items-center gap-4">
           {/* Cart */}
-          <div className="dropdown dropdown-end">
+          <div className="dropdown md:dropdown-end">
             <label tabIndex={0} className="btn btn-circle">
               <div className="indicator">
                 <svg
@@ -84,7 +90,7 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52"
+              className="menu dropdown-content z-[1] p-2 shadow bg-neutral rounded-box w-52 mt-4"
             >
               <li>
                 <Link
