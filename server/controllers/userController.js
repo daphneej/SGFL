@@ -66,8 +66,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logOutUser = asyncHandler(async (req, res) => {
-  delete req.credentials;
-
   res
     .status(200)
     .json({ message: "Déconnexion réussie. À bientôt !", user: null });

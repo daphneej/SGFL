@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { actions } from "../context/actions/appActions";
 import { useAppContext } from "../context/AppContext";
 import { apiUrl } from "./index.js";
 
@@ -6,6 +7,7 @@ const useCourse = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const { dispatch } = useAppContext();
+  const { SET_COURSES } = actions;
 
   const getCourses = async () => {
     setIsLoading(true);
@@ -17,7 +19,6 @@ const useCourse = () => {
           accept: "application/json",
           "content-type": "application/json",
         },
-        cache: "force-cache",
       });
 
       const data = await response.json();
@@ -27,7 +28,7 @@ const useCourse = () => {
       }
 
       if (response.ok) {
-        dispatch({ type: "SET_COURSES", payload: data });
+        dispatch({ type: SET_COURSES, payload: data });
       }
     } catch (error) {
       setErrorMessage(error.message);

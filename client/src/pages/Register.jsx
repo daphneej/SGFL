@@ -18,6 +18,12 @@ const Register = () => {
   });
 
   useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [user]);
+
+  useEffect(() => {
     let hasEmptyInput = false;
 
     const values = Object.values(inputs);

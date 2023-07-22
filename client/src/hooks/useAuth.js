@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { actions } from "../context/actions/appActions";
 import { useAppContext } from "../context/AppContext.jsx";
 import { apiUrl } from "./index.js";
 
@@ -7,6 +8,7 @@ const useAuth = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const { dispatch } = useAppContext();
+  const { SET_USER } = actions;
 
   const registerUser = async (user) => {
     setErrorMessage(null);
@@ -31,7 +33,7 @@ const useAuth = () => {
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        dispatch({ type: "SET_USER", payload: data.user });
+        dispatch({ type: SET_USER, payload: data.user });
         setSuccessMessage(data.message);
       }
     } catch (error) {
@@ -64,7 +66,7 @@ const useAuth = () => {
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        dispatch({ type: "SET_USER", payload: data.user });
+        dispatch({ type: SET_USER, payload: data.user });
         setSuccessMessage(data.message);
       }
     } catch (error) {
@@ -92,7 +94,7 @@ const useAuth = () => {
       const data = await response.json();
 
       if (response.ok) {
-        dispatch({ type: "SET_USER", payload: data.user });
+        dispatch({ type: SET_USER, payload: data.user });
         localStorage.removeItem("user");
         setSuccessMessage(data.message);
       }
@@ -127,7 +129,7 @@ const useAuth = () => {
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        dispatch({ type: "SET_USER", payload: data.user });
+        dispatch({ type: SET_USER, payload: data.user });
         setSuccessMessage(data.message);
       }
     } catch (error) {
