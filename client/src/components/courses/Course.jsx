@@ -4,7 +4,7 @@ import video from "../../assets/lesson.mp4";
 import { actions } from "../../context/actions/appActions";
 
 const Course = ({ course }) => {
-  const { coursesInCart, dispatch } = useAppContext();
+  const { coursesInCart, user, dispatch } = useAppContext();
   const [alreadyInCart, setAlreadyInCart] = useState(false);
   const { ADD_COURSES_TO_CART, REMOVE_COURSES_TO_CART } = actions;
 
@@ -45,18 +45,20 @@ const Course = ({ course }) => {
           {course.trainer.firstName} {course.trainer.lastName}
         </p>
         <div className="card-actions items-center">
-          <button
-            className={`btn w-full md:w-fit ${
-              alreadyInCart ? "btn-outline" : "btn-primary"
-            }`}
-            onClick={handleAddToCart}
-          >
-            {alreadyInCart ? (
-              <span>Retirer au panier</span>
-            ) : (
-              <span>Ajouter au panier</span>
-            )}
-          </button>
+          {user && (
+            <button
+              className={`btn w-full md:w-fit ${
+                alreadyInCart ? "btn-neutral" : "btn-primary"
+              }`}
+              onClick={handleAddToCart}
+            >
+              {alreadyInCart ? (
+                <span>Retirer au panier</span>
+              ) : (
+                <span>Ajouter au panier</span>
+              )}
+            </button>
+          )}
           <p className="text-center md:text-right">
             $<span className="font-bold">{course.price}</span> US
           </p>
