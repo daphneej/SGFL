@@ -5,7 +5,7 @@ CREATE TABLE `User` (
     `lastName` VARCHAR(191) NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `gender` VARCHAR(191) NULL,
+    `gender` ENUM('MALE', 'FEMALE') NULL,
     `address` VARCHAR(191) NULL,
     `phone` VARCHAR(191) NULL,
     `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
@@ -22,7 +22,7 @@ CREATE TABLE `Course` (
     `title` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
     `price` DOUBLE NOT NULL,
-    `trainerId` INTEGER NOT NULL,
+    `trainerId` INTEGER NULL,
 
     INDEX `Course_trainerId_idx`(`trainerId`),
     PRIMARY KEY (`id`)

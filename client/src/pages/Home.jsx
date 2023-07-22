@@ -4,7 +4,7 @@ import { BeatLoader } from "react-spinners";
 
 import { useAppContext } from "../context/AppContext";
 
-import Courses from "../components/Courses";
+import Courses from "../components/courses/Courses";
 
 const Home = () => {
   const { courses } = useAppContext();

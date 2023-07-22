@@ -27,6 +27,7 @@ export const getCourses = asyncHandler(async function (req, res) {
       },
     },
   });
+
   res.status(200).json(courses);
 });
 

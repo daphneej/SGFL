@@ -9,12 +9,19 @@ import { useAppContext } from "../context/AppContext";
 const Login = () => {
   const { user } = useAppContext();
   const navigate = useNavigate();
+
   const [emptyInput, setEmptyInput] = useState(true);
   const { isLoading, errorMessage, successMessage, loginUser } = useAuth();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   useEffect(() => {
     let hasEmptyInput = false;
