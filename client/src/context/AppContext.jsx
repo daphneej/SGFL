@@ -7,6 +7,7 @@ const INITIAL_VALUE = {
     ? JSON.parse(localStorage.getItem("user"))
     : null,
   courses: [],
+  selectedCoursesCategory: "Tous",
   coursesInCart: localStorage.getItem("coursesInCart")
     ? JSON.parse(localStorage.getItem("coursesInCart"))
     : [],

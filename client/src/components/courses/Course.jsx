@@ -31,12 +31,12 @@ const Course = ({ course }) => {
         <source src={video} type="video/mp4" />
       </video>
       <div className="card-body">
-        <p className="w-full font-bold text-xl">
+        <p className="w-full font-bold text-xl text-base-950">
           {course.title.length > 30
             ? `${course.title.substring(0, 30)}...`
             : course.title}
         </p>
-        <p className="w-full text-neutral-500">
+        <p className="w-full text-neutral-400">
           {course.description.length > 65
             ? `${course.description.substring(0, 65)}...`
             : course.description}
@@ -47,7 +47,7 @@ const Course = ({ course }) => {
         <div className="card-actions items-center">
           <button
             className={`btn w-full md:w-fit ${
-              alreadyInCart ? "btn-outline btn-primary" : "btn-primary"
+              alreadyInCart ? "btn-outline" : "btn-primary"
             }`}
             onClick={handleAddToCart}
           >

@@ -61,7 +61,8 @@ const Navbar = () => {
                     .reduce((sum, course) => {
                       return sum + course.price;
                     }, 0)
-                    .toFixed(2)}
+                    .toFixed(2)}{" "}
+                  US
                 </span>
                 <div className="card-actions">
                   <button className="btn btn-primary btn-block">
