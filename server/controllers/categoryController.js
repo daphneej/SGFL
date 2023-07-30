@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { prisma } from "./index.js";
 
-export const createCategory = asyncHandler(async function (req, res) {
+export const createCategory = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
   const createdCategory = await prisma.category.create({
@@ -12,7 +12,7 @@ export const createCategory = asyncHandler(async function (req, res) {
   res.status(201).json(createdCategory);
 });
 
-export const getCategories = asyncHandler(async function (req, res) {
+export const getCategories = asyncHandler(async (req, res) => {
   const categories = await prisma.category.findMany({
     include: {
       courses: {
@@ -20,6 +20,13 @@ export const getCategories = asyncHandler(async function (req, res) {
           id: true,
           title: true,
           description: true,
+          price: true,
+          trainer: {
+            select: {
+              lastName: true,
+              firstName: true,
+            },
+          },
         },
       },
     },
@@ -27,7 +34,7 @@ export const getCategories = asyncHandler(async function (req, res) {
   res.status(200).json(categories);
 });
 
-export const getCategory = asyncHandler(async function (req, res) {
+export const getCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
 
   const category = await prisma.category.findFirst({
@@ -42,7 +49,7 @@ export const getCategory = asyncHandler(async function (req, res) {
   res.status(200).json(category);
 });
 
-export const updateCategory = asyncHandler(async function (req, res) {
+export const updateCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
 
   const { name } = req.body;
@@ -66,7 +73,7 @@ export const updateCategory = asyncHandler(async function (req, res) {
   res.status(200).json(updatedCategory);
 });
 
-export const deleteCategory = asyncHandler(async function (req, res) {
+export const deleteCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
 
   const category = await prisma.category.findFirst({
