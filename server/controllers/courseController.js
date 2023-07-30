@@ -2,14 +2,15 @@ import { prisma } from "./index.js";
 import asyncHandler from "express-async-handler";
 
 export const createCourse = asyncHandler(async function (req, res) {
-  const { title, description, price } = req.body;
+  const { title, description, price, categoryId } = req.body;
 
   const createdCourse = await prisma.course.create({
     data: {
       title: title,
       description: description,
       price: parseInt(price),
-      trainerId: parseInt(req.id),
+      trainerId: parseInt(req.credentials.id),
+      categoryId: parseInt(categoryId),
     },
   });
 
@@ -27,6 +28,7 @@ export const getCourses = asyncHandler(async function (req, res) {
       },
     },
   });
+
   res.status(200).json(courses);
 });
 

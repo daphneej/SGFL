@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CircleLoader } from "react-spinners";
 
-import { useAppContext } from "../context/AppContext";
 import useAuth from "../hooks/useAuth";
+import { useAppContext } from "../context/AppContext";
 
 const Register = () => {
+  const { user } = useAppContext();
   const navigate = useNavigate();
   const [emptyInput, setEmptyInput] = useState(true);
-  const { user } = useAppContext();
   const { isLoading, errorMessage, successMessage, registerUser } = useAuth();
-
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -41,14 +40,6 @@ const Register = () => {
   const handleRegisterUser = async (e) => {
     e.preventDefault();
     await registerUser(inputs);
-
-    if (errorMessage) {
-      toast.error(errorMessage);
-    }
-
-    if (successMessage) {
-      toast.success(successMessage);
-    }
   };
 
   useEffect(() => {
@@ -62,58 +53,82 @@ const Register = () => {
   }, [errorMessage, successMessage]);
 
   return (
-    <div className="flex-1 flex justify-center">
-      <div className="flex flex-col mt-8">
+    <div className="w-screen min-h-[36rem] md:h-screen flex flex-col p-4">
+      <div className="flex flex-col items-center mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Inscription</h1>
 
         <form
-          className="flex flex-col w-96 gap-3"
+          className="flex flex-col w-full md:w-96 gap-3"
           onSubmit={handleRegisterUser}
         >
-          <input
-            value={inputs.email}
-            onChange={(e) =>
-              setInputs({
-                ...inputs,
-                email: e.target.value,
-              })
-            }
-            type="text"
-            placeholder="Entrez votre email"
-            className="input input-bordered input-primary w-full"
-          />
-          <input
-            value={inputs.password}
-            onChange={(e) =>
-              setInputs({
-                ...inputs,
-                password: e.target.value,
-              })
-            }
-            type="password"
-            autoComplete="true"
-            placeholder="Entrez votre mot de passe"
-            className="input input-bordered input-primary w-full"
-          />
-          <input
-            value={inputs.confirmPassword}
-            onChange={(e) =>
-              setInputs({
-                ...inputs,
-                confirmPassword: e.target.value,
-              })
-            }
-            type="password"
-            autoComplete="true"
-            placeholder="Confirmez votre mot de passe"
-            className="input input-bordered input-primary w-full"
-          />
+          <div>
+            <label className="font-bold" htmlFor="email">
+              Adresse Email
+            </label>
+            <input
+              id="email"
+              value={inputs.email}
+              onChange={(e) =>
+                setInputs({
+                  ...inputs,
+                  email: e.target.value,
+                })
+              }
+              type="text"
+              placeholder="Veuillez saisir votre email"
+              className="input input-bordered input-primary w-full"
+            />
+          </div>
+
+          <div>
+            <label className="font-bold" htmlFor="password">
+              Mot De Passe
+            </label>
+            <input
+              id="password"
+              value={inputs.password}
+              onChange={(e) =>
+                setInputs({
+                  ...inputs,
+                  password: e.target.value,
+                })
+              }
+              type="password"
+              autoComplete="true"
+              placeholder="Veuillez saisir votre mot de passe"
+              className="input input-bordered input-primary w-full"
+            />
+          </div>
+
+          <div>
+            <label className="font-bold" htmlFor="confirmPassword">
+              Confirmation Mot De Passe
+            </label>
+            <input
+              id="confirmPassword"
+              value={inputs.confirmPassword}
+              onChange={(e) =>
+                setInputs({
+                  ...inputs,
+                  confirmPassword: e.target.value,
+                })
+              }
+              type="password"
+              autoComplete="true"
+              placeholder="Veuillez confirmer votre mot de passe"
+              className="input input-bordered input-primary w-full"
+            />
+          </div>
           <button
             type="submit"
             className="btn btn-primary w-full"
             disabled={emptyInput}
           >
-            {isLoading ? <CircleLoader /> : <span>Inscription</span>}
+            {isLoading ? (
+              <CircleLoader size={25} color={"white"} />
+            ) : (
+              <span>Inscription</span>
+            )}
           </button>
         </form>
       </div>

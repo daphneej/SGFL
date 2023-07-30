@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { actions } from "../context/actions/appActions";
 import { useAppContext } from "../context/AppContext";
+import { apiUrl } from "./index.js";
 
 const useCourse = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const { dispatch } = useAppContext();
+  const { SET_COURSES } = actions;
 
   const getCourses = async () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/courses`, {
+      const response = await fetch(`${apiUrl}/api/courses`, {
         method: "GET",
         headers: {
           accept: "application/json",
@@ -25,7 +28,7 @@ const useCourse = () => {
       }
 
       if (response.ok) {
-        dispatch({ type: "SET_COURSES", payload: data });
+        dispatch({ type: SET_COURSES, payload: data });
       }
     } catch (error) {
       setErrorMessage(error.message);

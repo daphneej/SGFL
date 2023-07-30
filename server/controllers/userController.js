@@ -21,7 +21,9 @@ export const registerUser = asyncHandler(async (req, res) => {
     })
   ) {
     res.status(409);
-    throw new Error("Le compte existe déjà");
+    throw new Error(
+      "Désolé, cet e-mail est déjà associé à un compte existant."
+    );
   }
 
   const user = await prisma.user.create({
@@ -35,15 +37,10 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   const token = generateToken({ id: user.id, role: user.role });
 
-  res
-    .cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    })
-    .status(201)
-    .json(user);
+  res.status(201).json({
+    message: "Félicitations ! Votre compte a été créé avec succès.",
+    user: { ...user, token },
+  });
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -53,36 +50,29 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   if (!user || !(await unHashPassword(password, user.password))) {
     res.status(400);
-    throw new Error("Invalid email or password");
+    throw new Error(
+      "Les informations de connexion sont incorrectes. Veuillez vérifier votre e-mail et mot de passe."
+    );
   }
 
   delete user.password;
 
   const token = generateToken({ id: user.id, role: user.role });
 
-  res
-    .cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    })
-    .status(200)
-    .json(user);
+  res.status(200).json({
+    message: "Connexion réussie. Bienvenue !",
+    user: { ...user, token },
+  });
 });
 
 export const logOutUser = asyncHandler(async (req, res) => {
   res
-    .cookie("jwt", "", {
-      httpOnly: true,
-      expires: new Date(0),
-    })
     .status(200)
-    .send();
+    .json({ message: "Déconnexion réussie. À bientôt !", user: null });
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-  const { id } = req.credentials;
+  const { id, token } = req.credentials;
 
   const user = await prisma.user.findFirst({
     where: { id },
@@ -90,21 +80,33 @@ export const getUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+    );
   }
 
   delete user.password;
 
-  res.status(200).json(user);
+  res.status(200).json({ ...user, token });
 });
 
 export const updateUser = asyncHandler(async (req, res) => {
-  const { id } = req.credentials;
+  const { id, token } = req.credentials;
+
+  const user = await prisma.user.findFirst({ where: { id } });
+
+  if (!user) {
+    res.status(404);
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+    );
+  }
 
   const {
     firstName,
     lastName,
     email,
+    role,
     password,
     gender,
     address,
@@ -112,30 +114,50 @@ export const updateUser = asyncHandler(async (req, res) => {
     status,
   } = updateUserSchema.parse(req.body);
 
-  const user = await prisma.user.findFirst({ where: { id } });
+  if (
+    email &&
+    (await prisma.user.findFirst({ where: { AND: [{ email, NOT: { id } }] } }))
+  ) {
+    res.status(409);
+    throw new Error(
+      "Désolé, cet e-mail est déjà associé à un compte existant."
+    );
+  }
 
-  if (!user) {
-    res.status(404);
-    throw new Error("User not found");
+  if (
+    phone &&
+    (await prisma.user.findFirst({ where: { AND: [{ phone, NOT: { id } }] } }))
+  ) {
+    res.status(409);
+    throw new Error(
+      "Désolé, ce numéro de téléphone est déjà associé à un compte existant."
+    );
   }
 
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
     data: {
-      firstName: firstName ? firstName : user.firstName,
-      lastName: lastName ? lastName : user.lastName,
-      email: email ? email : user.email,
-      gender: gender ? gender : user.gender,
-      address: address ? address : user.address,
-      phone: phone ? phone : user.phone,
-      status: status ? status : user.status,
-      password: password ? await hashPassword(password) : user.password,
+      firstName: firstName && firstName.length > 0 ? firstName : user.firstName,
+      lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
+      email: email && email.length > 0 ? email : user.email,
+      role: role && role.length > 0 ? role : user.role,
+      gender: gender && gender.length > 0 ? gender : user.gender,
+      address: address && address.length > 0 ? address : user.address,
+      phone: phone && phone.length > 0 ? phone : user.phone,
+      status: status && status.length > 0 ? status : user.status,
+      password:
+        password && password.length > 0
+          ? await hashPassword(password)
+          : user.password,
     },
   });
 
   delete updatedUser.password;
 
-  res.status(200).json(updatedUser);
+  res.status(200).json({
+    message: "Profil mis à jour avec succès.",
+    user: { ...updatedUser, token },
+  });
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {
@@ -145,10 +167,17 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+    );
   }
 
   await prisma.user.delete({ where: { id: user.id } });
 
-  res.status(200).send();
+  delete req.user;
+
+  res.status(200).json({
+    message: "Compte supprimé avec succès. Merci pour votre confiance.",
+    user: null,
+  });
 });

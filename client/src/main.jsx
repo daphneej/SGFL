@@ -12,7 +12,7 @@ import {
 
 import { ToastContainer } from "react-toastify";
 
-import { AppContextProvider } from "./context/AppContext.jsx";
+import { AppContextProvider, useAppContext } from "./context/AppContext.jsx";
 
 import Home from "./pages/Home.jsx";
 import Register from "./pages/Register.jsx";
@@ -28,7 +28,7 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/profile" element={<PrivateRoutes />}>
+      <Route path="/" element={<PrivateRoutes />}>
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Route>
@@ -36,8 +36,10 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AppContextProvider>
-    <RouterProvider router={router} />
-    <ToastContainer />
-  </AppContextProvider>
+  <React.StrictMode>
+    <AppContextProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </AppContextProvider>
+  </React.StrictMode>
 );

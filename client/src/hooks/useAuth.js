@@ -1,17 +1,22 @@
 import { useState } from "react";
+import { actions } from "../context/actions/appActions";
 import { useAppContext } from "../context/AppContext.jsx";
+import { apiUrl } from "./index.js";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const { dispatch } = useAppContext();
+  const { SET_USER } = actions;
 
   const registerUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/register`, {
+      const response = await fetch(`${apiUrl}/api/users/register`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -27,9 +32,9 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
-        setSuccessMessage("Votre compte a été crée avec succès");
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: SET_USER, payload: data.user });
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -39,10 +44,12 @@ const useAuth = () => {
   };
 
   const loginUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/login`, {
+      const response = await fetch(`${apiUrl}/api/users/login`, {
         method: "POST",
         headers: {
           accept: "application/json",
@@ -58,9 +65,9 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
-        setSuccessMessage("L'utilisateur a été authentifié avec succès");
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: SET_USER, payload: data.user });
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -69,21 +76,27 @@ const useAuth = () => {
     }
   };
 
-  const logoutUser = async () => {
+  const logoutUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/logout`, {
+      const response = await fetch(`${apiUrl}/api/users/logout`, {
         method: "POST",
         headers: {
           accept: "application/json",
           "content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        dispatch({ type: SET_USER, payload: data.user });
         localStorage.removeItem("user");
-        dispatch({ type: "SET_USER", payload: null });
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -93,14 +106,17 @@ const useAuth = () => {
   };
 
   const updateUser = async (user) => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/users/update`, {
+      const response = await fetch(`${apiUrl}/api/users/update`, {
         method: "PUT",
         headers: {
           accept: "application/json",
           "content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(user),
       });
@@ -112,11 +128,9 @@ const useAuth = () => {
       }
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        dispatch({ type: "SET_USER", payload: data });
-        setSuccessMessage(
-          "Les informations utilisateur ont été modifiées avec succès"
-        );
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: SET_USER, payload: data.user });
+        setSuccessMessage(data.message);
       }
     } catch (error) {
       setErrorMessage(error.message);
