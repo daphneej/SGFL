@@ -21,6 +21,11 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       await getCourses();
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       await getCategories();
     })();
   }, []);
@@ -29,9 +34,7 @@ const Home = () => {
     const courseList =
       selectedCoursesCategory.id === 0
         ? courses
-        : courses.filter(
-            (course) => course.categoryId === selectedCoursesCategory.id
-          );
+        : selectedCoursesCategory.courses;
 
     setFilteredCourses(
       courseList.filter(

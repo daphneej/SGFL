@@ -1,7 +1,7 @@
 import { prisma } from "./index.js";
 import asyncHandler from "express-async-handler";
 
-export const createCourse = asyncHandler(async function (req, res) {
+export const createCourse = asyncHandler(async (req, res) => {
   const { title, description, price, categoryId } = req.body;
 
   const createdCourse = await prisma.course.create({
@@ -17,13 +17,19 @@ export const createCourse = asyncHandler(async function (req, res) {
   res.status(201).json(createdCourse);
 });
 
-export const getCourses = asyncHandler(async function (req, res) {
+export const getCourses = asyncHandler(async (req, res) => {
   const courses = await prisma.course.findMany({
     include: {
       trainer: {
         select: {
-          firstName: true,
           lastName: true,
+          firstName: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
         },
       },
     },
@@ -32,7 +38,7 @@ export const getCourses = asyncHandler(async function (req, res) {
   res.status(200).json(courses);
 });
 
-export const getCourse = asyncHandler(async function (req, res) {
+export const getCourse = asyncHandler(async (req, res) => {
   const courseId = req.params.id;
 
   const course = await prisma.course.findFirst({
@@ -47,7 +53,7 @@ export const getCourse = asyncHandler(async function (req, res) {
   res.status(200).json(course);
 });
 
-export const updateCourse = asyncHandler(async function (req, res) {
+export const updateCourse = asyncHandler(async (req, res) => {
   const courseId = req.params.id;
 
   const { title, description, price } = req.body;
@@ -73,7 +79,7 @@ export const updateCourse = asyncHandler(async function (req, res) {
   res.status(200).json(updatedCourse);
 });
 
-export const deleteCourse = asyncHandler(async function (req, res) {
+export const deleteCourse = asyncHandler(async (req, res) => {
   const courseId = req.params.id;
 
   const course = await prisma.course.findFirst({

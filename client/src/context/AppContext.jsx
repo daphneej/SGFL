@@ -20,7 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, INITIAL_VALUE);
 
   console.log("====================================");
-  console.log(state);
+  console.log(state.categories);
   console.log("====================================");
 
   return (

@@ -40,6 +40,12 @@ model User {
   enrolledCourses Course[] @relation("StudentCourses")
 }
 
+model Category {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  courses Course[]
+}
+
 model Course {
   id          Int      @id @default(autoincrement())
   title       String
@@ -50,13 +56,8 @@ model Course {
   students    User[]   @relation("StudentCourses")
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
 
   @@index([trainerId])
   @@index([categoryId])
-}
-
-model Category {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  courses Course[]
 }
