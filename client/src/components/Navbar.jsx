@@ -19,7 +19,7 @@ const Navbar = () => {
   }, [successMessage]);
 
   return (
-    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-white p-4 gap-4">
+    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-white p-4 gap-4 sticky top-0 z-10">
       <Link
         to={"/"}
         className="flex items-center p-2 rounded-lg hover:bg-stone-700"
@@ -55,7 +55,7 @@ const Navbar = () => {
             </label>
             <div
               tabIndex={0}
-              className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow"
+              className="mt-3 z-[1] card card-compact dropdown-content w-52 shadow"
             >
               <div className="card-body bg-neutral rounded-box">
                 <span className="font-bold text-lg">

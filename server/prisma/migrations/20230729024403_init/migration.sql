@@ -23,8 +23,19 @@ CREATE TABLE `Course` (
     `description` VARCHAR(191) NOT NULL,
     `price` DOUBLE NOT NULL,
     `trainerId` INTEGER NULL,
+    `categoryId` INTEGER NOT NULL,
 
     INDEX `Course_trainerId_idx`(`trainerId`),
+    INDEX `Course_categoryId_idx`(`categoryId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Category` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `Category_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

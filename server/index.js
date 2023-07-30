@@ -14,6 +14,7 @@ dotenv.config();
 // Import route handlers
 import { usersRouter } from "./routes/usersRouter.js";
 import { coursesRouter } from "./routes/coursesRouter.js";
+import { categoryRouter } from "./routes/categoryRouter.js";
 
 // Create Express app
 const app = express();
@@ -34,6 +35,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/users", usersRouter);
 app.use("/api/courses", coursesRouter);
+app.use("/api/categories", categoryRouter);
 
 // Error handling middlewares
 app.use(notFound);

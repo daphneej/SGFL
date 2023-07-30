@@ -7,7 +7,8 @@ const INITIAL_VALUE = {
     ? JSON.parse(localStorage.getItem("user"))
     : null,
   courses: [],
-  selectedCoursesCategory: "Tous",
+  selectedCoursesCategory: { id: 0, name: "Tous" },
+  categories: [],
   coursesInCart: localStorage.getItem("coursesInCart")
     ? JSON.parse(localStorage.getItem("coursesInCart"))
     : [],
@@ -17,6 +18,10 @@ const AppContext = createContext(INITIAL_VALUE);
 
 export const AppContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, INITIAL_VALUE);
+
+  console.log("====================================");
+  console.log(state);
+  console.log("====================================");
 
   return (
     <AppContext.Provider value={{ ...state, dispatch }}>

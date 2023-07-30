@@ -6,6 +6,7 @@ const registerUserSchema = object({
   }).email({
     message: "Le format de l'email est invalide",
   }),
+  role: string().optional(),
   password: string({
     invalid_type_error: "Le type de mot de passe est invalide",
     required_error: "Le mot de passe est requis",
@@ -48,6 +49,7 @@ const updateUserSchema = object({
       message: "Le format de l'email est invalide",
     })
     .optional(),
+  role: string().optional(),
   password: string({
     invalid_type_error: "Le type du mot de passe est invalide",
   })
