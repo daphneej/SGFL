@@ -7,16 +7,20 @@ import {
   updateCourse,
 } from "../controllers/courseController.js";
 
-import { protectRoutes } from "../middlewares/authMiddleware.js";
+import {
+  protectUserRoutes,
+  protectTrainerRoutes,
+  protectAdminRoutes,
+} from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
 // Define routes
-router.post("/", protectRoutes, createCourse);
+router.post("/", protectUserRoutes, protectTrainerRoutes, createCourse);
 router.get("/", getCourses);
-router.get("/:id", protectRoutes, getCourse);
-router.put("/:id", protectRoutes, updateCourse);
-router.delete("/:id", protectRoutes, deleteCourse);
+router.get("/:id", protectUserRoutes, getCourse);
+router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCourse);
+router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCourse);
 
 // Export the router
 export { router as coursesRouter };

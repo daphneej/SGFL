@@ -26,7 +26,7 @@ const Course = ({ course }) => {
   }, [coursesInCart]);
 
   return (
-    <li className="card w-[95%] md:w-96 bg-base-100 shadow-xl">
+    <li className="card w-[95%] md:w-96 bg-base-300 shadow-xl">
       <video className="w-full rounded-t-2xl" controls>
         <source src={video} type="video/mp4" />
       </video>
