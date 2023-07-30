@@ -1,8 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { prisma } from "./index.js";
 
-
-
 export const createCategory = asyncHandler(async function (req, res) {
   const { name } = req.body;
 
@@ -15,7 +13,17 @@ export const createCategory = asyncHandler(async function (req, res) {
 });
 
 export const getCategories = asyncHandler(async function (req, res) {
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    include: {
+      courses: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    },
+  });
   res.status(200).json(categories);
 });
 
