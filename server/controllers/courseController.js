@@ -22,8 +22,14 @@ export const getCourses = asyncHandler(async function (req, res) {
     include: {
       trainer: {
         select: {
-          firstName: true,
           lastName: true,
+          firstName: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
         },
       },
     },

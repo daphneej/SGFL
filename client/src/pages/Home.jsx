@@ -21,6 +21,11 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       await getCourses();
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       await getCategories();
     })();
   }, []);
