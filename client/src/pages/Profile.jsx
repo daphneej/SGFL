@@ -6,6 +6,7 @@ import useUserStore from "../zustand/useUserStore";
 
 import useAuth from "../hooks/useAuth";
 import { useMutation } from "react-query";
+import { AxiosError } from "axios";
 
 const GENDERS = ["Male", "Female"];
 
@@ -27,7 +28,9 @@ const Profile = () => {
       setUser(data.user);
     },
     onError: (error) => {
-      toast.error(error.message);
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
     },
   });
 

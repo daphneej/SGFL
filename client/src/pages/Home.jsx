@@ -6,6 +6,7 @@ import useCourse from "../hooks/useCourse";
 import useCategory from "../hooks/useCategory";
 
 import Courses from "../components/courses/Courses";
+import { AxiosError } from "axios";
 
 const Home = () => {
   const { getCourses } = useCourse();
@@ -18,6 +19,11 @@ const Home = () => {
   const { isLoading, data: courses } = useQuery("courses", getCourses, {
     onSuccess: (data) => {
       setFilteredCourses(data);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
     },
   });
 

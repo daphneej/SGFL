@@ -3,7 +3,7 @@ import { z } from "zod";
 // 404 Not Found middleware
 export function notFound(req, res, next) {
   res.status(404);
-  const error = new Error(`Not Found - ${req.originalUrl}`);
+  const error = new Error(`Resource: ${req.originalUrl} Not Found`);
   next(error);
 }
 
