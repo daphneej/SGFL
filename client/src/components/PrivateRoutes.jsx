@@ -1,8 +1,8 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import useUserStore from "../zustand/useUserStore";
 
 const PrivateRoutes = () => {
-  const { user } = useAppContext();
+  const { user } = useUserStore();
   return user ? <Outlet /> : <Navigate to={"/login"} />;
 };
 
