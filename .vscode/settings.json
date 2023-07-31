@@ -1,4 +1,5 @@
 {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "reactSnippets.settings.prettierEnabled": true
+    "reactSnippets.settings.prettierEnabled": true,
+    "liveServer.settings.CustomBrowser": "chrome"
 }

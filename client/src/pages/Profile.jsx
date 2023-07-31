@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { CircleLoader } from "react-spinners";
 
-import { useAppContext } from "../context/AppContext";
+import useUserStore from "../zustand/useUserStore";
+
 import useAuth from "../hooks/useAuth";
+import { useMutation } from "react-query";
 
 const GENDERS = ["Male", "Female"];
 
 const Profile = () => {
-  const { user } = useAppContext();
-  const { isLoading, errorMessage, successMessage, updateUser } = useAuth();
+  const { user, setUser } = useUserStore();
+  const { updateUser } = useAuth();
 
   const [inputs, setInputs] = useState({
     firstName: user.firstName ? user.firstName : "",
@@ -19,23 +21,23 @@ const Profile = () => {
     phone: user.phone ? user.phone : "",
   });
 
+  const { isLoading, mutate } = useMutation("user", updateUser, {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setUser(data.user);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-    await updateUser({ ...inputs, token: user.token });
+    mutate({ ...inputs, token: user.token });
   };
 
-  useEffect(() => {
-    if (errorMessage) {
-      toast.error(errorMessage);
-    }
-
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-  }, [errorMessage, successMessage]);
-
   return (
-    <div className="w-screen min-h-[36rem] md:h-screen flex flex-col p-4">
+    <div className="flex-1 flex flex-col w-full p-4">
       <div className="flex flex-col items-center mt-4 md:mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Profile</h1>
 

@@ -1,29 +1,18 @@
-import { useAppContext } from "../../context/AppContext";
-import { useState, useEffect } from "react";
 import video from "../../assets/lesson.mp4";
-import { actions } from "../../context/actions/appActions";
+
+import useUserStore from "../../zustand/useUserStore.js";
 
 const Course = ({ course }) => {
-  const { coursesInCart, user, dispatch } = useAppContext();
-  const [alreadyInCart, setAlreadyInCart] = useState(false);
-  const { ADD_COURSES_TO_CART, REMOVE_COURSES_TO_CART } = actions;
+  const { user, coursesInCart, addCourseInCart, removeCourseInCart } =
+    useUserStore();
 
   const handleAddToCart = () => {
-    if (alreadyInCart) {
-      dispatch({ type: REMOVE_COURSES_TO_CART, payload: course.id });
+    if (coursesInCart.find((eachCourse) => eachCourse.id === course.id)) {
+      removeCourseInCart(course.id);
     } else {
-      dispatch({ type: ADD_COURSES_TO_CART, payload: course });
+      addCourseInCart(course);
     }
   };
-
-  useEffect(() => {
-    setAlreadyInCart(
-      coursesInCart.filter((eachCourse) => eachCourse.id === course.id).length >
-        0
-    );
-
-    localStorage.setItem("coursesInCart", JSON.stringify(coursesInCart));
-  }, [coursesInCart]);
 
   return (
     <li className="card w-[95%] md:w-96 bg-base-300 shadow-xl">
@@ -48,11 +37,15 @@ const Course = ({ course }) => {
           {user && (
             <button
               className={`btn w-full md:w-fit ${
-                alreadyInCart ? "btn-neutral" : "btn-primary"
+                coursesInCart.find((eachCourse) => eachCourse.id === course.id)
+                  ? "btn-neutral"
+                  : "btn-primary"
               }`}
               onClick={handleAddToCart}
             >
-              {alreadyInCart ? (
+              {coursesInCart.find(
+                (eachCourse) => eachCourse.id === course.id
+              ) ? (
                 <span>Retirer au panier</span>
               ) : (
                 <span>Ajouter au panier</span>

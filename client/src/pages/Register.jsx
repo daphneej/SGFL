@@ -2,19 +2,30 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CircleLoader } from "react-spinners";
-
 import useAuth from "../hooks/useAuth";
-import { useAppContext } from "../context/AppContext";
+import useUserStore from "../zustand/useUserStore";
+import { useMutation } from "react-query";
 
 const Register = () => {
-  const { user } = useAppContext();
   const navigate = useNavigate();
+  const { registerUser } = useAuth();
+
+  const { user } = useUserStore();
   const [emptyInput, setEmptyInput] = useState(true);
-  const { isLoading, errorMessage, successMessage, registerUser } = useAuth();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
     confirmPassword: "",
+  });
+
+  const { isLoading, mutate } = useMutation("user", registerUser, {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setUser(data.user);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   useEffect(() => {
@@ -39,21 +50,11 @@ const Register = () => {
 
   const handleRegisterUser = async (e) => {
     e.preventDefault();
-    await registerUser(inputs);
+    mutate(inputs);
   };
 
-  useEffect(() => {
-    if (errorMessage) {
-      toast.error(errorMessage);
-    }
-
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-  }, [errorMessage, successMessage]);
-
   return (
-    <div className="w-screen min-h-[36rem] md:h-screen flex flex-col p-4">
+    <div className="flex-1 flex flex-col w-full p-4">
       <div className="flex flex-col items-center mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Inscription</h1>
 
