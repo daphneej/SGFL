@@ -5,12 +5,13 @@ import { CircleLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
 import useUserStore from "../zustand/useUserStore";
 import { useMutation } from "react-query";
+import { AxiosError } from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
   const { registerUser } = useAuth();
 
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [emptyInput, setEmptyInput] = useState(true);
   const [inputs, setInputs] = useState({
     email: "",
@@ -24,7 +25,9 @@ const Register = () => {
       setUser(data.user);
     },
     onError: (error) => {
-      toast.error(error.message);
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
     },
   });
 

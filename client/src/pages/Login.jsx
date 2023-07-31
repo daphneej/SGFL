@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CircleLoader } from "react-spinners";
+import { AxiosError } from "axios";
 
 import useUserStore from "../zustand/useUserStore";
 import useAuth from "../hooks/useAuth";
@@ -30,7 +31,9 @@ const Login = () => {
       setUser(data.user);
     },
     onError: (error) => {
-      toast.error(error.message);
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
     },
   });
 
