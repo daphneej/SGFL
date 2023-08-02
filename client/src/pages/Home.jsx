@@ -1,53 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import { BeatLoader } from "react-spinners";
 
 import useCourse from "../hooks/useCourse";
 import useCategory from "../hooks/useCategory";
 
-import { actions } from "../context/actions/appActions";
-import { useAppContext } from "../context/AppContext";
-
 import Courses from "../components/courses/Courses";
+import { AxiosError } from "axios";
 
 const Home = () => {
-  const { SET_SELECTED_COURSES_CATEGORY } = actions;
-  const { isLoading, getCourses } = useCourse();
+  const { getCourses } = useCourse();
   const { getCategories } = useCategory();
-  const { courses, categories, selectedCoursesCategory, dispatch } =
-    useAppContext();
-  const [filteredCourses, setFilteredCourses] = useState(courses);
-  const [searchString, setSearchString] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      await getCourses();
-    })();
-  }, []);
+  const [selectedCategoryCourse, setSelectedCategoryCourse] = useState("Tous");
+  const [searchCourseValue, setSearchCourseValue] = useState("");
+  const [filteredCourses, setFilteredCourses] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      await getCategories();
-    })();
-  }, []);
+  const { isLoading, data: courses } = useQuery("courses", getCourses, {
+    onSuccess: (data) => {
+      setFilteredCourses(data);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
 
-  useEffect(() => {
-    const courseList =
-      selectedCoursesCategory.id === 0
-        ? courses
-        : selectedCoursesCategory.courses;
-
-    setFilteredCourses(
-      courseList.filter(
-        (course) =>
-          course.title
-            .toLocaleLowerCase()
-            .includes(searchString.toLocaleLowerCase()) ||
-          course.description
-            .toLocaleLowerCase()
-            .includes(searchString.toLocaleLowerCase())
-      )
-    );
-  }, [courses, selectedCoursesCategory, searchString]);
+  const { data: categories } = useQuery("categories", getCategories);
 
   return (
     <div className="flex-1 flex flex-col w-full p-4">
@@ -58,31 +38,71 @@ const Home = () => {
             onChange={(e) => {
               const { value } = e.target;
 
-              dispatch({
-                type: SET_SELECTED_COURSES_CATEGORY,
-                payload: [...categories, { id: 0, name: "Tous" }].find(
-                  (category) => category.name === value
-                ),
-              });
+              const courseList =
+                searchCourseValue.trim().length === 0
+                  ? courses
+                  : courses?.filter((course) => {
+                      return (
+                        course.title
+                          .toLowerCase()
+                          .includes(searchCourseValue.trim().toLowerCase()) ||
+                        course.description
+                          .toLowerCase()
+                          .includes(searchCourseValue.trim().toLowerCase())
+                      );
+                    });
+
+              setFilteredCourses(
+                value === "Tous"
+                  ? courseList
+                  : courseList.filter((course) => {
+                      return course.category.name === value;
+                    })
+              );
+
+              setSelectedCategoryCourse(value);
             }}
             className="input input-bordered input-sm w-56 md:w-fit text-center"
             defaultValue={"Tous"}
-            disabled={courses.length === 0}
+            disabled={courses?.length === 0}
           >
             <option value={"Tous"}>Tous</option>
-            {categories.map((category, index) => (
+            {categories?.map((category, index) => (
               <option key={index} value={category.name}>
                 {category.name}
               </option>
             ))}
           </select>
           <input
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              const { value } = e.target;
+
+              const courseList =
+                selectedCategoryCourse === "Tous"
+                  ? courses
+                  : courses?.filter((course) => {
+                      return course.category.name === selectedCategoryCourse;
+                    });
+
+              setFilteredCourses(
+                courseList.filter((course) => {
+                  return (
+                    course.title
+                      .toLowerCase()
+                      .includes(value.trim().toLowerCase()) ||
+                    course.description
+                      .toLowerCase()
+                      .includes(value.trim().toLowerCase())
+                  );
+                })
+              );
+
+              setSearchCourseValue(value);
+            }}
             type="search"
             className="input input-bordered input-sm w-56"
             placeholder="Rechercher un cours"
-            disabled={courses.length === 0}
+            disabled={courses?.length === 0}
           />
         </div>
       </div>
@@ -92,7 +112,7 @@ const Home = () => {
           <BeatLoader />
         ) : (
           <div className="w-full h-fit">
-            {filteredCourses.length === 0 ? (
+            {filteredCourses?.length === 0 ? (
               <p className="my-4 mx-auto font-bold text-3xl text-neutral-500 text-center">
                 Aucun cours trouvé
               </p>

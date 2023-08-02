@@ -1,35 +1,40 @@
-import { useEffect } from "react";
+import { useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAppContext } from "../context/AppContext.jsx";
+import useUserStore from "../zustand/useUserStore";
 import useAuth from "../hooks/useAuth.js";
 
 const Navbar = () => {
-  const { user, coursesInCart } = useAppContext();
-  const { successMessage, logoutUser } = useAuth();
+  const { logoutUser } = useAuth();
+
+  const { user, setUser, coursesInCart } = useUserStore();
+
+  const { mutate } = useMutation("user", logoutUser, {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setUser(data.user);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const handleLogOutUser = async () => {
-    await logoutUser(user);
+    mutate(user);
   };
 
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-  }, [successMessage]);
-
   return (
-    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-white p-4 gap-4 sticky top-0 z-10">
+    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-base-300 p-4 gap-4 sticky top-0 z-10">
       <Link
         to={"/"}
-        className="flex items-center p-2 rounded-lg hover:bg-stone-700"
+        className="flex items-center p-2 rounded-lg hover:bg-neutral-700"
       >
         <span className="text-3xl font-black">NTB</span>
         <span className="">NoFake</span>
       </Link>
 
       {user ? (
-        <div className="w-full md:w-auto flex justify-center items-center gap-4">
+        <div className="md:w-auto flex justify-center items-center gap-4">
           {/* Cart */}
           <div className="dropdown md:dropdown-end">
             <label tabIndex={0} className="btn btn-circle">

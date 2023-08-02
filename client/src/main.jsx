@@ -12,7 +12,9 @@ import {
 
 import { ToastContainer } from "react-toastify";
 
-import { AppContextProvider, useAppContext } from "./context/AppContext.jsx";
+import { QueryClientProvider } from "react-query";
+
+import { queryClient } from "./index";
 
 import Home from "./pages/Home.jsx";
 import Register from "./pages/Register.jsx";
@@ -37,9 +39,9 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AppContextProvider>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
       <ToastContainer />
-    </AppContextProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

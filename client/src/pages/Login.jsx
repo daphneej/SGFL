@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CircleLoader } from "react-spinners";
+import { AxiosError } from "axios";
 
+import useUserStore from "../zustand/useUserStore";
 import useAuth from "../hooks/useAuth";
-import { useAppContext } from "../context/AppContext";
 
 const Login = () => {
-  const { user } = useAppContext();
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
+  const { user, setUser } = useUserStore();
   const [emptyInput, setEmptyInput] = useState(true);
-  const { isLoading, errorMessage, successMessage, loginUser } = useAuth();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -22,6 +24,18 @@ const Login = () => {
       navigate("/");
     }
   }, [user]);
+
+  const { isLoading, mutate } = useMutation("user", loginUser, {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setUser(data.user);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
 
   useEffect(() => {
     let hasEmptyInput = false;
@@ -39,21 +53,11 @@ const Login = () => {
 
   const handleLoginUser = async (e) => {
     e.preventDefault();
-    await loginUser(inputs);
+    mutate(inputs);
   };
 
-  useEffect(() => {
-    if (errorMessage) {
-      toast.error(errorMessage);
-    }
-
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-  }, [errorMessage, successMessage]);
-
   return (
-    <div className="w-screen min-h-[36rem] md:h-screen flex flex-col p-4">
+    <div className="flex-1 flex flex-col w-full p-4">
       <div className="flex flex-col items-center mt-8">
         <h1 className="font-bold text-2xl uppercase my-4">Connexion</h1>
 
