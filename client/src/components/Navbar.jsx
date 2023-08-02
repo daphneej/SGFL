@@ -24,10 +24,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center bg-neutral text-base-300 p-4 gap-4 sticky top-0 z-10">
+    <nav className="flex flex-col justify-center md:flex-row md:justify-between items-center p-4 md:px-28 gap-4 sticky top-0 z-10 bg-neutral">
       <Link
         to={"/"}
-        className="flex items-center p-2 rounded-lg hover:bg-neutral-700"
+        className="flex items-center p-2 rounded-lg text-neutral-100"
       >
         <span className="text-3xl font-black">NTB</span>
         <span className="">NoFake</span>
@@ -62,7 +62,7 @@ const Navbar = () => {
               tabIndex={0}
               className="mt-3 z-[1] card card-compact dropdown-content w-52 shadow"
             >
-              <div className="card-body bg-neutral rounded-box">
+              <div className="card-body bg-base-300 rounded-xl">
                 <span className="font-bold text-lg">
                   {coursesInCart.length} Cours
                 </span>
@@ -76,7 +76,7 @@ const Navbar = () => {
                   US
                 </span>
                 <div className="card-actions">
-                  <button className="btn btn-primary btn-block">
+                  <button className="btn btn-primary btn-block rounded-xl">
                     View cart
                   </button>
                 </div>
@@ -95,19 +95,19 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu dropdown-content z-[1] p-2 shadow bg-neutral rounded-box w-52 mt-4"
+              className="menu dropdown-content z-[1] p-2 shadow bg-base-300 rounded-xl w-52 mt-4"
             >
               <li>
                 <Link
                   to={"/profile"}
-                  className="justify-between hover:text-neutral-300"
+                  className="justify-between"
                 >
                   Profile
                 </Link>
               </li>
               <li>
                 <button
-                  className="hover:text-neutral-300"
+                  className=""
                   onClick={handleLogOutUser}
                 >
                   Logout
@@ -118,7 +118,7 @@ const Navbar = () => {
         </div>
       ) : (
         // Auth Login Items
-        <ul className="flex gap-8">
+        <ul className="flex gap-8 text-base-100">
           <li>
             <Link to="/register">Inscription</Link>
           </li>
