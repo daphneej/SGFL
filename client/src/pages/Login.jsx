@@ -80,7 +80,7 @@ const Login = () => {
               }
               type="text"
               placeholder="Veuillez saisir votre email"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
 
@@ -100,12 +100,12 @@ const Login = () => {
               type="password"
               autoComplete="true"
               placeholder="Veuillez saisir votre mot de passe"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="btn btn-primary w-full rounded-xl"
             disabled={emptyInput}
           >
             {isLoading ? (

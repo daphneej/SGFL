@@ -31,9 +31,9 @@ const Home = () => {
 
   return (
     <div className="flex-1 flex flex-col w-full p-4">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mx-12 my-2">
+      <div className="w-full md:w-[95%] flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 mx-auto my-8">
         <h1 className="font-bold text-2xl text-left">Cours</h1>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 w-96">
+        <div className="flex flex-col md:flex-row items-center p-2 md:p-0 md:justify-between gap-1 md:gap-4 w-full md:w-96">
           <select
             onChange={(e) => {
               const { value } = e.target;
@@ -62,7 +62,7 @@ const Home = () => {
 
               setSelectedCategoryCourse(value);
             }}
-            className="input input-bordered input-sm w-56 md:w-fit text-center"
+            className="input input-bordered input-sm w-56 md:w-fit text-center rounded-xl"
             defaultValue={"Tous"}
             disabled={courses?.length === 0}
           >
@@ -100,7 +100,7 @@ const Home = () => {
               setSearchCourseValue(value);
             }}
             type="search"
-            className="input input-bordered input-sm w-56"
+            className="input input-bordered input-sm w-56 rounded-xl"
             placeholder="Rechercher un cours"
             disabled={courses?.length === 0}
           />

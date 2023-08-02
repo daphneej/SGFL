@@ -63,7 +63,7 @@ const Profile = () => {
               }
               type="text"
               placeholder="Veuillez saisir votre prénom"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
 
@@ -82,7 +82,7 @@ const Profile = () => {
               }
               type="text"
               placeholder="Veuillez saisir votre nom de famille"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
 
@@ -129,7 +129,7 @@ const Profile = () => {
               }
               type="address"
               placeholder="Veuillez saisir votre adresse"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
 
@@ -148,13 +148,13 @@ const Profile = () => {
               }
               type="tel"
               placeholder="Veuillez saisir votre numéro de téléphone"
-              className="input input-bordered input-primary w-full"
+              className="input input-bordered input-primary w-full rounded-xl"
             />
           </div>
 
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="btn btn-primary w-full rounded-xl"
             disabled={isLoading}
           >
             {isLoading ? (

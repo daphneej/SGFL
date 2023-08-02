@@ -15,30 +15,32 @@ const Course = ({ course }) => {
   };
 
   return (
-    <li className="card w-[95%] md:w-96 bg-base-300 shadow-xl">
-      <video className="w-full rounded-t-2xl" controls>
+    <li className="card w-full md:w-80 h-[26rem] md:h-[24rem] bg-base-300 shadow-lg shadow-neutral rounded-xl">
+      <video className="h-[10rem] w-full rounded-t-xl object-fill" controls>
         <source src={video} type="video/mp4" />
       </video>
-      <div className="card-body">
-        <p className="w-full font-bold text-xl text-base-950">
-          {course.title.length > 30
-            ? `${course.title.substring(0, 30)}...`
+      <div className="flex-1 flex flex-col justify-between p-4">
+        <div className="flex-1 flex flex-col">
+          <p className="w-full font-bold text-xl text-base-950 pb-2">
+          {course.title.length > 20
+            ? `${course.title.substring(0, 20)}...`
             : course.title}
         </p>
-        <p className="w-full text-neutral-400">
-          {course.description.length > 65
-            ? `${course.description.substring(0, 65)}...`
+        <p className="flex-1 text-neutral-600">
+          {course.description.length > 60
+            ? `${course.description.substring(0, 60)}...`
             : course.description}
         </p>
-        <p className="font-bold italic my-2">
+        </div>
+        <p className="font-bold italic my-4">
           {course.trainer.firstName} {course.trainer.lastName}
         </p>
-        <div className="card-actions items-center">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2">
           {user && (
             <button
-              className={`btn w-full md:w-fit ${
+              className={`btn rounded-xl w-full md:w-fit ${
                 coursesInCart.find((eachCourse) => eachCourse.id === course.id)
-                  ? "btn-neutral"
+                  ? "btn-outline"
                   : "btn-primary"
               }`}
               onClick={handleAddToCart}
@@ -53,7 +55,7 @@ const Course = ({ course }) => {
             </button>
           )}
           <p className="text-center md:text-right">
-            $<span className="font-bold">{course.price}</span> US
+            $<span className="font-bold text-accent">{course.price}</span> US
           </p>
         </div>
       </div>
