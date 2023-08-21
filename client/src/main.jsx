@@ -16,32 +16,40 @@ import { QueryClientProvider } from "react-query";
 
 import { queryClient } from "./index";
 
-import Home from "./pages/Home.jsx";
-import Register from "./pages/Register.jsx";
-import Login from "./pages/Login.jsx";
-import Profile from "./pages/Profile.jsx";
-import PrivateRoutes from "./components/PrivateRoutes.jsx";
+import HomePage from "./pages/HomePage";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import CoursePage from "./pages/CoursePage";
+import AdminDashboard from "./pages/AdminDashboard";
+
+import PrivateRoutes from "./components/PrivateRoutes";
+import AdminRoute from "./components/AdminRoute";
 
 import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
+  createRoutesFromElements([
     <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route index={true} path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/courses" element={<CoursePage />} />
       <Route path="/" element={<PrivateRoutes />}>
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
-    </Route>
-  )
+    </Route>,
+    <Route path="/" element={<AdminRoute />}>
+      <Route path="/admin" element={<AdminDashboard />} />,
+    </Route>,
+  ])
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </QueryClientProvider>
   </React.StrictMode>
 );

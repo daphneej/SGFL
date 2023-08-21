@@ -2,11 +2,13 @@ import Course from "./Course";
 
 const Courses = ({ courses }) => {
   return (
-    <ul className="w-full md:w-[95%] mx-auto flex flex-wrap justify-center rounded-xl md:py-16 gap-4 md:gap-16 md:bg-neutral">
-      {courses.map((course, index) => (
-        <Course key={index} course={course} />
-      ))}
-    </ul>
+    <section className="">
+      <div className="flex flex-wrap justify-center gap-8 text-center py-8">
+        {courses.map((course, index) => (
+          <Course key={index} course={course} />
+        ))}
+      </div>
+    </section>
   );
 };
 

@@ -24,6 +24,8 @@ const useAuth = () => {
   };
 
   const updateUser = async (user) => {
+    console.log(user);
+
     const response = await api.put(`/api/users/update`, user, {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -34,11 +36,24 @@ const useAuth = () => {
     return data;
   };
 
+  const getUsers = async (user) => {
+    const response = await api.get(`/api/users`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    const data = await response.data;
+
+    return data;
+  };
+
   return {
     updateUser,
     registerUser,
     loginUser,
     logoutUser,
+    getUsers,
   };
 };
 
