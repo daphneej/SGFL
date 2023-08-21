@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 const App = () => {
   return (
-    <div className="flex flex-col w-screen h-screen overflow-x-hidden">
+    <div className="relative flex flex-col w-full overflow-hidden">
       <Navbar />
-      <Outlet />
-      <Footer />
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };

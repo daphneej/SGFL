@@ -36,8 +36,9 @@ model User {
   phone           String?  @unique
   status          Status   @default(ACTIVE)
   role            Role     @default(USER)
-  createdCourses  Course[] @relation("TrainerCourses")
-  enrolledCourses Course[] @relation("StudentCourses")
+  createdCourses  Course[] @relation("TrainerCreatedCourses")
+  enrolledCourses Course[] @relation("StudentEnrolledCourses")
+  coursesInCart   Course[] @relation("StudentCartCourses")
 }
 
 model Category {
@@ -47,16 +48,18 @@ model Category {
 }
 
 model Course {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  price       Float
-  trainerId   Int?
-  trainer     User?    @relation("TrainerCourses", fields: [trainerId], references: [id])
-  students    User[]   @relation("StudentCourses")
-  categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
+  id                       Int      @id @default(autoincrement())
+  title                    String
+  description              String
+  price                    Float
+  trainerId                Int?
+  trainer                  User?    @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
+  students                 User[]   @relation("StudentEnrolledCourses")
+  studentsWithCourseInCart User[]   @relation("StudentCartCourses")
+  categoryId               Int
+  category                 Category @relation(fields: [categoryId], references: [id])
+  createdAt                DateTime @default(now())
+  published                Boolean  @default(false)
 
   @@index([trainerId])
   @@index([categoryId])
