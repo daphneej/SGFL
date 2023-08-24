@@ -1,6 +1,11 @@
 import { Router } from "express";
 
 import {
+  protectAdminRoutes,
+  protectUserRoutes,
+} from "../middlewares/auth.middlewares.js";
+
+import {
   createCategory,
   deleteCategory,
   getCategory,
@@ -10,10 +15,10 @@ import {
 
 const router = Router();
 
-router.post("/", createCategory);
-router.get("/", getCategories);
-router.get("/:id", getCategory);
-router.put("/:id", updateCategory);
-router.delete("/:id", deleteCategory);
+router.post("/", protectUserRoutes, protectAdminRoutes, createCategory);
+router.get("/", protectUserRoutes, protectAdminRoutes, getCategories);
+router.get("/:id", protectUserRoutes, protectAdminRoutes, getCategory);
+router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCategory);
+router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCategory);
 
-export { router as categoryRouter };
+export { router as categoryRoutes };

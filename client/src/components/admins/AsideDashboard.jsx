@@ -10,9 +10,9 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 
-import useAuth from "../../hooks/useAuth";
+import useAuth from "@/hooks/users/useAuth";
 
-import useUserStore from "../../zustand/useUserStore";
+import useUserStore from "@/zustand/useUserStore";
 
 const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
   const { user, setUser } = useUserStore();
@@ -34,16 +34,18 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
   };
 
   return (
-    <aside className="w-1/5 font-semibold bg-white text-slate-800 dark:bg-slate-950 dark:text-white">
+    <aside className="w-full py-8 font-semibold md:h-screen h-fit sm:w-72 bg-base-300">
       <div className="p-4">
-        <div className="flex items-center space-x-2 mb-6">
+        <div className="flex items-center mb-6 space-x-2">
           {/* Add your user profile image here */}
-          <div className="rounded-full bg-gray-700 text-white w-10 h-10 flex items-center justify-center">
-            <span className="text-lg">A</span>
+          <div className="flex items-center justify-center w-10 h-10 text-white bg-gray-700 rounded-full">
+            <span className="text-lg">
+              {`${user?.firstName.at(0)}${user?.lastName.at(0)}`}
+            </span>
           </div>
           <div>
-            <p className="text-sm font-semibold">Admin</p>
-            <p className="text-xs text-gray-500">admin@example.com</p>
+            <p className="text-sm font-semibold">{user?.role}</p>
+            <p className="text-xs text-gray-500">{user?.email}</p>
           </div>
         </div>
         <ul className="">
@@ -58,12 +60,12 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
               onClick={() => setSelectedMenuItem("Dashboard")}
             >
               <FiBarChart className="mr-2" />
-              Dashboard
+              Tableau de bord
             </button>
           </li>
           {/* Users section */}
           <li>
-            <div className="border-t border-gray-300 mb-4"></div>
+            <div className="border-t border-gray-300"></div>
             <button
               className={`w-full py-2 flex items-center ${
                 selectedMenuItem === "Users"
@@ -73,7 +75,7 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
               onClick={() => setSelectedMenuItem("Users")}
             >
               <FiUsers className="mr-2" />
-              Users
+              Utilisateurs
             </button>
           </li>
           {/* Categories section */}
@@ -88,7 +90,7 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
               onClick={() => setSelectedMenuItem("Categories")}
             >
               <FiLayers className="mr-2" />
-              Categories
+              Catégories
             </button>
           </li>
           {/* Courses section */}
@@ -103,27 +105,20 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
               onClick={() => setSelectedMenuItem("Courses")}
             >
               <FiBook className="mr-2" />
-              Courses
+              Cours
             </button>
           </li>
           <li>
-            <div className="border-t border-gray-300 mb-4"></div>
-            {/* Link to the home page */}
-            <Link
-              to="/"
-              className="w-full py-2 flex items-center hover:text-primary"
-            >
-              Home
-            </Link>
+            <div className="mb-4 border-t border-gray-300"></div>
           </li>
           <li>
             {/* Logout button */}
             <button
               onClick={handleLogOutUser}
-              className="w-full py-2 flex items-center text-red-500 hover:text-red-600"
+              className="w-full text-base text-red-500 normal-case btn btn-neutral"
             >
-              <FiLogOut className="mr-2" />
-              Logout
+              <FiLogOut />
+              Déconnexion
             </button>
           </li>
         </ul>

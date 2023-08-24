@@ -23,4 +23,4 @@ router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCourse);
 router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCourse);
 
 // Export the router
-export { router as coursesRouter };
+export { router as courseRoutes };

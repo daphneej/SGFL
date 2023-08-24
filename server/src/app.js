@@ -13,9 +13,10 @@ import {
 dotenv.config();
 
 // Import route handlers
-import { usersRouter } from "./routes/users.routes.js";
-import { coursesRouter } from "./routes/courses.routes.js";
-import { categoryRouter } from "./routes/category.routes.js";
+import { adminRoutes } from "./routes/admin.routes.js";
+import { userRoutes } from "./routes/user.routes.js";
+import { courseRoutes } from "./routes/course.routes.js";
+import { categoryRoutes } from "./routes/category.routes.js";
 
 // Create Express app
 const app = express();
@@ -33,9 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-app.use("/api/users", usersRouter);
-app.use("/api/courses", coursesRouter);
-app.use("/api/categories", categoryRouter);
+app.use("/api/users", adminRoutes, userRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/categories", categoryRoutes);
 
 // Error handling middlewares
 app.use(notFound);

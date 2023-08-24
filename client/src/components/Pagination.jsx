@@ -1,7 +1,9 @@
-import React from "react";
-
-function Pagination({ contents, currentPage, itemsPerPage, setCurrentPage }) {
-  // Function to handle page change
+const Pagination = ({
+  contents,
+  currentPage,
+  itemsPerPage,
+  setCurrentPage,
+}) => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -12,10 +14,8 @@ function Pagination({ contents, currentPage, itemsPerPage, setCurrentPage }) {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-3 py-1 rounded-l-md border font-medium ${
-            currentPage === 1
-              ? "bg-gray-200 text-gray-600"
-              : "bg-white text-gray-500 hover:bg-gray-100"
+          className={`px-3 py-1 rounded-l-md border border-base-300 font-medium ${
+            currentPage === 1 ? "bg-base-300" : "bg-base-200 hover:bg-base-100"
           }`}
         >
           Prev
@@ -26,10 +26,10 @@ function Pagination({ contents, currentPage, itemsPerPage, setCurrentPage }) {
             <button
               key={i}
               onClick={() => handlePageChange(i + 1)}
-              className={`px-3 py-1 border-t border-b font-medium ${
+              className={`px-3 py-1 border-t border-b font-medium border-base-300 ${
                 currentPage === i + 1
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-500 hover:bg-gray-100"
+                  ? "bg-primary text-white hover:bg-base-100 hover:text-primary"
+                  : "bg-base-300 text-gray-500 hover:bg-base-200"
               }`}
             >
               {i + 1}
@@ -39,10 +39,10 @@ function Pagination({ contents, currentPage, itemsPerPage, setCurrentPage }) {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === Math.ceil(contents?.length / itemsPerPage)}
-          className={`px-3 py-1 rounded-r-md border-t border-b font-medium ${
+          className={`px-3 py-1 rounded-r-md border-t border-b font-medium border-base-300 ${
             currentPage === Math.ceil(contents?.length / itemsPerPage)
-              ? "bg-gray-200 text-gray-600"
-              : "bg-white text-gray-500 hover:bg-gray-100"
+              ? "bg-base-200"
+              : "bg-base-300 hover:bg-base-100"
           }`}
         >
           Next
@@ -50,6 +50,6 @@ function Pagination({ contents, currentPage, itemsPerPage, setCurrentPage }) {
       </nav>
     </div>
   );
-}
+};
 
 export default Pagination;

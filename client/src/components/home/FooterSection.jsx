@@ -1,8 +1,6 @@
-import logo from "../../assets/images/logo.png";
-
 const FooterSection = () => {
   return (
-    <footer className="footer footer-center p-10 bg-neutral text-white">
+    <footer className="p-10 footer footer-center bg-base-300">
       <div>
         <svg
           width="50"

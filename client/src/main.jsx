@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
 
+import { QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -10,23 +10,26 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
+import App from "@/App.jsx";
 
-import { QueryClientProvider } from "react-query";
+import AdminRoute from "@/components/AdminRoute";
+import PrivateRoutes from "@/components/PrivateRoutes";
 
-import { queryClient } from "./index";
+import AdminDashboard from "@/components/admins/AdminDashboard";
+import TrainerDashboard from "@/components/trainers/TrainerDashboard";
+import StudentDashboard from "@/components/students/StudentDashboard";
+import UserDashboard from "@/components/users/UserDashboard";
 
-import HomePage from "./pages/HomePage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import ProfilePage from "./pages/ProfilePage";
-import CoursePage from "./pages/CoursePage";
-import AdminDashboard from "./pages/AdminDashboard";
+import HomePage from "@/components/home/HomePage";
+import CoursePage from "@/components/courses/CoursePage";
+import LoginPage from "@/components/users/LoginPage";
+import ProfilePage from "@/components/users/ProfilePage";
+import RegisterPage from "@/components/users/RegisterPage";
 
-import PrivateRoutes from "./components/PrivateRoutes";
-import AdminRoute from "./components/AdminRoute";
+import { queryClient } from "@/index";
 
 import "react-toastify/dist/ReactToastify.css";
+import "@/index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -36,11 +39,14 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/courses" element={<CoursePage />} />
       <Route path="/" element={<PrivateRoutes />}>
+        <Route path="dashboard/users" element={<UserDashboard />} />,
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="dashboard/trainers" element={<TrainerDashboard />} />,
+        <Route path="dashboard/students" element={<StudentDashboard />} />,
+        <Route path="/" element={<AdminRoute />}>
+          <Route path="dashboard/admin" element={<AdminDashboard />} />,
+        </Route>
       </Route>
-    </Route>,
-    <Route path="/" element={<AdminRoute />}>
-      <Route path="/admin" element={<AdminDashboard />} />,
     </Route>,
   ])
 );
@@ -49,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ToastContainer position="top-center" />
     </QueryClientProvider>
+    <ToastContainer position="top-center" />
   </React.StrictMode>
 );
