@@ -1,10 +1,12 @@
 import { useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import useUserStore from "../zustand/useUserStore";
-import useAuth from "../hooks/useAuth.js";
 
-import logo from "../assets/images/logo.png";
+import useUserStore from "@/zustand/useUserStore";
+import useAuth from "@/hooks/users/useAuth.js";
+
+import logoColor from "@/assets/images/logo-color.png";
+import { FiLogOut } from "react-icons/fi";
 
 const Navbar = () => {
   const { logoutUser } = useAuth();
@@ -26,34 +28,28 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-neutral p-4 md:p-2">
-      <div className="container flex-col md:flex-row items-center justify-between mx-auto gap-4">
+    <nav className="p-4 bg-base-300 navbar md:p-2">
+      <div className="container flex-col items-center justify-between gap-4 mx-auto md:flex-row">
         <Link
           to={"/"}
-          className="flex items-center p-1 rounded-lg text-neutral-100 w-56 md:w-28"
+          className="flex items-center w-56 p-1 rounded-lg text-neutral-100 md:w-28"
         >
-          <img src={logo} alt="Logo" className="w-full h-full" />
+          <img src={logoColor} alt="Logo" className="w-full h-full" />
         </Link>
 
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          {user && user.role === "ADMIN" && (
-            <ul className="text-white">
-              <li>
-                <Link className="btn" to={"/admin"}>
-                  Admin Dashboard
-                </Link>
-              </li>
-            </ul>
-          )}
+        <div className="flex flex-col items-center gap-4 md:flex-row">
           {user ? (
-            <div className="md:w-auto flex justify-center items-center gap-4 mt-2 md:mt-0">
-              {/* Cart */}
+            <div className="flex items-center justify-center gap-4 mt-2 md:w-auto md:mt-0">
+              {/* Panier */}
               <div className="dropdown md:dropdown-end">
-                <label tabIndex={0} className="btn btn-circle">
+                <label
+                  tabIndex={0}
+                  className="bg-base-100 hover:bg-base-200 btn btn-circle"
+                >
                   <div className="indicator">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -74,63 +70,87 @@ const Navbar = () => {
                   tabIndex={0}
                   className="mt-3 z-[1] card card-compact dropdown-content w-52 shadow"
                 >
-                  <div className="card-body bg-base-300 rounded-xl">
-                    <span className="font-bold text-lg">
+                  <div className="rounded-md bg-base-300 card-body">
+                    <span className="text-lg font-bold">
                       {user.coursesInCart?.length} Cours
                     </span>
                     <span className="text-info">
-                      Subtotal: $
+                      Total :{" "}
                       {user.coursesInCart
                         ?.reduce((sum, course) => {
                           return sum + course.price;
                         }, 0)
                         .toFixed(2)}{" "}
-                      US
+                      USD
                     </span>
                     <div className="card-actions">
-                      <button className="btn bg-primary btn-block rounded-xl hover:bg-primary-focus text-white">
-                        View cart
+                      <button className="text-white btn bg-primary hover:bg-neutral btn-block rounded-xl hover:text-black-focus">
+                        Voir le panier
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* User Profile */}
+              {/* Profil de l'utilisateur */}
               <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-circle avatar">
+                <label
+                  tabIndex={0}
+                  className="bg-base-100 hover:bg-base-200 btn btn-circle avatar"
+                >
                   <div className="w-10 h-10 rounded-full">
-                    <p className="w-full h-full flex justify-center items-center font-bold text-2xl">
+                    <p className="flex items-center justify-center w-full h-full text-2xl font-bold">
                       {user.email.split("")[0]}
                     </p>
                   </div>
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu dropdown-content z-[1] p-4 shadow bg-base-300 rounded-xl min-w-52 mt-4"
+                  className="menu dropdown-content z-[1] p-4 shadow bg-base-300 min-w-52 mt-4 gap-1 rounded-md"
                 >
-                  <p className="text-xs text-center mb-4 dark:text-white font-bold bg-white p-2 rounded-lg">
+                  <p className="p-2 mb-4 text-xs font-bold text-center rounded-lg bg-base-100">
                     {user.email}
                   </p>
 
-                  <li className="font-bold text-md mb-1">User</li>
+                  <li className="mb-1 font-bold text-md">Utilisateur</li>
+                  {user && (
+                    <li>
+                      <Link
+                        to={`/dashboard/${
+                          user.role === "ADMIN"
+                            ? "admin"
+                            : user.role === "TRAINER"
+                            ? "trainer"
+                            : user.role === "STUDENTS"
+                            ? "students"
+                            : "user"
+                        }`}
+                      >
+                        Tableau de bord
+                      </Link>
+                    </li>
+                  )}
                   <li>
-                    <Link to={"/profile"}>Profile</Link>
+                    <Link to={"/profile"}>Profil</Link>
                   </li>
                   <li>
-                    <button className="" onClick={handleLogOutUser}>
-                      Logout
+                    <button
+                      onClick={handleLogOutUser}
+                      className="text-red-500 bg-neutral hover:text-red-500"
+                    >
+                      <FiLogOut />
+                      Déconnexion
                     </button>
                   </li>
                 </ul>
               </div>
             </div>
           ) : (
-            // Auth Login Items
-            <ul className="flex gap-2 p-1 text-white">
+            // Éléments d'authentification et de connexion
+            <ul className="flex gap-2 p-1">
               <li>
                 <Link
-                  className="rounded-md py-2 px-4 hover:bg-neutral-100 hover:text-neutral"
+                  className="text-white btn btn-sm bg-primary hover:bg-neutral"
                   to="/register"
                 >
                   Inscription
@@ -138,7 +158,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  className="rounded-md py-2 px-4 hover:bg-neutral-100 hover:text-neutral"
+                  className="text-white btn btn-sm bg-primary hover:bg-neutral"
                   to="/login"
                 >
                   Connexion

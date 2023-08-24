@@ -8,20 +8,27 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  addUser,
 } from "../controllers/users/user.controller.js";
 
-import { protectUserRoutes } from "../middlewares/auth.middlewares.js";
+import {
+  protectAdminRoutes,
+  protectUserRoutes,
+} from "../middlewares/auth.middlewares.js";
 
 const router = express.Router();
 
-// Define routes
+// Admin Routes
+router.post("/", protectUserRoutes, protectAdminRoutes, addUser);
+router.get("/", protectUserRoutes, protectAdminRoutes, getUsers);
+router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteUser);
+
+// User Routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logOutUser);
-router.get("/", protectUserRoutes, getUsers);
 router.get("/profile", protectUserRoutes, getUser);
 router.put("/update", protectUserRoutes, updateUser);
 router.delete("/delete", protectUserRoutes, deleteUser);
 
-// Export the router
-export { router as usersRouter };
+export { router as userRoutes };

@@ -1,23 +1,23 @@
 import AnchorLink from "react-anchor-link-smooth-scroll";
-import aboutImage from "../../assets/images/about.jpg";
+import aboutImage from "@/assets/images/about.jpg";
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-10 min-h-screen bg-base-200">
-      <div className="container mx-auto py-12 md:py-24 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <div className="md:flex justify-end">
+    <section id="about" className="min-h-screen py-10 bg-base-200">
+      <div className="container px-4 py-12 mx-auto md:py-24">
+        <div className="grid items-start grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="justify-end md:flex">
             <img
               src={aboutImage}
               alt="About Image"
-              className="w-full h-full object-cover rounded-lg"
+              className="object-cover w-full h-full rounded-lg"
             />
           </div>
           <div className="text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h2 className="mb-4 text-xl font-bold md:text-2xl lg:text-3xl">
               Découvrez notre plateforme d'apprentissage
             </h2>
-            <p className="text-lg md:text-xl my-6">
+            <p className="my-6">
               Nous sommes dédiés à fournir une expérience d'apprentissage de
               qualité supérieure dans un large éventail de domaines
               passionnants. Que vous souhaitiez vous spécialiser dans
@@ -26,7 +26,7 @@ const AboutSection = () => {
               développer vos compétences et à progresser dans votre parcours
               professionnel.
             </p>
-            <p className="text-lg md:text-xl mb-6">
+            <p className="my-6">
               Notre approche pédagogique interactive et pratique vise à offrir
               des cours adaptés à tous les niveaux, que vous soyez débutant
               cherchant à acquérir de nouvelles compétences ou professionnel en
@@ -34,16 +34,16 @@ const AboutSection = () => {
               explorer de nouvelles opportunités d'apprentissage en ligne et
               atteindre vos objectifs avec succès.
             </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
+            <div className="flex flex-col justify-center gap-4 md:flex-row md:justify-start">
               <AnchorLink
                 href="#formations"
-                className="btn btn-primary py-2 px-4 md:px-6"
+                className="text-white btn bg-primary hover:bg-neutral"
               >
                 Explorer les Formations
               </AnchorLink>
               <AnchorLink
                 href="#contact"
-                className="btn btn-outline py-2 px-4 md:px-6"
+                className="btn btn-outline hover:bg-neutral hover:text-white hover:border-primary"
               >
                 Nous Contacter
               </AnchorLink>

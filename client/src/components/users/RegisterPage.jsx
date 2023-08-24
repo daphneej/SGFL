@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAuth from "../hooks/useAuth";
-import useUserStore from "../zustand/useUserStore";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
+
+import useAuth from "@/hooks/users/useAuth";
+import useUserStore from "@/zustand/useUserStore";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const RegisterPage = () => {
     if (user) {
       navigate("/profile");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   useEffect(() => {
     let hasEmptyInput = false;
@@ -56,15 +57,13 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex justify-center h-screen bg-gray-100 dark:bg-gray-900 px-4 py-24">
-      <div className="w-full h-fit max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-          Inscription
-        </h2>
+    <div className="flex justify-center px-4 py-24 h-fit bg-base-100">
+      <div className="w-full max-w-md p-8 rounded-md h-fit bg-base-300">
+        <h2 className="mb-6 text-3xl font-bold text-center">Inscription</h2>
 
         <form onSubmit={handleRegisterUser}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-lg font-medium">
+            <label htmlFor="email" className="font-medium text-md">
               Adresse Email
             </label>
             <input
@@ -78,12 +77,12 @@ const RegisterPage = () => {
               }
               type="text"
               placeholder="Veuillez saisir votre email"
-              className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-200"
+              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-lg font-medium">
+            <label htmlFor="password" className="font-medium text-md">
               Mot De Passe
             </label>
             <input
@@ -98,15 +97,12 @@ const RegisterPage = () => {
               type="password"
               autoComplete="true"
               placeholder="Veuillez saisir votre mot de passe"
-              className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-200"
+              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
             />
           </div>
 
           <div className="mb-6">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-lg font-medium"
-            >
+            <label htmlFor="confirmPassword" className="font-medium text-md">
               Confirmation Mot De Passe
             </label>
             <input
@@ -121,17 +117,13 @@ const RegisterPage = () => {
               type="password"
               autoComplete="true"
               placeholder="Veuillez confirmer votre mot de passe"
-              className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-200"
+              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
             />
           </div>
 
           <button
             type="submit"
-            className={`w-full px-4 py-2 rounded-lg ${
-              isLoading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-primary hover:bg-primary-focus"
-            } text-white font-semibold`}
+            className="w-full text-white btn bg-primary hover:bg-neutral"
             disabled={emptyInput || isLoading}
           >
             {isLoading ? (

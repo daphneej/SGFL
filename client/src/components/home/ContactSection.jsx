@@ -1,34 +1,33 @@
 import { useState } from "react";
-import contactImage from "../../assets/images/contact.png";
+import contactImage from "@/assets/images/contact.png";
 
 const ContactSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [emptyInput, setEmptyInput] = useState(false);
 
   return (
-    <section id="contact" className="py-12 md:py-24 min-h-screen bg-base-200">
-      <div className="container mx-auto px-4">
+    <section id="contact" className="min-h-screen py-12 md:py-24 bg-base-200">
+      <div className="container px-4 mx-auto">
         <div className="flex flex-col gap-8 text-center md:text-left md:flex-row-reverse">
           <div className="flex justify-center rounded-md">
             <img
               src={contactImage}
               alt="Contact Image"
-              className="w-2/3 h-2/3 object-contain"
+              className="object-contain w-2/3 h-2/3"
             />
           </div>
-          <div className="">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+          <div className="p-6 rounded-md bg-base-300">
+            <h2 className="mb-4 text-xl font-bold md:text-2xl lg:text-3xl">
               Nous contacter
             </h2>
-            <p className="text-lg mb-6">
+            <p className="mb-6">
               Vous avez des questions, des commentaires ou des demandes
-              spécifiques ? N'hésitez pas à nous contacter en utilisant le
-              formulaire ci-dessous. Notre équipe sera ravie de vous répondre
-              dans les plus brefs délais.
+              spécifiques ? N'hésitez pas à nous contacter. Notre équipe sera
+              ravie de vous répondre dans les plus brefs délais.
             </p>
             <form>
               <div className="mb-8">
-                <label htmlFor="name" className="block text-lg font-medium">
+                <label htmlFor="name" className="font-medium text-md">
                   Nom complet
                 </label>
                 <input
@@ -36,11 +35,11 @@ const ContactSection = () => {
                   id="name"
                   name="name"
                   placeholder="Votre nom complet"
-                  className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-100"
+                  className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-100"
                 />
               </div>
               <div className="mb-8">
-                <label htmlFor="email" className="block text-lg font-medium">
+                <label htmlFor="email" className="font-medium text-md">
                   Adresse e-mail
                 </label>
                 <input
@@ -48,11 +47,11 @@ const ContactSection = () => {
                   id="email"
                   name="email"
                   placeholder="Votre adresse e-mail"
-                  className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-100"
+                  className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-100"
                 />
               </div>
               <div className="mb-8">
-                <label htmlFor="message" className="block text-lg font-medium">
+                <label htmlFor="message" className="font-medium text-md">
                   Message
                 </label>
                 <textarea
@@ -60,16 +59,12 @@ const ContactSection = () => {
                   name="message"
                   rows="4"
                   placeholder="Votre message"
-                  className="w-full px-4 py-2 mt-2 rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-primary bg-base-100 resize-none"
+                  className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md resize-none focus:outline-none focus:ring focus:ring-primary bg-base-100"
                 />
               </div>
               <button
                 type="submit"
-                className={`w-full px-4 py-2 rounded-lg ${
-                  isLoading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-primary hover:bg-primary-focus"
-                } text-white font-semibold`}
+                className="w-full text-white btn bg-primary hover:bg-neutral"
                 disabled={emptyInput || isLoading}
               >
                 {isLoading ? (
