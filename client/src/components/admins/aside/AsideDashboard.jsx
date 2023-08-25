@@ -1,15 +1,11 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
-import {
-  FiUsers,
-  FiLayers,
-  FiBook,
-  FiBarChart,
-  FiLogOut,
-  FiHome,
-} from "react-icons/fi";
+import { FiUsers, FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
+
+import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
+
+import { RiMenuFoldLine } from "react-icons/ri";
 
 import useAuth from "@/hooks/users/useAuth";
 
@@ -17,7 +13,12 @@ import useUserStore from "@/zustand/useUserStore";
 
 import MenuItem from "@/components/admins/aside/MenuItem";
 
-const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
+const AsideDashboard = ({
+  selectedMenuItem,
+  setSelectedMenuItem,
+  menuOpen,
+  setMenuOpen,
+}) => {
   const { user, setUser } = useUserStore();
 
   const { logoutUser } = useAuth();
@@ -35,10 +36,20 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
   const handleLogOutUser = async () => {
     mutate(user);
   };
-
   return (
-    <aside className="w-full py-8 font-semibold md:h-screen h-fit md:overflow-y-auto sm:w-72 bg-base-300">
-      <div className="p-4">
+    <aside
+      className={`absolute ease-in-out duration-300 z-10 w-full py-8 overflow-hidden font-semibold h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+        !menuOpen && "-left-full"
+      }`}
+    >
+      <div className="absolute mt-4 mr-4 top-1 right-1">
+        <RiMenuFoldLine
+          className="cursor-pointer"
+          size={30}
+          onClick={() => setMenuOpen(false)}
+        />
+      </div>
+      <div className="px-4 mt-20 md:mt-10">
         <div className="flex items-center mb-6 space-x-2">
           {/* Add your user profile image here */}
           <div className="flex items-center justify-center w-10 h-10 text-white bg-gray-700 rounded-full">
@@ -47,56 +58,65 @@ const AsideDashboard = ({ selectedMenuItem, setSelectedMenuItem }) => {
               .at(0)}`}</span>
           </div>
           <div>
-            <p className="text-sm font-semibold">{user?.role}</p>
+            <p className="text-sm font-semibold">
+              {user?.firstName} {user?.lastName}
+            </p>
             <p className="text-xs text-gray-500">{user?.email}</p>
           </div>
         </div>
-        <ul className="">
+        <ul>
           <MenuItem
-            label={"Tableau de bord"}
-            icon={<FiBarChart className="mr-2" />}
+            label={"Dashboard"}
+            icon={<MdOutlineSpaceDashboard className="mr-2" size={20} />}
             menuItem={"Dashboard"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
             label={"Utilisateurs"}
-            icon={<FiUsers className="mr-2" />}
+            icon={<FiUsers className="mr-2" size={20} />}
             menuItem={"Users"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
             label={"Catégories"}
-            icon={<FiLayers className="mr-2" />}
+            icon={<MdOutlineCategory className="mr-2" size={20} />}
             menuItem={"Categories"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
             label={"Cours"}
-            icon={<FiBook className="mr-2" />}
+            icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
-          <li>
-            <Link
-              to={"/"}
-              className="flex items-center w-full py-2 mt-4 hover:text-primary"
-            >
-              <FiHome className="mr-2" />
-              Home
-            </Link>
-          </li>
-          <li>
-            <div className="mb-4 border-t border-gray-300"></div>
-          </li>
+
+          <div className="mt-4">
+            <li>
+              <p className="text-xl font-extrabold">Utilisateur</p>
+            </li>
+
+            <MenuItem
+              label={"Home"}
+              icon={<FiHome className="mr-2" size={20} />}
+              link={"/"}
+            />
+
+            <MenuItem
+              label={"Profile"}
+              icon={<FiUser className="mr-2" size={20} />}
+              link={"/profile"}
+            />
+          </div>
+
           <li>
             {/* Logout button */}
             <button
               onClick={handleLogOutUser}
-              className="w-full text-base text-red-500 normal-case btn btn-neutral"
+              className="w-full mt-8 text-base text-red-500 normal-case btn btn-neutral"
             >
               <FiLogOut />
               Déconnexion

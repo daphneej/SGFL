@@ -60,8 +60,8 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   };
 
   return (
-    <div className="w-full h-full overflow-auto text-center">
-      <div className="flex flex-col-reverse items-center justify-between gap-4 my-8 md:flex-row">
+    <div className="flex flex-col justify-between flex-1 w-full h-full overflow-auto text-center">
+      <div className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">Users</h2>
 
         <button
@@ -72,83 +72,85 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
         </button>
       </div>
 
-      <UserAddFormModal
-        modalOpen={modalAddOpen}
-        setModalOpen={setModalAddOpen}
-      />
+      <div className="flex-1 py-4 overflow-x-auto">
+        <UserAddFormModal
+          modalOpen={modalAddOpen}
+          setModalOpen={setModalAddOpen}
+        />
 
-      <UserUpdateFormModal
-        selectedUser={selectedUser}
-        modalOpen={modalUpdateOpen}
-        setModalOpen={setModalUpdateOpen}
-      />
+        <UserUpdateFormModal
+          selectedUser={selectedUser}
+          modalOpen={modalUpdateOpen}
+          setModalOpen={setModalUpdateOpen}
+        />
 
-      <ViewUserModal
-        selectedUser={selectedUser}
-        modalOpen={modalViewOpen}
-        setModalOpen={setModalViewOpen}
-      />
+        <ViewUserModal
+          selectedUser={selectedUser}
+          modalOpen={modalViewOpen}
+          setModalOpen={setModalViewOpen}
+        />
 
-      <table className="w-full mx-auto">
-        <thead className="bg-base-300">
-          <tr>
-            {COLUMNS.map((column, index) => (
-              <th key={index} className="p-3 border border-base-100">
-                {column.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="text-sm">
-          {isLoading && (
+        <table className="w-full mx-auto">
+          <thead className="bg-base-300">
             <tr>
-              <td className="p-2" colSpan={COLUMNS.length}>
-                <div className="loading"></div>
-              </td>
+              {COLUMNS.map((column, index) => (
+                <th key={index} className="p-3 border border-base-100">
+                  {column.label}
+                </th>
+              ))}
             </tr>
-          )}
+          </thead>
+          <tbody className="text-sm">
+            {isLoading && (
+              <tr>
+                <td className="p-2" colSpan={COLUMNS.length}>
+                  <div className="loading"></div>
+                </td>
+              </tr>
+            )}
 
-          {currentUsers?.map((user) => (
-            <tr
-              key={user.id}
-              className={`hover:bg-base-100 ${
-                user.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
-              }`}
-            >
-              <td className="p-3 border border-base-100">{user.id}</td>
-              <td className="p-3 border border-base-100">{user.firstName}</td>
-              <td className="p-3 border border-base-100">{user.lastName}</td>
-              <td className="p-3 border border-base-100">{user.email}</td>
-              <td className="p-3 border border-base-100">{user.role}</td>
-              <td className="p-3 border border-base-100">
-                <div className="flex justify-center gap-3 mx-auto">
-                  <FiEye
-                    className="cursor-pointer text-primary hover:underline"
-                    size={18}
-                    onClick={() => {
-                      setSelectedUser(user);
-                      setModalViewOpen(true);
-                    }}
-                  />
-                  <FiEdit
-                    className="text-green-500 cursor-pointer hover:underline"
-                    size={18}
-                    onClick={() => {
-                      setSelectedUser(user);
-                      setModalUpdateOpen(true);
-                    }}
-                  />
-                  <FiTrash2
-                    onClick={() => handleRemoveUser(user.id)}
-                    className="text-red-500 cursor-pointer hover:underline"
-                    size={18}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {currentUsers?.map((user) => (
+              <tr
+                key={user.id}
+                className={`hover:bg-base-100 ${
+                  user.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
+                }`}
+              >
+                <td className="p-3 border border-base-100">{user.id}</td>
+                <td className="p-3 border border-base-100">{user.firstName}</td>
+                <td className="p-3 border border-base-100">{user.lastName}</td>
+                <td className="p-3 border border-base-100">{user.email}</td>
+                <td className="p-3 border border-base-100">{user.role}</td>
+                <td className="p-3 border border-base-100">
+                  <div className="flex justify-center gap-3 mx-auto">
+                    <FiEye
+                      className="cursor-pointer text-primary hover:underline"
+                      size={18}
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setModalViewOpen(true);
+                      }}
+                    />
+                    <FiEdit
+                      className="text-green-500 cursor-pointer hover:underline"
+                      size={18}
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setModalUpdateOpen(true);
+                      }}
+                    />
+                    <FiTrash2
+                      onClick={() => handleRemoveUser(user.id)}
+                      className="text-red-500 cursor-pointer hover:underline"
+                      size={18}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
       <Pagination
