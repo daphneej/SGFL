@@ -7,11 +7,12 @@ import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
 import useDashboardStore from "@/zustand/useDashboardStore";
 
+import AsideDashboard from "@/components/admins/aside/AsideDashboard";
+
 import DashboardChart from "@/components/admins/charts/DashboardChart";
 import UserTable from "@/components/admins/tables/UserTable";
 import CategoryTable from "@/components/admins/tables/CategoryTable";
 import CourseTable from "@/components/admins/tables/CourseTable";
-import AsideDashboard from "@/components/admins/AsideDashboard";
 
 const AdminDashboard = () => {
   const { user } = useUserStore();
@@ -40,7 +41,7 @@ const AdminDashboard = () => {
   });
 
   return (
-    <div className="flex flex-col h-full md:flex-row bg-base-100">
+    <div className="flex flex-col h-screen overflow-hidden bg-base-100 md:flex-row">
       {/* Sidebar */}
       <AsideDashboard
         selectedMenuItem={selectedMenuItem}
@@ -48,7 +49,7 @@ const AdminDashboard = () => {
       />
 
       {/* Main content */}
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 h-full p-2 overflow-auto md:p-6 md:overflow-hidden">
         {selectedMenuItem === "Dashboard" && (
           <DashboardChart
             users={users}

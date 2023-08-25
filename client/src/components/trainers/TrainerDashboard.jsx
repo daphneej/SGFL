@@ -1,5 +1,5 @@
 const TrainerDashboard = () => {
-  return <div className="flex h-screen bg-gray-100">TrainerDashboard</div>;
+  return <div className="flex h-screen bg-base-100">TrainerDashboard</div>;
 };
 
 export default TrainerDashboard;

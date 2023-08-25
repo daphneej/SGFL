@@ -1,10 +1,6 @@
 import asyncHandler from "express-async-handler";
 
-import {
-  addUserSchema,
-  loginUserSchema,
-  registerUserSchema,
-} from "../../models/userModel.js";
+import { loginUserSchema, registerUserSchema } from "../../models/userModel.js";
 
 import {
   generateToken,
@@ -75,7 +71,6 @@ export const loginUser = asyncHandler(async (req, res) => {
   });
 });
 
-// TODO - Better
 export const logOutUser = asyncHandler(async (req, res) => {
   res
     .status(200)
@@ -103,7 +98,7 @@ export const getUser = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
   const user = await prisma.user.findFirst({
-    where: { id },
+    where: { id: parseInt(id) },
     include: {
       coursesInCart: true,
       createdCourses: true,
@@ -127,7 +122,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
   const user = await prisma.user.findFirst({
-    where: { id },
+    where: { id: parseInt(id) },
     include: {
       coursesInCart: true,
       createdCourses: true,
@@ -157,7 +152,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   if (
     email &&
-    (await prisma.user.findFirst({ where: { AND: [{ email, NOT: { id } }] } }))
+    (await prisma.user.findFirst({
+      where: { AND: [{ email, NOT: { id: parseInt(id) } }] },
+    }))
   ) {
     res.status(409);
     throw new Error(
@@ -167,7 +164,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   if (
     phone &&
-    (await prisma.user.findFirst({ where: { AND: [{ phone, NOT: { id } }] } }))
+    (await prisma.user.findFirst({
+      where: { AND: [{ phone, NOT: { id: parseInt(id) } }] },
+    }))
   ) {
     res.status(409);
     throw new Error(
@@ -235,7 +234,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     delete updatedUser.password;
 
     res.status(200).json({
-      message: "Profil mis à jour avec succès.",
+      message: "Votre profil a ete mis à jour avec succès.",
       user: { ...updatedUser, token },
     });
   }
@@ -257,54 +256,5 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     message: "Compte supprimé avec succès. Merci pour votre confiance.",
-  });
-});
-
-export const addUser = asyncHandler(async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    gender,
-    address,
-    phone,
-    role,
-    status,
-  } = addUserSchema.parse(req.body);
-
-  if (await prisma.user.findFirst({ where: { email } })) {
-    res.status(409);
-    throw new Error(
-      "Désolé, cet e-mail est déjà associé à un compte existant."
-    );
-  }
-
-  if (await prisma.user.findFirst({ where: { phone } })) {
-    res.status(409);
-    throw new Error(
-      "Désolé, ce numéro de téléphone est déjà associé à un compte existant."
-    );
-  }
-
-  const user = await prisma.user.create({
-    data: {
-      firstName,
-      lastName,
-      email,
-      gender,
-      address,
-      phone,
-      password: await hashPassword(password),
-      role,
-      status,
-    },
-  });
-
-  delete user.password;
-
-  res.status(201).json({
-    message: "Le compte a été créé avec succès.",
-    user,
   });
 });
