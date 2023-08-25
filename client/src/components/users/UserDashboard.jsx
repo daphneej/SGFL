@@ -1,5 +1,5 @@
 const UserDashboard = () => {
-  return <div className="flex h-screen bg-gray-100">UserDashboard</div>;
+  return <div className="flex h-screen bg-base-100">UserDashboard</div>;
 };
 
 export default UserDashboard;

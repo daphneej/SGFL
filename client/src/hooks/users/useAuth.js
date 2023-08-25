@@ -24,12 +24,11 @@ const useAuth = () => {
   };
 
   const updateUser = async (user) => {
-    const response = await api.put(`/api/users/update`, user, {
+    const response = await api.put(`/api/users/update/${user.id}`, user, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     });
-
     return await response.data;
   };
 

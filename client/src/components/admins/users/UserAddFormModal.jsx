@@ -1,7 +1,19 @@
+import { useMutation } from "react-query";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { queryClient } from "@/index";
+
+import useUser from "@/hooks/users/useUser";
+import useUserStore from "@/zustand/useUserStore";
+import { addUserSchema } from "@/schemas/userSchema";
+
 import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
-import SimpleForm from "@/components/forms/SimpleForm";
+import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
@@ -9,11 +21,45 @@ const GENDERS = ["MALE", "FEMALE"];
 const STATUS = ["ACTIVE", "INACTIVE"];
 const ROLES = ["ADMIN", "TRAINER", "STUDENT", "USER"];
 
-const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
+const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
+  const { user } = useUserStore();
+  const { addUser } = useUser();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(addUserSchema) });
+
+  const { isLoading, mutate } = useMutation({
+    mutationFn: addUser,
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries("users");
+      reset();
+      setModalOpen(false);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
+
+  const handleAddUser = (data) => {
+    mutate({ user: data, token: user.token });
+  };
+
+  const handleCancelClick = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <SimpleForm handler={handler}>
-      <InputsForm col={2}>
+    <ModalForm handler={handleSubmit(handleAddUser)} modalOpen={modalOpen}>
+      <InputsForm col={3}>
         <InputField
+          uuid={crypto.randomUUID()}
           label={"Prénom"}
           errors={errors}
           register={register}
@@ -22,6 +68,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <InputField
+          uuid={crypto.randomUUID()}
           label={"Nom De Famille"}
           errors={errors}
           register={register}
@@ -30,6 +77,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <InputField
+          uuid={crypto.randomUUID()}
           label={"Adresse Email"}
           errors={errors}
           register={register}
@@ -38,6 +86,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <InputField
+          uuid={crypto.randomUUID()}
           label={"Adresse"}
           errors={errors}
           register={register}
@@ -46,6 +95,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <InputField
+          uuid={crypto.randomUUID()}
           label={"Numéro De Téléphone"}
           errors={errors}
           register={register}
@@ -54,6 +104,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <SelectField
+          uuid={crypto.randomUUID()}
           label={"Sexe"}
           errors={errors}
           register={register}
@@ -62,7 +113,17 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
           options={GENDERS}
         />
 
+        <InputField
+          uuid={crypto.randomUUID()}
+          label={"Mot De Passe"}
+          errors={errors}
+          register={register}
+          field={"password"}
+          type={"password"}
+        />
+
         <SelectField
+          uuid={crypto.randomUUID()}
           label={"Rôle"}
           errors={errors}
           register={register}
@@ -72,6 +133,7 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         />
 
         <SelectField
+          uuid={crypto.randomUUID()}
           label={"Statut"}
           errors={errors}
           register={register}
@@ -84,12 +146,18 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
         <ButtonForm
           isLoading={isLoading}
           primary={true}
-          label={"Sauvegarder l'Utilisateur"}
+          label={"Ajouter l'Utilisateur"}
           handleClick={() => {}}
         />
+        <ButtonForm
+          isLoading={isLoading}
+          primary={false}
+          label={"Annuler"}
+          handleClick={handleCancelClick}
+        />
       </ButtonsForm>
-    </SimpleForm>
+    </ModalForm>
   );
 };
 
-export default UpdateUserProfile;
+export default UserAddFormModal;

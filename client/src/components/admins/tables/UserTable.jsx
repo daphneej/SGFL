@@ -1,7 +1,6 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 import { AxiosError } from "axios";
 
 import useUser from "@/hooks/users/useUser";
@@ -10,29 +9,37 @@ import useUserStore from "@/zustand/useUserStore";
 import Pagination from "@/components/Pagination";
 
 import { queryClient } from "@/index";
-import UserAddFormModal from "@/components/users/UserAddFormModal";
-import UserUpdateFormModal from "@/components/users/UserUpdateFormModal";
 
-const COLUMNS = ["ID", "Prénom", "Nom", "Email", "Rôle", "Actions"];
+import UserAddFormModal from "@/components/admins/users/UserAddFormModal";
+import UserUpdateFormModal from "@/components/admins/users/UserUpdateFormModal";
+import ViewUserModal from "@/components/admins/users/ViewUserModal";
+
+import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
+
+const COLUMNS = [
+  { label: "ID", key: "id" },
+  { label: "Prénom", key: "firstName" },
+  { label: "Nom De Famille", key: "lastName" },
+  { label: "Adresse Email", key: "email" },
+  { label: "Rôle", key: "role" },
+  { label: "Actions", key: "actions" },
+];
 
 const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   const { user } = useUserStore();
-  const { removeUser, getUser } = useUser();
+  const { removeUser } = useUser();
   const itemsPerPage = 7;
 
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [modalUpdateOpen, setModalUpdateOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [modalViewOpen, setModalViewOpen] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users?.slice(indexOfFirstItem, indexOfLastItem);
-
-  const { data: selectedUser } = useQuery({
-    queryFn: () => getUser(selectedUserId),
-    enabled: Boolean(selectedUserId),
-  });
 
   const { mutate } = useMutation({
     mutationKey: "users",
@@ -53,12 +60,12 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   };
 
   return (
-    <div className="text-center">
-      <div className="flex items-center justify-between my-8">
+    <div className="w-full h-full overflow-auto text-center">
+      <div className="flex flex-col-reverse items-center justify-between gap-4 my-8 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">Users</h2>
 
         <button
-          className="text-white border-none outline-none btn bg-primary hover:bg-neutral"
+          className="w-full text-white border-none outline-none btn bg-primary hover:bg-neutral md:w-fit"
           onClick={() => setModalAddOpen(true)}
         >
           Add New User
@@ -76,12 +83,18 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
         setModalOpen={setModalUpdateOpen}
       />
 
+      <ViewUserModal
+        selectedUser={selectedUser}
+        modalOpen={modalViewOpen}
+        setModalOpen={setModalViewOpen}
+      />
+
       <table className="w-full mx-auto">
         <thead className="bg-base-300">
           <tr>
             {COLUMNS.map((column, index) => (
               <th key={index} className="p-3 border border-base-100">
-                {column}
+                {column.label}
               </th>
             ))}
           </tr>
@@ -112,12 +125,16 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
                   <FiEye
                     className="cursor-pointer text-primary hover:underline"
                     size={18}
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setModalViewOpen(true);
+                    }}
                   />
                   <FiEdit
                     className="text-green-500 cursor-pointer hover:underline"
                     size={18}
                     onClick={() => {
-                      setSelectedUserId(user.id);
+                      setSelectedUser(user);
                       setModalUpdateOpen(true);
                     }}
                   />

@@ -97,12 +97,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const user = await prisma.user.findFirst({
-    where: { id },
-    include: {
-      coursesInCart: true,
-      createdCourses: true,
-      enrolledCourses: true,
-    },
+    where: { id: parseInt(id) },
   });
 
   if (!user) {
@@ -126,7 +121,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   if (
     email &&
-    (await prisma.user.findFirst({ where: { AND: [{ email, NOT: { id } }] } }))
+    (await prisma.user.findFirst({
+      where: { AND: [{ email, NOT: { id: parseInt(id) } }] },
+    }))
   ) {
     res.status(409);
     throw new Error(
@@ -136,7 +133,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   if (
     phone &&
-    (await prisma.user.findFirst({ where: { AND: [{ phone, NOT: { id } }] } }))
+    (await prisma.user.findFirst({
+      where: { AND: [{ phone, NOT: { id: parseInt(id) } }] },
+    }))
   ) {
     res.status(409);
     throw new Error(
@@ -144,70 +143,36 @@ export const updateUser = asyncHandler(async (req, res) => {
     );
   }
 
-  if (updatedCoursesInCart && Array.isArray(updatedCoursesInCart)) {
-    const removedCourses = updatedCoursesInCart.filter((course) =>
-      user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
-    );
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      firstName: firstName && firstName.length > 0 ? firstName : user.firstName,
+      lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
+      email: email && email.length > 0 ? email : user.email,
+      role: role && role.length > 0 ? role : user.role,
+      gender:
+        gender && gender.length > 0 ? gender.toLocaleUpperCase() : user.gender,
+      address: address && address.length > 0 ? address : user.address,
+      phone: phone && phone.length > 0 ? phone : user.phone,
+      status: status && status.length > 0 ? status : user.status,
+      password:
+        password && password.length > 0
+          ? await hashPassword(password)
+          : user.password,
+    },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
 
-    const addedCourses = updatedCoursesInCart.filter(
-      (updatedCourse) =>
-        !user.coursesInCart.some((course) => course.id === updatedCourse.id)
-    );
+  delete updatedUser.password;
 
-    const updatedUser = await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        coursesInCart: {
-          connect: addedCourses.map((course) => ({ id: course.id })),
-          disconnect: removedCourses.map((course) => ({ id: course.id })),
-        },
-      },
-      include: {
-        coursesInCart: true,
-        createdCourses: true,
-        enrolledCourses: true,
-      },
-    });
-
-    res.status(200).json({
-      message: "Course added to your cart successfuly.",
-      user: { ...updatedUser, token },
-    });
-  } else {
-    const updatedUser = await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        firstName:
-          firstName && firstName.length > 0 ? firstName : user.firstName,
-        lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
-        email: email && email.length > 0 ? email : user.email,
-        role: role && role.length > 0 ? role : user.role,
-        gender:
-          gender && gender.length > 0
-            ? gender.toLocaleUpperCase()
-            : user.gender,
-        address: address && address.length > 0 ? address : user.address,
-        phone: phone && phone.length > 0 ? phone : user.phone,
-        status: status && status.length > 0 ? status : user.status,
-        password:
-          password && password.length > 0
-            ? await hashPassword(password)
-            : user.password,
-      },
-      include: {
-        coursesInCart: true,
-        createdCourses: true,
-        enrolledCourses: true,
-      },
-    });
-
-    delete updatedUser.password;
-
-    res.status(200).json({
-      message: "Profil mis à jour avec succès.",
-      user: { ...updatedUser, token },
-    });
-  }
+  res.status(200).json({
+    message: "Le profil de l'utilisateur a ete mis à jour avec succès.",
+    user,
+  });
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {

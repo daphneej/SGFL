@@ -21,10 +21,10 @@ import StudentDashboard from "@/components/students/StudentDashboard";
 import UserDashboard from "@/components/users/UserDashboard";
 
 import HomePage from "@/components/home/HomePage";
-import CoursePage from "@/components/courses/CoursePage";
-import LoginPage from "@/components/users/LoginPage";
+import LoginPage from "@/components/users/auth/LoginPage";
+import RegisterPage from "@/components/users/auth/RegisterPage";
 import ProfilePage from "@/components/users/ProfilePage";
-import RegisterPage from "@/components/users/RegisterPage";
+import CoursePage from "@/components/courses/CoursePage";
 
 import { queryClient } from "@/index";
 
@@ -39,14 +39,14 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/courses" element={<CoursePage />} />
       <Route path="/" element={<PrivateRoutes />}>
-        <Route path="dashboard/users" element={<UserDashboard />} />,
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="dashboard/trainers" element={<TrainerDashboard />} />,
-        <Route path="dashboard/students" element={<StudentDashboard />} />,
-        <Route path="/" element={<AdminRoute />}>
-          <Route path="dashboard/admin" element={<AdminDashboard />} />,
-        </Route>
+        <Route path="dashboard/users" element={<UserDashboard />} />
+        <Route path="dashboard/trainers" element={<TrainerDashboard />} />
+        <Route path="dashboard/students" element={<StudentDashboard />} />
       </Route>
+    </Route>,
+    <Route path="/" element={<AdminRoute />}>
+      <Route path="dashboard/admins" element={<AdminDashboard />} />
     </Route>,
   ])
 );
