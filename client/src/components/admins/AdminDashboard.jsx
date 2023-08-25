@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
+import { RiMenuUnfoldLine } from "react-icons/ri";
 
 import useUser from "@/hooks/users/useUser";
 import useCategory from "@/hooks/useCategory";
@@ -15,6 +17,8 @@ import CategoryTable from "@/components/admins/tables/CategoryTable";
 import CourseTable from "@/components/admins/tables/CourseTable";
 
 const AdminDashboard = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const { user } = useUserStore();
   const { selectedMenuItem, setSelectedMenuItem } = useDashboardStore();
 
@@ -46,29 +50,51 @@ const AdminDashboard = () => {
       <AsideDashboard
         selectedMenuItem={selectedMenuItem}
         setSelectedMenuItem={setSelectedMenuItem}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
       />
 
       {/* Main content */}
-      <main className="flex-1 h-full p-2 overflow-auto md:p-6 md:overflow-hidden">
-        {selectedMenuItem === "Dashboard" && (
-          <DashboardChart
-            users={users}
-            categories={categories}
-            courses={courses}
+      <main
+        className="flex flex-col flex-1 h-full overflow-auto md:overflow-hidden"
+        onClick={() => {
+          if (menuOpen) {
+            setMenuOpen(false);
+          }
+        }}
+      >
+        <div className="absolute mt-4 ml-4 top-1 left-1">
+          <RiMenuUnfoldLine
+            className="cursor-pointer"
+            size={30}
+            onClick={() => setMenuOpen(true)}
           />
-        )}
-        {selectedMenuItem === "Users" && (
-          <UserTable users={users} isLoadingUsers={isLoadingUsers} />
-        )}
-        {selectedMenuItem === "Categories" && (
-          <CategoryTable
-            categories={categories}
-            isLoadingCategories={isLoadingCategories}
-          />
-        )}
-        {selectedMenuItem === "Courses" && (
-          <CourseTable courses={courses} isLoadingCourses={isLoadingCourses} />
-        )}
+        </div>
+
+        <div className="p-4 mt-20 md:mt-10 md:p-6">
+          {selectedMenuItem === "Dashboard" && (
+            <DashboardChart
+              users={users}
+              categories={categories}
+              courses={courses}
+            />
+          )}
+          {selectedMenuItem === "Users" && (
+            <UserTable users={users} isLoadingUsers={isLoadingUsers} />
+          )}
+          {selectedMenuItem === "Categories" && (
+            <CategoryTable
+              categories={categories}
+              isLoadingCategories={isLoadingCategories}
+            />
+          )}
+          {selectedMenuItem === "Courses" && (
+            <CourseTable
+              courses={courses}
+              isLoadingCourses={isLoadingCourses}
+            />
+          )}
+        </div>
       </main>
     </div>
   );

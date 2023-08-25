@@ -1,12 +1,13 @@
 import { useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FiLogOut, FiUser } from "react-icons/fi";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 
 import useUserStore from "@/zustand/useUserStore";
 import useAuth from "@/hooks/users/useAuth.js";
 
 import logoColor from "@/assets/images/logo-color.png";
-import { FiLogOut } from "react-icons/fi";
 
 const Navbar = () => {
   const { logoutUser } = useAuth();
@@ -108,13 +109,14 @@ const Navbar = () => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu dropdown-content z-[1] p-4 shadow bg-base-300 min-w-52 mt-4 gap-1 rounded-md"
+                  className="menu menu-sm dropdown-content z-[1] p-4 shadow bg-base-300 mt-4 gap-1 rounded-md"
                 >
                   <p className="p-2 mb-4 text-xs font-bold text-center rounded-lg bg-base-100">
                     {user.email}
                   </p>
 
                   <li className="mb-1 font-bold text-md">Utilisateur</li>
+
                   {user && (
                     <li>
                       <Link
@@ -128,12 +130,16 @@ const Navbar = () => {
                             : "users"
                         }`}
                       >
-                        Tableau de bord
+                        <MdOutlineSpaceDashboard />
+                        Dashboard
                       </Link>
                     </li>
                   )}
                   <li>
-                    <Link to={"/profile"}>Profil</Link>
+                    <Link to={"/profile"}>
+                      <FiUser />
+                      Profil
+                    </Link>
                   </li>
                   <li>
                     <button

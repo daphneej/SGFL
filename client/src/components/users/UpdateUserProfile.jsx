@@ -6,13 +6,17 @@ import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
 const GENDERS = ["MALE", "FEMALE"];
-const STATUS = ["ACTIVE", "INACTIVE"];
-const ROLES = ["ADMIN", "TRAINER", "STUDENT", "USER"];
 
-const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
+const UpdateUserProfile = ({
+  register,
+  handler,
+  errors,
+  isLoading,
+  setIsEditing,
+}) => {
   return (
     <SimpleForm handler={handler}>
-      <InputsForm col={2}>
+      <InputsForm col={3}>
         <InputField
           label={"Prénom"}
           errors={errors}
@@ -61,31 +65,19 @@ const UpdateUserProfile = ({ register, handler, errors, isLoading }) => {
           optionLabel={"Sélectionner Le Sexe"}
           options={GENDERS}
         />
-
-        <SelectField
-          label={"Rôle"}
-          errors={errors}
-          register={register}
-          field={"role"}
-          optionLabel={"Sélectionner Le Rôle"}
-          options={ROLES}
-        />
-
-        <SelectField
-          label={"Statut"}
-          errors={errors}
-          register={register}
-          field={"status"}
-          optionLabel={"Sélectionner Le Statut"}
-          options={STATUS}
-        />
       </InputsForm>
       <ButtonsForm>
         <ButtonForm
           isLoading={isLoading}
           primary={true}
-          label={"Sauvegarder l'Utilisateur"}
+          label={"Sauvegarder"}
           handleClick={() => {}}
+        />
+        <ButtonForm
+          isLoading={false}
+          primary={false}
+          label={"Annuler"}
+          handleClick={() => setIsEditing(false)}
         />
       </ButtonsForm>
     </SimpleForm>

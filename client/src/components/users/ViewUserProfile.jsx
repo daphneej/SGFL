@@ -1,6 +1,6 @@
 const ViewUserProfile = ({ user }) => {
   return (
-    <div className="flex flex-col flex-1 gap-4 mt-6">
+    <div className="grid grid-cols-1 gap-1 mt-10 sm:grid-cols-1">
       {user?.gender && (
         <div className="flex justify-between gap-1 mb-6">
           <label className="block font-semibold">Sexe</label>
