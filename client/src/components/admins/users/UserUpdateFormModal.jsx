@@ -124,7 +124,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
           register={register}
           field={"gender"}
           optionLabel={"Sélectionner Le Sexe"}
-          options={GENDERS}
+          options={GENDERS.map((gender) => ({ key: gender, value: gender }))}
         />
 
         <SelectField
@@ -134,7 +134,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
           register={register}
           field={"role"}
           optionLabel={"Sélectionner Le Rôle"}
-          options={ROLES}
+          options={ROLES.map((role) => ({ key: role, value: role }))}
         />
 
         <SelectField
@@ -144,7 +144,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
           register={register}
           field={"status"}
           optionLabel={"Sélectionner Le Statut"}
-          options={STATUS}
+          options={STATUS.map((status) => ({ key: status, value: status }))}
         />
       </InputsForm>
       <ButtonsForm>

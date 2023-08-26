@@ -1,8 +1,11 @@
 import { prisma } from "../index.js";
 import asyncHandler from "express-async-handler";
+import { addCourseSchema } from "../../models/course.models.js";
 
 export const createCourse = asyncHandler(async (req, res) => {
-  const { title, description, price, categoryId } = req.body;
+  const { title, description, price, categoryId } = addCourseSchema.parse(
+    req.body
+  );
 
   const createdCourse = await prisma.course.create({
     data: {
@@ -14,7 +17,9 @@ export const createCourse = asyncHandler(async (req, res) => {
     },
   });
 
-  res.status(201).json(createdCourse);
+  res.status(201).json({
+    message: "Le cours a bien été créé.",
+  });
 });
 
 export const getCourses = asyncHandler(async (req, res) => {
@@ -32,6 +37,11 @@ export const getCourses = asyncHandler(async (req, res) => {
           name: true,
         },
       },
+      students: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
 
@@ -43,6 +53,25 @@ export const getCourse = asyncHandler(async (req, res) => {
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
+    include: {
+      trainer: {
+        select: {
+          lastName: true,
+          firstName: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      students: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   if (!course) {
@@ -60,6 +89,25 @@ export const updateCourse = asyncHandler(async (req, res) => {
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
+    include: {
+      trainer: {
+        select: {
+          lastName: true,
+          firstName: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      students: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   if (!course) {
@@ -76,7 +124,9 @@ export const updateCourse = asyncHandler(async (req, res) => {
     },
   });
 
-  res.status(200).json(updatedCourse);
+  res.status(200).json({
+    message: "Le cours a bien été modifié.",
+  });
 });
 
 export const deleteCourse = asyncHandler(async (req, res) => {
@@ -95,5 +145,7 @@ export const deleteCourse = asyncHandler(async (req, res) => {
     where: { id: course.id },
   });
 
-  res.status(200).json(deletedCourse);
+  res.status(200).json({
+    message: "Le cours a bien été supprimé.",
+  });
 });

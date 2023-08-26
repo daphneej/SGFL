@@ -4,12 +4,15 @@ import { prisma } from "../index.js";
 export const createCategory = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
-  const createdCategory = await prisma.category.create({
+  await prisma.category.create({
     data: {
       name: name,
     },
   });
-  res.status(201).json(createdCategory);
+
+  res.status(201).json({
+    message: "La catégorie a bien été créée.",
+  });
 });
 
 export const getCategories = asyncHandler(async (req, res) => {
@@ -18,15 +21,6 @@ export const getCategories = asyncHandler(async (req, res) => {
       courses: {
         select: {
           id: true,
-          title: true,
-          description: true,
-          price: true,
-          trainer: {
-            select: {
-              lastName: true,
-              firstName: true,
-            },
-          },
         },
       },
     },
@@ -66,14 +60,16 @@ export const updateCategory = asyncHandler(async (req, res) => {
     throw new Error(`Category id: ${categoryId} not found`);
   }
 
-  const updatedCategory = await prisma.category.update({
+  await prisma.category.update({
     where: { id: category.id },
     data: {
       name,
     },
   });
 
-  res.status(200).json(updatedCategory);
+  res.status(200).json({
+    message: "La catégorie a bien été modifiée.",
+  });
 });
 
 export const deleteCategory = asyncHandler(async (req, res) => {
@@ -88,9 +84,11 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     throw new Error(`Category id: ${categoryId} not found`);
   }
 
-  const deletedCategory = await prisma.category.delete({
+  await prisma.category.delete({
     where: { id: category.id },
   });
 
-  res.status(200).json(deletedCategory);
+  res.status(200).json({
+    message: "La catégorie a bien été supprimée.",
+  });
 });

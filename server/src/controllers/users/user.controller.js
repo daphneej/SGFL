@@ -1,6 +1,9 @@
 import asyncHandler from "express-async-handler";
 
-import { loginUserSchema, registerUserSchema } from "../../models/userModel.js";
+import {
+  loginUserSchema,
+  registerUserSchema,
+} from "../../models/user.models.js";
 
 import {
   generateToken,
