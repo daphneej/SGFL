@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 
-import { addUserSchema } from "../../models/userModel.js";
+import { addUserSchema } from "../../models/user.models.js";
 
 import { hashPassword } from "../../utils/index.js";
 
@@ -49,7 +49,9 @@ export const addUser = asyncHandler(async (req, res) => {
 
   delete user.password;
 
-  res.status(201).json({ message: "Le compte a été créé avec succès." });
+  res
+    .status(201)
+    .json({ message: "Le compte de l'utilisateur a été créé avec succès." });
 });
 
 export const getUsers = asyncHandler(async (req, res) => {
@@ -170,8 +172,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   delete updatedUser.password;
 
   res.status(200).json({
-    message: "Le profil de l'utilisateur a ete mis à jour avec succès.",
-    user,
+    message: "Le profil de l'utilisateur a été mis à jour avec succès.",
   });
 });
 
@@ -190,6 +191,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
   await prisma.user.delete({ where: { id: user.id } });
 
   res.status(200).json({
-    message: "Compte supprimé avec succès.",
+    message: "Le compte de l'utilisateur a été supprimé avec succès.",
   });
 });

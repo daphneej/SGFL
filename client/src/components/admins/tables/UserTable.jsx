@@ -12,14 +12,14 @@ import { queryClient } from "@/index";
 
 import UserAddFormModal from "@/components/admins/users/UserAddFormModal";
 import UserUpdateFormModal from "@/components/admins/users/UserUpdateFormModal";
-import ViewUserModal from "@/components/admins/users/ViewUserModal";
+import UserViewModal from "@/components/admins/users/UserViewModal";
 
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
   { label: "Prénom", key: "firstName" },
-  { label: "Nom De Famille", key: "lastName" },
+  { label: "Nom", key: "lastName" },
   { label: "Adresse Email", key: "email" },
   { label: "Rôle", key: "role" },
   { label: "Actions", key: "actions" },
@@ -28,7 +28,7 @@ const COLUMNS = [
 const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   const { user } = useUserStore();
   const { removeUser } = useUser();
-  const itemsPerPage = 7;
+  const itemsPerPage = 10;
 
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [modalUpdateOpen, setModalUpdateOpen] = useState(false);
@@ -62,13 +62,15 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   return (
     <div className="flex flex-col justify-between flex-1 w-full h-full overflow-auto text-center">
       <div className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
-        <h2 className="text-2xl font-semibold text-left">Users</h2>
+        <h2 className="text-2xl font-semibold text-left">
+          Liste Des Utilisateurs
+        </h2>
 
         <button
           className="w-full text-white border-none outline-none btn bg-primary hover:bg-neutral md:w-fit"
           onClick={() => setModalAddOpen(true)}
         >
-          Add New User
+          Ajouter Un Nouvel Utilisateur
         </button>
       </div>
 
@@ -84,7 +86,7 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
           setModalOpen={setModalUpdateOpen}
         />
 
-        <ViewUserModal
+        <UserViewModal
           selectedUser={selectedUser}
           modalOpen={modalViewOpen}
           setModalOpen={setModalViewOpen}

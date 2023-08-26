@@ -11,8 +11,8 @@ import useAuth from "@/hooks/users/useAuth";
 
 import { updateUserSchema } from "@/schemas/userSchema";
 
-import ViewUserProfile from "@/components/users/ViewUserProfile";
-import UpdateUserProfile from "@/components/users/UpdateUserProfile";
+import UserProfileView from "@/components/users/UserProfileView";
+import UserProfileUpdate from "@/components/users/UserProfileUpdate";
 
 import { queryClient } from "@/index";
 
@@ -108,7 +108,7 @@ const ProfilePage = () => {
           </div>
 
           {isEditing ? (
-            <UpdateUserProfile
+            <UserProfileUpdate
               register={register}
               handler={handleSubmit(handleUpdateUser)}
               errors={errors}
@@ -116,7 +116,7 @@ const ProfilePage = () => {
               setIsEditing={setIsEditing}
             />
           ) : (
-            <ViewUserProfile user={user} />
+            <UserProfileView user={user} />
           )}
         </div>
       </div>

@@ -7,7 +7,7 @@ import ButtonsForm from "@/components/forms/ButtonsForm";
 
 const GENDERS = ["MALE", "FEMALE"];
 
-const UpdateUserProfile = ({
+const UserProfileUpdate = ({
   register,
   handler,
   errors,
@@ -84,4 +84,4 @@ const UpdateUserProfile = ({
   );
 };
 
-export default UpdateUserProfile;
+export default UserProfileUpdate;

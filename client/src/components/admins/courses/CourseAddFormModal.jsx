@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
@@ -6,9 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { queryClient } from "@/index";
 
-import useUser from "@/hooks/users/useUser";
 import useUserStore from "@/zustand/useUserStore";
-import { addUserSchema } from "@/schemas/userSchema";
+import useUser from "@/hooks/users/useUser";
+import useCategory from "@/hooks/useCategory";
+import useCourse from "@/hooks/useCourse";
+import { addCourseSchema } from "@/schemas/courseSchema";
 
 import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
@@ -16,28 +18,25 @@ import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
-import { useEffect } from "react";
-
-const GENDERS = ["MALE", "FEMALE"];
-const STATUS = ["ACTIVE", "INACTIVE"];
-const ROLES = ["ADMIN", "TRAINER", "STUDENT", "USER"];
 
 const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
-  const { addUser } = useUser();
+  const { addCourse } = useCourse();
+  const { getUsers } = useUser();
+  const { getCategories } = useCategory();
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(addUserSchema) });
+  } = useForm({ resolver: zodResolver(addCourseSchema) });
 
   const { isLoading, mutate } = useMutation({
-    mutationFn: addUser,
+    mutationFn: addCourse,
     onSuccess: (data) => {
       toast.success(data.message);
-      queryClient.invalidateQueries("users");
+      queryClient.invalidateQueries("courses");
       reset();
       setModalOpen(false);
     },
@@ -48,8 +47,20 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
     },
   });
 
-  const handleAddUser = (data) => {
-    mutate({ user: data, token: user.token });
+  const { isLoading: isLoadingCategories, data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(user.token),
+    enabled: Boolean(user),
+  });
+
+  const { isLoading: isLoadingUsers, data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUsers(user.token),
+    enabled: Boolean(user),
+  });
+
+  const handleAddCourse = (data) => {
+    mutate({ course: data, token: user.token });
   };
 
   const handleCancelClick = () => {
@@ -58,100 +69,75 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
 
   return (
     <ModalForm
-      handler={handleSubmit(handleAddUser)}
+      handler={handleSubmit(handleAddCourse)}
       modalOpen={modalOpen}
-      label={"Ajouter Un Nouvel Utilisateur"}
+      label={"Ajouter Un Nouveau Cours"}
     >
-      <InputsForm col={3}>
+      <InputsForm col={2}>
         <InputField
           uuid={crypto.randomUUID()}
-          label={"Prénom"}
+          label={"Titre"}
           errors={errors}
           register={register}
-          field={"firstName"}
+          field={"title"}
           type={"text"}
         />
 
         <InputField
           uuid={crypto.randomUUID()}
-          label={"Nom De Famille"}
+          label={"Description"}
           errors={errors}
           register={register}
-          field={"lastName"}
+          field={"description"}
           type={"text"}
         />
 
-        <InputField
+        <SelectField
           uuid={crypto.randomUUID()}
-          label={"Adresse Email"}
+          label={"Catégorie"}
           errors={errors}
           register={register}
-          field={"email"}
-          type={"email"}
+          field={"categoryId"}
+          optionLabel={"Sélectionner La Catégorie"}
+          options={categories?.map((category) => ({
+            key: category.id,
+            value: category.name,
+          }))}
+          disabled={isLoadingCategories}
+          type={"number"}
         />
 
         <InputField
           uuid={crypto.randomUUID()}
-          label={"Adresse"}
+          label={"Prix"}
           errors={errors}
           register={register}
-          field={"address"}
-          type={"text"}
-        />
-
-        <InputField
-          uuid={crypto.randomUUID()}
-          label={"Numéro De Téléphone"}
-          errors={errors}
-          register={register}
-          field={"phone"}
-          type={"tel"}
+          field={"price"}
+          type={"number"}
         />
 
         <SelectField
           uuid={crypto.randomUUID()}
-          label={"Sexe"}
+          label={"Formateur"}
           errors={errors}
           register={register}
-          field={"gender"}
-          optionLabel={"Sélectionner Le Sexe"}
-          options={GENDERS.map((gender) => ({ key: gender, value: gender }))}
-        />
-
-        <InputField
-          uuid={crypto.randomUUID()}
-          label={"Mot De Passe"}
-          errors={errors}
-          register={register}
-          field={"password"}
-          type={"password"}
-        />
-
-        <SelectField
-          uuid={crypto.randomUUID()}
-          label={"Rôle"}
-          errors={errors}
-          register={register}
-          field={"role"}
-          optionLabel={"Sélectionner Le Rôle"}
-          options={ROLES.map((role) => ({ key: role, value: role }))}
-        />
-
-        <SelectField
-          uuid={crypto.randomUUID()}
-          label={"Statut"}
-          errors={errors}
-          register={register}
-          field={"status"}
-          optionLabel={"Sélectionner Le Statut"}
-          options={STATUS.map((status) => ({ key: status, value: status }))}
+          field={"trainerId"}
+          optionLabel={"Sélectionner Le Formateur"}
+          options={users
+            ?.filter((user) => user.role === "TRAINER" || user.role === "ADMIN")
+            .map((trainer) => ({
+              key: trainer.id,
+              value: `${trainer.firstName} ${trainer.lastName}`,
+            }))}
+          disabled={isLoadingUsers}
+          type={"number"}
         />
       </InputsForm>
       <ButtonsForm>
         <ButtonForm
           isLoading={isLoading}
           primary={true}
-          label={"Ajouter l'Utilisateur"}
+          label={"Ajouter Le Cours"}
           handleClick={() => {}}
         />
         <ButtonForm
