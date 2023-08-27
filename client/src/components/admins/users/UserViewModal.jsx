@@ -15,10 +15,10 @@ const UserViewModal = ({ selectedUser: user, modalOpen, setModalOpen }) => {
       />
 
       <div className="flex-1 mt-6">
-        <div className="flex flex-col items-center gap-2 p-4 rounded-md bg-base-200 md:items-start md:gap-4 md:flex-row">
+        <div className="flex flex-col items-center gap-2 p-4 rounded-md bg-base-100 md:bg-transparent md:items-start md:gap-4 md:flex-row">
           <div className="avatar placeholder">
-            <div className="rounded-full w-14 bg-neutral-focus text-neutral-content">
-              <span>{user?.email[0].toUpperCase()}</span>
+            <div className="text-xl font-extrabold rounded-full w-14 bg-neutral-focus text-neutral-content">
+              <span>{user?.email.at(0).toUpperCase()}</span>
             </div>
           </div>
           <div className="flex flex-col items-center md:items-start">
