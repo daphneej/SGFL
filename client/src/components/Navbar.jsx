@@ -103,15 +103,15 @@ const Navbar = () => {
                 >
                   <div className="w-10 h-10 rounded-full">
                     <p className="flex items-center justify-center w-full h-full text-2xl font-bold">
-                      {user.email.split("")[0]}
+                      {user?.email?.at(0)}
                     </p>
                   </div>
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu dropdown-content z-[1] p-4 shadow bg-base-300 mt-4 gap-1 rounded-md"
+                  className="menu menu-sm dropdown-content z-[1] p-4 shadow bg-base-300 mt-4 gap-1 rounded-md"
                 >
-                  <p className="p-2 mb-4 text-xs font-bold text-center rounded-lg bg-base-100">
+                  <p className="p-2 mb-4 text-sm font-bold text-center rounded-lg bg-base-100">
                     {user.email}
                   </p>
 
