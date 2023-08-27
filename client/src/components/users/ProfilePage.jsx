@@ -15,6 +15,8 @@ import UserProfileView from "@/components/users/UserProfileView";
 import UserProfileUpdate from "@/components/users/UserProfileUpdate";
 
 import { queryClient } from "@/index";
+import ButtonsForm from "@/components/forms/ButtonsForm";
+import ButtonForm from "@/components/forms/ButtonForm";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -70,27 +72,10 @@ const ProfilePage = () => {
 
   return (
     <div className="flex justify-center px-4 py-10 bg-base-100">
-      <div className="flex flex-col w-full md:w-[45rem] gap-1 px-4 py-8 rounded-md h-fit bg-base-300 shadow-md shadow-primary">
-        <div className="flex flex-col-reverse items-center justify-between gap-8 md:flex-row">
-          <h2 className="text-2xl font-bold">Terminez Votre Profil</h2>
-          {!isEditing && (
-            <div className="flex flex-col items-center justify-center w-full gap-2 md:w-fit md:flex-row">
-              <button
-                onClick={handleEditClick}
-                className="flex-1 w-full px-4 py-2 font-semibold text-white rounded-lg bg-primary hover:bg-neutral"
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                onClick={handleSkipClick}
-                className="flex-1 w-full px-4 py-2 font-semibold text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400"
-              >
-                Skip
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="flex flex-col w-full md:w-[45rem] gap-1 px-4 py-4 rounded-md h-fit bg-base-300 shadow-md shadow-primary">
+        <h2 className="my-3 text-2xl font-bold text-center">
+          Modifiez Votre Profil
+        </h2>
 
         <div className="mt-2 md:mt-6">
           <div className="flex flex-col items-center gap-2 p-4 rounded-md md:gap-4 md:flex-row bg-base-100 md:bg-transparent">
@@ -119,6 +104,23 @@ const ProfilePage = () => {
             <UserProfileView user={user} />
           )}
         </div>
+
+        {!isEditing && (
+          <ButtonsForm>
+            <ButtonForm
+              isLoading={false}
+              primary={true}
+              label={"Edit"}
+              handleClick={handleEditClick}
+            />
+            <ButtonForm
+              isLoading={false}
+              primary={false}
+              label={"Passer"}
+              handleClick={handleSkipClick}
+            />
+          </ButtonsForm>
+        )}
       </div>
     </div>
   );

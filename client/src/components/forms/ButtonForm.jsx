@@ -15,7 +15,7 @@ const ButtonForm = ({ isLoading, label, primary, handleClick }) => {
     <button
       type="button"
       onClick={handleClick}
-      className="flex-1 px-4 py-2 font-semibold text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400"
+      className="flex-1 px-4 py-2 font-semibold text-gray-700 bg-gray-300 rounded-lg btn hover:bg-gray-400"
     >
       {label}
     </button>

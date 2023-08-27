@@ -74,7 +74,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
         </button>
       </div>
 
-      <div className="flex flex-col flex-1 gap-2 overflow-x-auto">
+      <div className="flex flex-col flex-1 gap-2 pb-4 overflow-x-auto">
         <CourseAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}

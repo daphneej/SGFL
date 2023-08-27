@@ -74,7 +74,7 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
         </button>
       </div>
 
-      <div className="flex flex-col flex-1 gap-2 overflow-x-auto">
+      <div className="flex flex-col flex-1 gap-2 pb-4 overflow-x-auto">
         <UserAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}
