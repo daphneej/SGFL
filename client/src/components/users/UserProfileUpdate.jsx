@@ -63,7 +63,7 @@ const UserProfileUpdate = ({
           register={register}
           field={"gender"}
           optionLabel={"Sélectionner Le Sexe"}
-          options={GENDERS}
+          options={GENDERS.map((gender) => ({ key: gender, value: gender }))}
         />
       </InputsForm>
       <ButtonsForm>

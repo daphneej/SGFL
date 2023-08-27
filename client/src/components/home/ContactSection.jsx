@@ -25,7 +25,7 @@ const ContactSection = () => {
               spécifiques ? N'hésitez pas à nous contacter. Notre équipe sera
               ravie de vous répondre dans les plus brefs délais.
             </p>
-            <form>
+            <form className="text-left">
               <div className="mb-8">
                 <label htmlFor="name" className="font-medium text-md">
                   Nom complet

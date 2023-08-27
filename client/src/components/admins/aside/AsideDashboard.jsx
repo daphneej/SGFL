@@ -38,13 +38,13 @@ const AsideDashboard = ({
   };
   return (
     <aside
-      className={`absolute ease-in-out duration-300 z-10 w-full py-8 overflow-hidden font-semibold h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
-        !menuOpen && "-left-full"
+      className={`fixed md:relative top-0 ease-in-out duration-300 z-10 w-full py-8 overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+        !menuOpen && "-left-full md:left-0"
       }`}
     >
       <div className="absolute mt-4 mr-4 top-1 right-1">
         <RiMenuFoldLine
-          className="cursor-pointer"
+          className="cursor-pointer md:hidden"
           size={30}
           onClick={() => setMenuOpen(false)}
         />

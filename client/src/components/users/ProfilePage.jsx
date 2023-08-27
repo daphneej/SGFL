@@ -69,10 +69,10 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="flex justify-center px-4 py-24 bg-base-100">
-      <div className="flex flex-col w-full md:w-[45rem] gap-1 p-8 rounded-md h-fit bg-base-300 shadow-md shadow-primary">
+    <div className="flex justify-center px-4 py-10 bg-base-100">
+      <div className="flex flex-col w-full md:w-[45rem] gap-1 px-4 py-8 rounded-md h-fit bg-base-300 shadow-md shadow-primary">
         <div className="flex flex-col-reverse items-center justify-between gap-8 md:flex-row">
-          <h2 className="text-3xl font-bold">Your Profile</h2>
+          <h2 className="text-2xl font-bold">Terminez Votre Profil</h2>
           {!isEditing && (
             <div className="flex flex-col items-center justify-center w-full gap-2 md:w-fit md:flex-row">
               <button
@@ -93,10 +93,10 @@ const ProfilePage = () => {
         </div>
 
         <div className="mt-2 md:mt-6">
-          <div className="flex flex-col items-center gap-2 md:items-start md:gap-4 md:flex-row">
+          <div className="flex flex-col items-center gap-2 p-4 rounded-md md:gap-4 md:flex-row bg-base-100 md:bg-transparent">
             <div className="avatar placeholder">
-              <div className="rounded-full w-14 bg-neutral-focus text-neutral-content">
-                <span>{user.email[0].toUpperCase()}</span>
+              <div className="text-xl font-extrabold rounded-full w-14 bg-neutral-focus text-neutral-content">
+                <span>{user.email.at(0).toUpperCase()}</span>
               </div>
             </div>
             <div className="flex flex-col text-center md:text-left">

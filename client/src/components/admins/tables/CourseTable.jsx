@@ -19,6 +19,7 @@ import CourseViewModal from "@/components/admins/courses/CourseViewModal";
 const COLUMNS = [
   { label: "ID", key: "id" },
   { label: "Titre", key: "title" },
+  { label: "Description", key: "description" },
   { label: "Formateur", key: "trainer" },
   { label: "Catégorie", key: "category" },
   { label: "Étudiants", key: "students" },
@@ -30,7 +31,7 @@ const COLUMNS = [
 const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
   const { user } = useUserStore();
   const { removeCourse } = useCourse();
-  const itemsPerPage = 7;
+  const itemsPerPage = 10;
 
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [modalUpdateOpen, setModalUpdateOpen] = useState(false);
@@ -62,7 +63,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between flex-1 w-full overflow-auto text-center">
+    <div className="flex flex-col justify-between flex-1 w-full h-[80%] overflow-auto text-center">
       <div className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">Liste Des Cours</h2>
 
@@ -74,7 +75,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
         </button>
       </div>
 
-      <div className="flex-1 py-4 overflow-x-auto">
+      <div className="flex-1 py-4 mt-6 overflow-x-auto">
         <CourseAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}
@@ -120,6 +121,9 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
               >
                 <td className="p-3 border border-base-100">{course?.id}</td>
                 <td className="p-3 border border-base-100">{course?.title}</td>
+                <td className="p-3 border border-base-100">
+                  {course?.description}
+                </td>
                 <td className="p-3 border border-base-100">
                   {course?.trainer?.firstName} {course?.trainer?.lastName}
                 </td>
