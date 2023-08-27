@@ -61,8 +61,8 @@ const CategoryTable = ({ isLoadingCategories: isLoading, categories }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between flex-1 w-full h-full overflow-auto text-center">
-      <div className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
+    <div className="flex flex-col justify-between flex-1 w-full gap-2 overflow-auto text-center">
+      <div className="flex flex-col-reverse items-center justify-between gap-2 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">
           Liste Des Catégories
         </h2>
@@ -75,7 +75,7 @@ const CategoryTable = ({ isLoadingCategories: isLoading, categories }) => {
         </button>
       </div>
 
-      <div className="flex-1 py-4 overflow-x-auto">
+      <div className="flex flex-col flex-1 gap-2 overflow-x-auto">
         <CategoryAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}
@@ -93,75 +93,86 @@ const CategoryTable = ({ isLoadingCategories: isLoading, categories }) => {
           setModalOpen={setModalViewOpen}
         />
 
-        <table className="w-full mx-auto">
-          <thead className="bg-base-300">
-            <tr>
-              {COLUMNS.map((column, index) => (
-                <th key={index} className="p-3 border border-base-100">
-                  {column.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="text-sm">
-            {isLoading && (
-              <tr>
-                <td className="p-2" colSpan={COLUMNS.length}>
-                  <div className="loading"></div>
-                </td>
-              </tr>
-            )}
+        {categories?.length === 0 ? (
+          <p className="mx-auto my-8 text-xl font-bold text-center text-neutral-500">
+            Aucune catégorie n'a été trouvée
+          </p>
+        ) : (
+          <>
+            <table className="flex-1 w-full mx-auto">
+              <thead className="bg-base-300">
+                <tr>
+                  {COLUMNS.map((column, index) => (
+                    <th key={index} className="p-3 border border-base-100">
+                      {column.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                {isLoading && (
+                  <tr>
+                    <td className="p-2" colSpan={COLUMNS.length}>
+                      <div className="loading"></div>
+                    </td>
+                  </tr>
+                )}
 
-            {currentCategories?.map((category) => (
-              <tr
-                key={category.id}
-                className={`hover:bg-base-100 ${
-                  category.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
-                }`}
-              >
-                <td className="p-3 border border-base-100">{category.id}</td>
-                <td className="p-3 border border-base-100">{category.name}</td>
-                <td className="p-3 border border-base-100">
-                  {category?.courses?.length}
-                </td>
-                <td className="p-3 border border-base-100">
-                  <div className="flex justify-center gap-3 mx-auto">
-                    <FiEye
-                      className="cursor-pointer text-primary hover:underline"
-                      size={18}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setModalViewOpen(true);
-                      }}
-                    />
-                    <FiEdit
-                      className="text-green-500 cursor-pointer hover:underline"
-                      size={18}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setModalUpdateOpen(true);
-                      }}
-                    />
-                    <FiTrash2
-                      onClick={() => handleRemoveCategory(category.id)}
-                      className="text-red-500 cursor-pointer hover:underline"
-                      size={18}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                {currentCategories?.map((category) => (
+                  <tr
+                    key={category.id}
+                    className={`hover:bg-base-100 ${
+                      category.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
+                    }`}
+                  >
+                    <td className="p-3 border border-base-100">
+                      {category.id}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      {category.name}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      {category?.courses?.length}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      <div className="flex justify-center gap-3 mx-auto">
+                        <FiEye
+                          className="cursor-pointer text-primary hover:underline"
+                          size={18}
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setModalViewOpen(true);
+                          }}
+                        />
+                        <FiEdit
+                          className="text-green-500 cursor-pointer hover:underline"
+                          size={18}
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setModalUpdateOpen(true);
+                          }}
+                        />
+                        <FiTrash2
+                          onClick={() => handleRemoveCategory(category.id)}
+                          className="text-red-500 cursor-pointer hover:underline"
+                          size={18}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* Pagination */}
+            <Pagination
+              contents={categories}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </>
+        )}
       </div>
-
-      {/* Pagination */}
-      <Pagination
-        contents={categories}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
     </div>
   );
 };

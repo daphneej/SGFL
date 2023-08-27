@@ -8,23 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-enum Status {
-  ACTIVE
-  INACTIVE
-}
-
-enum Role {
-  USER
-  STUDENT
-  TRAINER
-  ADMIN
-}
-
-enum Gender {
-  MALE
-  FEMALE
-}
-
 model User {
   id              Int      @id @default(autoincrement())
   firstName       String?
@@ -53,14 +36,49 @@ model Course {
   description              String
   price                    Float
   trainerId                Int?
+  categoryId               Int
+  createdAt                DateTime @default(now())
+  published                Boolean  @default(false)
   trainer                  User?    @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
   students                 User[]   @relation("StudentEnrolledCourses")
   studentsWithCourseInCart User[]   @relation("StudentCartCourses")
-  categoryId               Int
-  category                 Category @relation(fields: [categoryId], references: [id])
-  createdAt                DateTime @default(now())
-  published                Boolean  @default(false)
+  category                 Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([trainerId])
   @@index([categoryId])
+}
+
+model StudentCartCourses {
+  A Int
+  B Int
+
+  @@unique([A, B], map: "_StudentCartCourses_AB_unique")
+  @@index([B], map: "_StudentCartCourses_B_index")
+  @@map("_StudentCartCourses")
+}
+
+model StudentEnrolledCourses {
+  A Int
+  B Int
+
+  @@unique([A, B], map: "_StudentEnrolledCourses_AB_unique")
+  @@index([B], map: "_StudentEnrolledCourses_B_index")
+  @@map("_StudentEnrolledCourses")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Role {
+  USER
+  STUDENT
+  TRAINER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }

@@ -17,20 +17,6 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Course` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `title` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
-    `price` DOUBLE NOT NULL,
-    `trainerId` INTEGER NULL,
-    `categoryId` INTEGER NOT NULL,
-
-    INDEX `Course_trainerId_idx`(`trainerId`),
-    INDEX `Course_categoryId_idx`(`categoryId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `Category` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -39,10 +25,35 @@ CREATE TABLE `Category` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `_StudentCourses` (
+CREATE TABLE `Course` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `trainerId` INTEGER NULL,
+    `categoryId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `published` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `Course_trainerId_idx`(`trainerId`),
+    INDEX `Course_categoryId_idx`(`categoryId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_StudentEnrolledCourses` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
 
-    UNIQUE INDEX `_StudentCourses_AB_unique`(`A`, `B`),
-    INDEX `_StudentCourses_B_index`(`B`)
+    UNIQUE INDEX `_StudentEnrolledCourses_AB_unique`(`A`, `B`),
+    INDEX `_StudentEnrolledCourses_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_StudentCartCourses` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_StudentCartCourses_AB_unique`(`A`, `B`),
+    INDEX `_StudentCartCourses_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

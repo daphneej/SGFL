@@ -115,7 +115,7 @@ const CoursePage = () => {
           ) : (
             <div className="">
               {filteredCourses?.length === 0 ? (
-                <p className="mx-auto my-4 text-3xl font-bold text-center text-neutral-500">
+                <p className="mx-auto my-8 text-xl font-bold text-center text-neutral-500">
                   Aucun cours trouvé
                 </p>
               ) : (

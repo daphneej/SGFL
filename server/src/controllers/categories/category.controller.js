@@ -75,7 +75,7 @@ export const updateCategory = asyncHandler(async (req, res) => {
 export const deleteCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
 
-  const category = await prisma.category.findFirst({
+  const category = await prisma.category.findUnique({
     where: { id: parseInt(categoryId) },
   });
 
