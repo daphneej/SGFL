@@ -7,7 +7,7 @@ export const createCourse = asyncHandler(async (req, res) => {
     req.body
   );
 
-  const createdCourse = await prisma.course.create({
+  await prisma.course.create({
     data: {
       title: title,
       description: description,
@@ -25,26 +25,11 @@ export const createCourse = asyncHandler(async (req, res) => {
 export const getCourses = asyncHandler(async (req, res) => {
   const courses = await prisma.course.findMany({
     include: {
-      trainer: {
-        select: {
-          lastName: true,
-          firstName: true,
-        },
-      },
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      students: {
-        select: {
-          id: true,
-        },
-      },
+      category: true,
+      trainer: true,
+      students: true,
     },
   });
-
   res.status(200).json(courses);
 });
 
@@ -53,25 +38,6 @@ export const getCourse = asyncHandler(async (req, res) => {
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
-    include: {
-      trainer: {
-        select: {
-          lastName: true,
-          firstName: true,
-        },
-      },
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      students: {
-        select: {
-          id: true,
-        },
-      },
-    },
   });
 
   if (!course) {
@@ -89,25 +55,6 @@ export const updateCourse = asyncHandler(async (req, res) => {
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
-    include: {
-      trainer: {
-        select: {
-          lastName: true,
-          firstName: true,
-        },
-      },
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      students: {
-        select: {
-          id: true,
-        },
-      },
-    },
   });
 
   if (!course) {
@@ -115,7 +62,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
     throw new Error(`Course id: ${courseId} not found`);
   }
 
-  const updatedCourse = await prisma.course.update({
+  await prisma.course.update({
     where: { id: course.id },
     data: {
       title: title ? title : course.title,

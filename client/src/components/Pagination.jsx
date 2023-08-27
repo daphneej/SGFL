@@ -9,7 +9,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center">
       <nav className="inline-flex rounded-md shadow">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

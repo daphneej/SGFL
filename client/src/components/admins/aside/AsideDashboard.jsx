@@ -38,18 +38,20 @@ const AsideDashboard = ({
   };
   return (
     <aside
-      className={`fixed md:relative top-0 ease-in-out duration-300 z-10 w-full py-8 overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
-        !menuOpen && "-left-full md:left-0"
+      className={`ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+        !menuOpen && "hidden"
       }`}
     >
-      <div className="absolute mt-4 mr-4 top-1 right-1">
+      <div
+        className={`sticky top-0 right-0 flex justify-end p-4 backdrop-blur`}
+      >
         <RiMenuFoldLine
-          className="cursor-pointer md:hidden"
+          className="cursor-pointer"
           size={30}
           onClick={() => setMenuOpen(false)}
         />
       </div>
-      <div className="px-4 mt-20 md:mt-10">
+      <div className="px-4">
         <div className="flex items-center mb-6 space-x-2">
           {/* Add your user profile image here */}
           <div className="flex items-center justify-center w-10 h-10 text-white bg-gray-700 rounded-full">

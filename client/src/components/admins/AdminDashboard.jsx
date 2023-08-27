@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-base-100 md:flex-row">
+    <div className="flex flex-col w-screen h-screen overflow-hidden bg-base-100 md:flex-row">
       {/* Sidebar */}
       <AsideDashboard
         selectedMenuItem={selectedMenuItem}
@@ -56,14 +56,18 @@ const AdminDashboard = () => {
 
       {/* Main content */}
       <main
-        className="flex flex-col flex-1 h-full overflow-auto md:overflow-hidden"
+        className="flex flex-col flex-1 h-screen overflow-auto"
         onClick={() => {
           if (menuOpen) {
             setMenuOpen(false);
           }
         }}
       >
-        <div className="absolute mt-4 ml-4 top-1 left-1">
+        <div
+          className={`sticky top-0 flex justify-end md:justify-start p-4 backdrop-blur ${
+            menuOpen && "hidden"
+          }`}
+        >
           <RiMenuUnfoldLine
             className="cursor-pointer"
             size={30}
@@ -71,7 +75,7 @@ const AdminDashboard = () => {
           />
         </div>
 
-        <div className="p-4 mt-20 md:mt-10 md:p-6">
+        <div className="p-4 md:p-6">
           {selectedMenuItem === "Dashboard" && (
             <DashboardChart
               users={users}
