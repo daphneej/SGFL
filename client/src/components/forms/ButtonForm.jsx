@@ -8,6 +8,7 @@ const ButtonForm = ({ isLoading, label, primary, handleClick }) => {
           : "bg-primary hover:bg-primary text-white"
       } text-white font-semibold`}
       disabled={isLoading}
+      onClick={handleClick}
     >
       {isLoading ? <div className="loading"></div> : <span>{label}</span>}
     </button>
