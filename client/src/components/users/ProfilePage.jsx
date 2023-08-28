@@ -63,7 +63,7 @@ const ProfilePage = () => {
   });
 
   const handleSkipClick = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   const handleUpdateUser = (data) => {

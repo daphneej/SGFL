@@ -20,7 +20,7 @@ import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
-const UserUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
+const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
   const { updateCourse } = useCourse();
   const { getUsers } = useUser();
@@ -38,6 +38,7 @@ const UserUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       categoryId: selectedCourse?.categoryId,
       price: selectedCourse?.price,
       trainerId: selectedCourse?.trainerId,
+      published: selectedCourse?.published,
     },
   });
 
@@ -68,7 +69,14 @@ const UserUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   });
 
   const handleUpdateCourse = (data) => {
-    mutate({ course: { ...data, id: selectedCourse.id }, token: user.token });
+    mutate({
+      course: {
+        ...data,
+        id: selectedCourse.id,
+        published: Boolean(data?.published),
+      },
+      token: user.token,
+    });
   };
 
   const handleCancelClick = () => {
@@ -140,6 +148,19 @@ const UserUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
           disabled={isLoadingUsers}
           type={"number"}
         />
+
+        <SelectField
+          uuid={crypto.randomUUID()}
+          label={"Status"}
+          errors={errors}
+          register={register}
+          field={"published"}
+          optionLabel={"Sélectionner Le Status"}
+          options={[
+            { key: false, value: "En Attente" },
+            { key: true, value: "Publié" },
+          ]}
+        />
       </InputsForm>
       <ButtonsForm>
         <ButtonForm
@@ -159,4 +180,4 @@ const UserUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   );
 };
 
-export default UserUpdateFormModal;
+export default CourseUpdateFormModal;

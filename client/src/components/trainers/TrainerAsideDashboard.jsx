@@ -1,14 +1,7 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
-import {
-  FiUsers,
-  FiBook,
-  FiLogOut,
-  FiHome,
-  FiUser,
-  FiUserCheck,
-} from "react-icons/fi";
+import { FiUsers, FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
 
 import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
 
@@ -20,14 +13,13 @@ import useUserStore from "@/zustand/useUserStore";
 
 import MenuItem from "@/components/admins/aside/MenuItem";
 
-const AsideDashboard = ({
+const TrainerAsideDashboard = ({
   selectedMenuItem,
   setSelectedMenuItem,
   menuOpen,
   setMenuOpen,
 }) => {
   const { user, setUser } = useUserStore();
-
   const { logoutUser } = useAuth();
 
   const { mutate } = useMutation("user", logoutUser, {
@@ -82,31 +74,9 @@ const AsideDashboard = ({
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
-            label={"Utilisateurs"}
-            icon={<FiUsers className="mr-2" size={20} />}
-            menuItem={"Users"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-          <MenuItem
-            label={"Catégories"}
-            icon={<MdOutlineCategory className="mr-2" size={20} />}
-            menuItem={"Categories"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-          <MenuItem
-            label={"Cours"}
+            label={"Mes Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-
-          <MenuItem
-            label={"Formateurs"}
-            icon={<FiUserCheck className="mr-2" size={20} />}
-            menuItem={"Trainers"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
@@ -145,4 +115,4 @@ const AsideDashboard = ({
   );
 };
 
-export default AsideDashboard;
+export default TrainerAsideDashboard;

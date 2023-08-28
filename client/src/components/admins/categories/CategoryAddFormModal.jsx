@@ -16,7 +16,7 @@ import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
-const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
+const CategoryAddFormModal = ({ modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
   const { addCategory } = useCategory();
 
@@ -28,6 +28,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
   } = useForm({ resolver: zodResolver(addCategorySchema) });
 
   const { isLoading, mutate } = useMutation({
+    mutationKey: ["categories"],
     mutationFn: addCategory,
     onSuccess: (data) => {
       toast.success(data.message);
@@ -84,4 +85,4 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
   );
 };
 
-export default UserAddFormModal;
+export default CategoryAddFormModal;

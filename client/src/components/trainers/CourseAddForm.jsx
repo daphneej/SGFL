@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { queryClient } from "@/index";
 
 import useUserStore from "@/zustand/useUserStore";
-import useUser from "@/hooks/users/useUser";
 import useCategory from "@/hooks/useCategory";
 import useCourse from "@/hooks/useCourse";
 import { addCourseSchema } from "@/schemas/courseSchema";
@@ -15,14 +14,13 @@ import { addCourseSchema } from "@/schemas/courseSchema";
 import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
-import ModalForm from "@/components/forms/ModalForm";
+import SimpleForm from "@/components/forms/SimpleForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
-const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
+const CourseAddForm = () => {
   const { user } = useUserStore();
   const { addCourse } = useCourse();
-  const { getUsers } = useUser();
   const { getCategories } = useCategory();
 
   const {
@@ -30,15 +28,20 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(addCourseSchema) });
+  } = useForm({
+    resolver: zodResolver(addCourseSchema),
+    values: {
+      trainerId: user?.id,
+    },
+  });
 
   const { isLoading, mutate } = useMutation({
+    mutationKey: ["courses"],
     mutationFn: addCourse,
     onSuccess: (data) => {
       toast.success(data.message);
       queryClient.invalidateQueries("courses");
       reset();
-      setModalOpen(false);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -53,24 +56,13 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
     enabled: Boolean(user),
   });
 
-  const { isLoading: isLoadingUsers, data: users } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => getUsers(user.token),
-    enabled: Boolean(user),
-  });
-
   const handleAddCourse = (data) => {
     mutate({ course: data, token: user.token });
   };
 
-  const handleCancelClick = () => {
-    setModalOpen(false);
-  };
-
   return (
-    <ModalForm
+    <SimpleForm
       handler={handleSubmit(handleAddCourse)}
-      modalOpen={modalOpen}
       label={"Ajouter Un Nouveau Cours"}
     >
       <InputsForm col={2}>
@@ -115,23 +107,6 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
           field={"price"}
           type={"number"}
         />
-
-        <SelectField
-          uuid={crypto.randomUUID()}
-          label={"Formateur"}
-          errors={errors}
-          register={register}
-          field={"trainerId"}
-          optionLabel={"Sélectionner Le Formateur"}
-          options={users
-            ?.filter((user) => user.role === "TRAINER" || user.role === "ADMIN")
-            .map((trainer) => ({
-              key: trainer.id,
-              value: `${trainer.firstName} ${trainer.lastName}`,
-            }))}
-          disabled={isLoadingUsers}
-          type={"number"}
-        />
       </InputsForm>
       <ButtonsForm>
         <ButtonForm
@@ -140,15 +115,9 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
           label={"Ajouter Le Cours"}
           handleClick={() => {}}
         />
-        <ButtonForm
-          isLoading={isLoading}
-          primary={false}
-          label={"Annuler"}
-          handleClick={handleCancelClick}
-        />
       </ButtonsForm>
-    </ModalForm>
+    </SimpleForm>
   );
 };
 
-export default CourseAddFormModal;
+export default CourseAddForm;

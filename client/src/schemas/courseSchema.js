@@ -1,4 +1,4 @@
-import { object, string, number } from "zod";
+import { object, string, number, boolean } from "zod";
 
 const addCourseSchema = object({
   title: string({
@@ -16,6 +16,7 @@ const addCourseSchema = object({
   categoryId: number({
     required_error: "La catégorie est requise",
   }).min(1, "La catégorie est requise"),
+  published: boolean().optional(),
 });
 
 const updateCourseSchema = object({
@@ -24,6 +25,7 @@ const updateCourseSchema = object({
   price: number().min(1, "Le prix est requis"),
   trainerId: number().min(1, "Le formateur est requis"),
   categoryId: number().min(1, "La catégorie est requise"),
+  published: string().optional(),
 });
 
 export { addCourseSchema, updateCourseSchema };
