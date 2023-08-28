@@ -19,7 +19,7 @@ import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
-const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
+const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
   const { addCourse } = useCourse();
   const { getUsers } = useUser();
@@ -151,4 +151,4 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
   );
 };
 
-export default UserAddFormModal;
+export default CourseAddFormModal;

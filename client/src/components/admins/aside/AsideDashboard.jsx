@@ -1,7 +1,14 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
-import { FiUsers, FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
+import {
+  FiUsers,
+  FiBook,
+  FiLogOut,
+  FiHome,
+  FiUser,
+  FiUserCheck,
+} from "react-icons/fi";
 
 import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
 
@@ -92,6 +99,14 @@ const AsideDashboard = ({
             label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
+            selectedMenuItem={selectedMenuItem}
+            setSelectedMenuItem={setSelectedMenuItem}
+          />
+
+          <MenuItem
+            label={"Formateurs"}
+            icon={<FiUserCheck className="mr-2" size={20} />}
+            menuItem={"Trainers"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />

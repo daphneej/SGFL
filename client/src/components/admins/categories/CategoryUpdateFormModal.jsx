@@ -16,7 +16,11 @@ import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
 
-const UserUpdateFormModal = ({ selectedCategory, modalOpen, setModalOpen }) => {
+const CategoryUpdateFormModal = ({
+  selectedCategory,
+  modalOpen,
+  setModalOpen,
+}) => {
   const { user } = useUserStore();
   const { updateCategory } = useCategory();
 
@@ -33,6 +37,7 @@ const UserUpdateFormModal = ({ selectedCategory, modalOpen, setModalOpen }) => {
   });
 
   const { isLoading, mutate } = useMutation({
+    mutationKey: ["categories"],
     mutationFn: updateCategory,
     onSuccess: (data) => {
       toast.success(data.message);
@@ -92,4 +97,4 @@ const UserUpdateFormModal = ({ selectedCategory, modalOpen, setModalOpen }) => {
   );
 };
 
-export default UserUpdateFormModal;
+export default CategoryUpdateFormModal;

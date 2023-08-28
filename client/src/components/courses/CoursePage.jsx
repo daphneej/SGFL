@@ -119,7 +119,9 @@ const CoursePage = () => {
                   Aucun cours trouvé
                 </p>
               ) : (
-                <Courses courses={filteredCourses} />
+                <Courses
+                  courses={filteredCourses.filter((course) => course.published)}
+                />
               )}
             </div>
           )}

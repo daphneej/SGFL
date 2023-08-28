@@ -19,6 +19,8 @@ const useCourse = () => {
   };
 
   const updateCourse = async ({ course, token }) => {
+    console.log(course);
+
     const response = await api.put(`/api/courses/${course.id}`, course, {
       headers: {
         Authorization: `Bearer ${token}`,

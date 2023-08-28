@@ -43,7 +43,7 @@ const CategoryTable = ({ isLoadingCategories: isLoading, categories }) => {
   );
 
   const { mutate } = useMutation({
-    mutationKey: "categories",
+    mutationKey: ["categories"],
     mutationFn: removeCategory,
     onSuccess: (data) => {
       toast.success(data.message);

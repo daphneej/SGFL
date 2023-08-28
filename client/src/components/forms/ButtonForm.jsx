@@ -2,11 +2,7 @@ const ButtonForm = ({ isLoading, label, primary, handleClick }) => {
   return primary ? (
     <button
       type="submit"
-      className={`flex-1 btn rounded-lg ${
-        isLoading
-          ? "bg-gray-400 cursor-not-allowed"
-          : "bg-primary hover:bg-primary text-white"
-      } text-white font-semibold`}
+      className="flex-1 text-white btn bg-primary hover:bg-neutral"
       disabled={isLoading}
       onClick={handleClick}
     >
@@ -16,7 +12,7 @@ const ButtonForm = ({ isLoading, label, primary, handleClick }) => {
     <button
       type="button"
       onClick={handleClick}
-      className="flex-1 px-4 py-2 font-semibold text-gray-700 bg-gray-300 rounded-lg btn hover:bg-gray-400"
+      className="flex-1 btn btn-outline hover:bg-neutral hover:text-white hover:border-primary"
     >
       {label}
     </button>

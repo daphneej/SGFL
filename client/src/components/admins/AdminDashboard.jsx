@@ -15,6 +15,7 @@ import DashboardChart from "@/components/admins/charts/DashboardChart";
 import UserTable from "@/components/admins/tables/UserTable";
 import CategoryTable from "@/components/admins/tables/CategoryTable";
 import CourseTable from "@/components/admins/tables/CourseTable";
+import TrainerTable from "@/components/admins/tables/TrainerTable";
 
 const AdminDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -83,6 +84,7 @@ const AdminDashboard = () => {
               courses={courses}
             />
           )}
+
           {selectedMenuItem === "Users" && (
             <UserTable users={users} isLoadingUsers={isLoadingUsers} />
           )}
@@ -96,6 +98,13 @@ const AdminDashboard = () => {
             <CourseTable
               courses={courses}
               isLoadingCourses={isLoadingCourses}
+            />
+          )}
+
+          {selectedMenuItem === "Trainers" && (
+            <TrainerTable
+              users={users.filter((user) => user.role === "TRAINER")}
+              isLoadingUsers={isLoadingUsers}
             />
           )}
         </div>

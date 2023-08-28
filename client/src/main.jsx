@@ -41,9 +41,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<PrivateRoutes />}>
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="dashboard/users" element={<UserDashboard />} />
-        <Route path="dashboard/trainers" element={<TrainerDashboard />} />
         <Route path="dashboard/students" element={<StudentDashboard />} />
       </Route>
+    </Route>,
+    <Route path="/" element={<PrivateRoutes />}>
+      <Route path="dashboard/trainers" element={<TrainerDashboard />} />,
     </Route>,
     <Route path="/" element={<AdminRoute />}>
       <Route path="dashboard/admins" element={<AdminDashboard />} />

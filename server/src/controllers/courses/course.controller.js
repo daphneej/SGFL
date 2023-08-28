@@ -51,7 +51,7 @@ export const getCourse = asyncHandler(async (req, res) => {
 export const updateCourse = asyncHandler(async (req, res) => {
   const courseId = req.params.id;
 
-  const { title, description, price } = req.body;
+  const { title, description, price, published } = req.body;
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
@@ -68,6 +68,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
       title: title ? title : course.title,
       description: description ? description : course.description,
       price: price ? price : course.price,
+      published: published ? published : course.published,
     },
   });
 
