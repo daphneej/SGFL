@@ -65,7 +65,7 @@ const CourseAddForm = () => {
       handler={handleSubmit(handleAddCourse)}
       label={"Ajouter Un Nouveau Cours"}
     >
-      <InputsForm col={2}>
+      <InputsForm col={1}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Titre"}

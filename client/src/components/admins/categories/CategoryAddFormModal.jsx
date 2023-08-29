@@ -57,7 +57,7 @@ const CategoryAddFormModal = ({ modalOpen, setModalOpen }) => {
       modalOpen={modalOpen}
       label={"Ajouter Une Catégorie"}
     >
-      <InputsForm col={3}>
+      <InputsForm col={2}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Nom De La Catégorie"}

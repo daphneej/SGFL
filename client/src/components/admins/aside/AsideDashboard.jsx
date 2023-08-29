@@ -1,14 +1,9 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
-import {
-  FiUsers,
-  FiBook,
-  FiLogOut,
-  FiHome,
-  FiUser,
-  FiUserCheck,
-} from "react-icons/fi";
+import { FiBook, FiLogOut, FiHome, FiUser, FiUserCheck } from "react-icons/fi";
+
+import { PiStudentThin, PiUsersFour } from "react-icons/pi";
 
 import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
 
@@ -34,6 +29,7 @@ const AsideDashboard = ({
     onSuccess: (data) => {
       toast.success(data.message);
       setUser(data.user);
+      setSelectedMenuItem("Dashboard");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -83,7 +79,7 @@ const AsideDashboard = ({
           />
           <MenuItem
             label={"Utilisateurs"}
-            icon={<FiUsers className="mr-2" size={20} />}
+            icon={<PiUsersFour className="mr-2" size={20} />}
             menuItem={"Users"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
@@ -107,6 +103,14 @@ const AsideDashboard = ({
             label={"Formateurs"}
             icon={<FiUserCheck className="mr-2" size={20} />}
             menuItem={"Trainers"}
+            selectedMenuItem={selectedMenuItem}
+            setSelectedMenuItem={setSelectedMenuItem}
+          />
+
+          <MenuItem
+            label={"Etudiants"}
+            icon={<PiStudentThin className="mr-2" size={20} />}
+            menuItem={"Students"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />

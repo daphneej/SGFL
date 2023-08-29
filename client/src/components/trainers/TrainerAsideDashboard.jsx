@@ -37,7 +37,7 @@ const TrainerAsideDashboard = ({
   };
   return (
     <aside
-      className={`ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+      className={`fixed ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
         !menuOpen && "hidden"
       }`}
     >

@@ -21,12 +21,12 @@ const COLUMNS = [
   { label: "Prénom", key: "firstName" },
   { label: "Nom", key: "lastName" },
   { label: "Adresse Email", key: "email" },
-  { label: "Rôle", key: "role" },
+  { label: "Role", key: "role" },
   { label: "Cours Crées", key: "courses" },
   { label: "Actions", key: "actions" },
 ];
 
-const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
+const TrainerTable = ({ isLoadingUsers: isLoading, users: trainers }) => {
   const { user } = useUserStore();
   const { removeUser } = useUser();
   const itemsPerPage = 10;
@@ -40,7 +40,7 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = users?.slice(indexOfFirstItem, indexOfLastItem);
+  const currentTrainers = trainers?.slice(indexOfFirstItem, indexOfLastItem);
 
   const { mutate } = useMutation({
     mutationKey: "users",
@@ -61,7 +61,7 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between flex-1 w-full gap-2 overflow-auto text-center">
+    <div className="flex flex-col justify-between flex-1 w-full gap-4 overflow-auto text-center">
       <div className="flex flex-col-reverse items-center justify-between gap-2 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">
           Liste Des Formateurs
@@ -79,6 +79,7 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
         <UserAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}
+          userRole={"TRAINER"}
         />
 
         <UserUpdateFormModal
@@ -93,12 +94,12 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
           setModalOpen={setModalViewOpen}
         />
 
-        {users?.length === 0 ? (
+        {trainers?.length === 0 ? (
           <p className="mx-auto my-8 text-xl font-bold text-center text-neutral-500">
             Aucun utilisateur n'est enregistré
           </p>
         ) : (
-          <>
+          <div className="flex flex-col gap-4">
             <table className="flex-1 w-full mx-auto">
               <thead className="bg-base-300">
                 <tr>
@@ -118,26 +119,28 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
                   </tr>
                 )}
 
-                {currentUsers?.map((user) => (
+                {currentTrainers?.map((trainer) => (
                   <tr
-                    key={user?.id}
+                    key={trainer?.id}
                     className={`hover:bg-base-100 ${
-                      user?.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
+                      trainer?.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
                     }`}
                   >
-                    <td className="p-3 border border-base-100">{user?.id}</td>
+                    <td className="p-3 border border-base-100">{trainer?.id}</td>
                     <td className="p-3 border border-base-100">
-                      {user?.firstName}
+                      {trainer?.firstName}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {user?.lastName}
+                      {trainer?.lastName}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {user?.email}
+                      {trainer?.email}
                     </td>
-                    <td className="p-3 border border-base-100">{user?.role}</td>
                     <td className="p-3 border border-base-100">
-                      {user?.createdCourses?.length}
+                      {trainer?.role}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      {trainer?.createdCourses?.length}
                     </td>
                     <td className="p-3 border border-base-100">
                       <div className="flex justify-center gap-3 mx-auto">
@@ -145,7 +148,7 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
                           className="cursor-pointer text-primary hover:underline"
                           size={18}
                           onClick={() => {
-                            setSelectedUser(user);
+                            setSelectedUser(trainer);
                             setModalViewOpen(true);
                           }}
                         />
@@ -153,12 +156,12 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
                           className="text-green-500 cursor-pointer hover:underline"
                           size={18}
                           onClick={() => {
-                            setSelectedUser(user);
+                            setSelectedUser(trainer);
                             setModalUpdateOpen(true);
                           }}
                         />
                         <FiTrash2
-                          onClick={() => handleRemoveUser(user?.id)}
+                          onClick={() => handleRemoveUser(trainer?.id)}
                           className="text-red-500 cursor-pointer hover:underline"
                           size={18}
                         />
@@ -171,12 +174,12 @@ const TrainerTable = ({ isLoadingUsers: isLoading, users }) => {
 
             {/* Pagination */}
             <Pagination
-              contents={users}
+              contents={trainers}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
             />
-          </>
+          </div>
         )}
       </div>
     </div>

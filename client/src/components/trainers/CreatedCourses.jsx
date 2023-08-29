@@ -40,7 +40,7 @@ const CreatedCourses = () => {
               .map((course) => (
                 <li
                   key={course?.id}
-                  className="flex items-center justify-between px-6 py-4 transition duration-300 bg-white rounded-lg shadow-md hover:shadow-lg"
+                  className="flex items-center justify-between px-6 py-4 transition duration-300 rounded-lg shadow-sm cursor-pointer bg-base-300 shadow-primary hover:shadow-lg"
                 >
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold">{course?.title}</h3>

@@ -1,66 +1,12 @@
-import Chart from "chart.js/auto";
-import { useEffect } from "react";
-import { useRef } from "react";
 import { FiBook, FiUsers } from "react-icons/fi";
 import { MdOutlineCategory } from "react-icons/md";
+import BarChart from "@/components/admins/charts/BarChart";
+import PieChart from "@/components/admins/charts/PieChart";
+import StackedBarChart from "@/components/admins/charts/StackedBarChart";
+import ScatterPlot from "@/components/admins/charts/ScatterPlot";
 
-const DashboardChart = ({ users, categories, courses }) => {
-  const acquisitionsRef = useRef();
-  const acquisitionsRef2 = useRef();
-
-  useEffect(() => {
-    const canvasId = new Chart(acquisitionsRef.current, {
-      type: "bar",
-      data: {
-        labels: [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        datasets: [
-          {
-            label: "Users by day",
-            data: Array.from([25, 35, 38, 56, 12, 64]).map(
-              (value) => value * 12
-            ),
-          },
-        ],
-      },
-    });
-
-    const canvasId2 = new Chart(acquisitionsRef2.current, {
-      type: "line",
-      data: {
-        labels: [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        datasets: [
-          {
-            label: "Users by day",
-            data: Array.from([25, 35, 38, 56, 12, 64]).map(
-              (value) => value * 12
-            ),
-          },
-        ],
-      },
-    });
-
-    return () => {
-      canvasId.destroy();
-      canvasId2.destroy();
-    };
-  }, []);
-
+const DashboardChart = ({ users, categories, courses }) => {  
+   
   const cardsData = [
     {
       title: "Total Users",
@@ -97,12 +43,34 @@ const DashboardChart = ({ users, categories, courses }) => {
 
       <h2 className="my-4 text-2xl font-semibold text-left">Dashboard</h2>
 
-      <div className="grid w-full grid-cols-1 gap-2 p-4 rounded-md bg-base-200 h-fit md:grid-cols-2">
-        <div className="w-full h-fit">
-          <canvas ref={acquisitionsRef}></canvas>
+      <div className="flex flex-wrap items-center gap-8 py-4 rounded-md bg-base-200">
+        <div className="w-full md:w-[40vw] mx-auto">
+          <BarChart categories={categories} />
         </div>
-        <div className="w-full h-fit">
-          <canvas ref={acquisitionsRef2}></canvas>
+        <div className="w-full md:w-[40vw] mx-auto">
+          <ScatterPlot courses={courses} />
+        </div>
+        <div className="w-full md:w-[40vw] mx-auto">
+          <StackedBarChart 
+            userStats={users?.reduce((stats, user) => {
+              const { role, status } = user;
+              
+              if (!stats[role]) {
+                stats[role] = {};
+              }
+
+              if (!stats[role][status]) {
+                stats[role][status] = 1;
+              } else {
+                stats[role][status]++;
+              }
+
+              return stats;
+            }, {})}
+          />
+        </div>
+        <div className="w-full md:w-[40vw] mx-auto">
+          <PieChart users={users} />
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ const UserProfileUpdate = ({
 }) => {
   return (
     <SimpleForm handler={handler}>
-      <InputsForm col={3}>
+      <InputsForm col={2}>
         <InputField
           label={"Prénom"}
           errors={errors}

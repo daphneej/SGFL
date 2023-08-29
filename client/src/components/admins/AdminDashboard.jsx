@@ -12,14 +12,15 @@ import useDashboardStore from "@/zustand/useDashboardStore";
 import AsideDashboard from "@/components/admins/aside/AsideDashboard";
 
 import DashboardChart from "@/components/admins/charts/DashboardChart";
+
 import UserTable from "@/components/admins/tables/UserTable";
 import CategoryTable from "@/components/admins/tables/CategoryTable";
 import CourseTable from "@/components/admins/tables/CourseTable";
 import TrainerTable from "@/components/admins/tables/TrainerTable";
+import StudentTable from "@/components/admins/tables/StudentTable";
 
 const AdminDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
   const { user } = useUserStore();
   const { selectedMenuItem, setSelectedMenuItem } = useDashboardStore();
 
@@ -88,12 +89,14 @@ const AdminDashboard = () => {
           {selectedMenuItem === "Users" && (
             <UserTable users={users} isLoadingUsers={isLoadingUsers} />
           )}
+
           {selectedMenuItem === "Categories" && (
             <CategoryTable
               categories={categories}
               isLoadingCategories={isLoadingCategories}
             />
           )}
+
           {selectedMenuItem === "Courses" && (
             <CourseTable
               courses={courses}
@@ -103,7 +106,14 @@ const AdminDashboard = () => {
 
           {selectedMenuItem === "Trainers" && (
             <TrainerTable
-              users={users.filter((user) => user.role === "TRAINER")}
+              users={users?.filter((user) => user?.role === "TRAINER")}
+              isLoadingUsers={isLoadingUsers}
+            />
+          )}
+
+          {selectedMenuItem === "Students" && (
+            <StudentTable
+              users={users?.filter((user) => user?.role === "STUDENT")}
               isLoadingUsers={isLoadingUsers}
             />
           )}

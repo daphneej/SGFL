@@ -10,7 +10,7 @@ const InputField = ({
   disabled,
 }) => {
   return (
-    <div className="flex-col mb-4">
+    <div className="flex-col">
       <label htmlFor={`${uuid}${field}`} className="block mb-2 font-semibold">
         {label}
       </label>

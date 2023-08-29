@@ -33,7 +33,7 @@ const TrainerDashboard = () => {
           />
         </div>
 
-        <div className="px-4 py-8 md:px-8">
+        <div className="w-full h-screen px-4 py-8 overflow-y-auto md:px-8">
           <div className="w-full mx-auto mt-10 md:w-1/2">
             {selectedMenuItem === "Dashboard" && <CourseAddForm />}
           </div>

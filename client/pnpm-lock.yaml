@@ -23,6 +23,9 @@ dependencies:
   react-anchor-link-smooth-scroll:
     specifier: ^1.0.12
     version: 1.0.12
+  react-chartjs-2:
+    specifier: ^5.2.0
+    version: 5.2.0(chart.js@4.3.3)(react@18.2.0)
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
@@ -2182,6 +2185,16 @@ packages:
 
   /react-anchor-link-smooth-scroll@1.0.12:
     resolution: {integrity: sha512-aaY+9X0yh8YnC0jBfoTKpsiCLdO/Y6pCltww+VB+NnTBPDOvnIdnp1AlazajsDitc1j+cVSQ+yNtaVeTIMQbxw==}
+    dev: false
+
+  /react-chartjs-2@5.2.0(chart.js@4.3.3)(react@18.2.0):
+    resolution: {integrity: sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 4.3.3
+      react: 18.2.0
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):
