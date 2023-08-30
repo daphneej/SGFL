@@ -5,8 +5,7 @@ import PieChart from "@/components/admins/charts/PieChart";
 import StackedBarChart from "@/components/admins/charts/StackedBarChart";
 import ScatterPlot from "@/components/admins/charts/ScatterPlot";
 
-const DashboardChart = ({ users, categories, courses }) => {  
-   
+const DashboardChart = ({ users, categories, courses }) => {
   const cardsData = [
     {
       title: "Total Users",
@@ -51,10 +50,10 @@ const DashboardChart = ({ users, categories, courses }) => {
           <ScatterPlot courses={courses} />
         </div>
         <div className="w-full md:w-[40vw] mx-auto">
-          <StackedBarChart 
+          <StackedBarChart
             userStats={users?.reduce((stats, user) => {
               const { role, status } = user;
-              
+
               if (!stats[role]) {
                 stats[role] = {};
               }

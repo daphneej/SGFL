@@ -1,18 +1,22 @@
-import { useMutation } from "react-query";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineSpaceDashboard, MdOutlineBook } from "react-icons/md";
 
 import useUserStore from "@/zustand/useUserStore";
 import useAuth from "@/hooks/users/useAuth.js";
 
 import logoColor from "@/assets/images/logo-color.png";
 
+import CourseInCartModal from "@/components/users/CourseInCartModal";
+
 const Navbar = () => {
   const { logoutUser } = useAuth();
-
   const { user, setUser } = useUserStore();
+
+  const [openCourseInCart, setOpenCourseInCart] = useState(false);
 
   const { mutate } = useMutation("user", logoutUser, {
     onSuccess: (data) => {
@@ -38,11 +42,16 @@ const Navbar = () => {
           <img src={logoColor} alt="Logo" className="w-full h-full" />
         </Link>
 
+        <CourseInCartModal
+          openCourseInCart={openCourseInCart}
+          setOpenCourseInCart={setOpenCourseInCart}
+        />
+
         <div className="flex flex-col items-center gap-4 md:flex-row">
           {user ? (
             <div className="flex items-center justify-center gap-4 mt-2 md:w-auto md:mt-0">
               {/* Panier */}
-              {user.role !== "ADMIN" && (
+              {user?.role !== "ADMIN" && (
                 <div className="dropdown md:dropdown-end">
                   <label
                     tabIndex={0}
@@ -64,7 +73,7 @@ const Navbar = () => {
                         />
                       </svg>
                       <span className="badge badge-xs indicator-item">
-                        {user.coursesInCart?.length}
+                        {user?.coursesInCart?.length}
                       </span>
                     </div>
                   </label>
@@ -74,19 +83,24 @@ const Navbar = () => {
                   >
                     <div className="rounded-md bg-base-300 card-body">
                       <span className="text-lg font-bold">
-                        {user.coursesInCart?.length} Cours
+                        {user?.coursesInCart?.length} Cours
                       </span>
-                      <span className="text-info">
+                      <p>
                         Total :{" "}
-                        {user.coursesInCart
-                          ?.reduce((sum, course) => {
-                            return sum + course.price;
-                          }, 0)
-                          .toFixed(2)}{" "}
-                        USD
-                      </span>
+                        <span className="text-info">
+                          {user?.coursesInCart
+                            ?.reduce((sum, course) => {
+                              return sum + course.price;
+                            }, 0)
+                            .toFixed(2)}{" "}
+                        </span>{" "}
+                        US
+                      </p>
                       <div className="card-actions">
-                        <button className="text-white btn bg-primary hover:bg-neutral btn-block rounded-xl hover:text-black-focus">
+                        <button
+                          className="text-white btn bg-primary hover:bg-neutral btn-block rounded-xl hover:text-black-focus"
+                          onClick={() => setOpenCourseInCart(true)}
+                        >
                           Voir le panier
                         </button>
                       </div>
@@ -109,25 +123,25 @@ const Navbar = () => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content z-[1] p-4 shadow bg-base-300 mt-4 gap-1 rounded-md"
+                  className="menu menu-md dropdown-content z-[1] shadow bg-base-300 mt-4 gap-1 rounded-md"
                 >
-                  <p className="p-2 mb-4 text-sm font-bold text-center rounded-lg bg-base-100">
-                    {user.email}
-                  </p>
+                  <li>
+                    <p className="p-2 mb-4 text-sm font-bold text-center rounded-lg bg-base-100">
+                      {user?.email}
+                    </p>
+                  </li>
 
                   <li className="mb-1 font-bold text-md">Utilisateur</li>
 
-                  {user && (
+                  {(user.role === "ADMIN" ||
+                    user.role === "TRAINER" ||
+                    user.role === "STUDENT") && (
                     <li>
                       <Link
                         to={`/dashboard/${
-                          user.role === "ADMIN"
-                            ? "admins"
-                            : user.role === "TRAINER"
-                            ? "trainers"
-                            : user.role === "STUDENTS"
-                            ? "students"
-                            : "users"
+                          user?.role === "ADMIN" && "admins" ||
+                          user?.role === "TRAINER" && "trainers" ||
+                          user?.role === "STUDENT" && "students"
                         }`}
                       >
                         <MdOutlineSpaceDashboard />
@@ -135,6 +149,14 @@ const Navbar = () => {
                       </Link>
                     </li>
                   )}
+
+                  <li>
+                    <Link to={`/courses`}>
+                      <MdOutlineBook />
+                      Cours
+                    </Link>
+                  </li>
+
                   <li>
                     <Link to={"/profile"}>
                       <FiUser />

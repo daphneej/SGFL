@@ -72,10 +72,6 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-base-100">
-      <h2 className="mt-4 text-2xl font-bold text-center">
-        Modifiez Votre Profil
-      </h2>
-
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center gap-2 p-4 m-4 rounded-md md:gap-4 md:flex-row bg-base-200">
           <div className="avatar placeholder">
@@ -104,24 +100,26 @@ const ProfilePage = () => {
             <UserProfileView user={user} />
           )}
         </div>
-      </div>
 
-      {!isEditing && (
-        <ButtonsForm>
-          <ButtonForm
-            isLoading={false}
-            primary={true}
-            label={"Edit"}
-            handleClick={handleEditClick}
-          />
-          <ButtonForm
-            isLoading={false}
-            primary={false}
-            label={"Passer"}
-            handleClick={handleSkipClick}
-          />
-        </ButtonsForm>
-      )}
+        <div className="w-full">
+          {!isEditing && (
+            <ButtonsForm>
+              <ButtonForm
+                isLoading={false}
+                primary={true}
+                label={"Modifier"}
+                handleClick={handleEditClick}
+              />
+              <ButtonForm
+                isLoading={false}
+                primary={false}
+                label={"Passer"}
+                handleClick={handleSkipClick}
+              />
+            </ButtonsForm>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
