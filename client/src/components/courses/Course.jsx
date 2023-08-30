@@ -6,13 +6,14 @@ import useUserStore from "@/zustand/useUserStore";
 
 import { formatDate } from "@/utils/index";
 
-import video from "@/assets/videos/lesson.mp4";
+// import video from "@/assets/videos/lesson.mp4";
+import image from "@/assets/images/lesson.jpeg";
 
 const Course = ({ course }) => {
   const { user, setUser } = useUserStore();
-  const { updateUser } = useAuth();
+  const { toggleUserCourseInCart } = useAuth();
 
-  const { isLoading, mutate } = useMutation("user", updateUser, {
+  const { isLoading, mutate } = useMutation(["user"], toggleUserCourseInCart, {
     onSuccess: (data) => {
       toast.success(data.message);
       setUser(data.user);
@@ -33,10 +34,9 @@ const Course = ({ course }) => {
   };
 
   return (
-    <li className="flex flex-col w-full p-4 list-none rounded-lg shadow-sm md:w-96 shadow-primary">
-      <video className="rounded-xl" controls>
-        <source src={video} type="video/mp4" />
-      </video>
+    <li className="flex flex-col w-full p-4 list-none rounded-lg shadow-sm md:w-72 shadow-primary">
+      <img src={image} alt="Course Image" className="rounded-xl" />
+
       <div className="flex flex-col justify-between flex-1 py-4">
         <div className="flex flex-col h-full">
           <p className="text-xl font-bold text-left">
@@ -62,17 +62,26 @@ const Course = ({ course }) => {
             {user && (
               <button
                 className={`btn rounded-xl w-full md:w-fit ${
+                  user.enrolledCourses?.find(
+                  (eachCourse) => eachCourse.id === course.id) ? 
+                  "bg-warning" :
                   user.coursesInCart?.find(
                     (eachCourse) => eachCourse.id === course.id
                   )
                     ? "btn-outline"
                     : "bg-primary text-white hover:bg-gray-400 hover:text-black"
                 }`}
-                onClick={handleToggleCourseInCart}
+                onClick={user.enrolledCourses?.find(
+                  (eachCourse) => eachCourse.id === course.id) ? () => {
+                    toast.success("Suivre Le Cours")
+                  } : handleToggleCourseInCart}
               >
                 {isLoading ? (
                   <div className="loading"></div>
-                ) : user.coursesInCart?.find(
+                ) : user.enrolledCourses?.find(
+                  (eachCourse) => eachCourse.id === course.id) ? (
+                    <span>Suivre Le Cours</span>
+                  ) : user.coursesInCart?.find(
                     (eachCourse) => eachCourse.id === course.id
                   ) ? (
                   <span>Retirer au panier</span>

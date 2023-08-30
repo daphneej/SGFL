@@ -15,7 +15,7 @@ const UserProfileUpdate = ({
   setIsEditing,
 }) => {
   return (
-    <SimpleForm handler={handler}>
+    <SimpleForm handler={handler} label={"Modifier Votre Profile"}>
       <InputsForm col={2}>
         <InputField
           label={"Prénom"}

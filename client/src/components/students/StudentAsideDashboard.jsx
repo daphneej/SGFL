@@ -2,18 +2,15 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
 import { FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
-import { LuBookPlus } from "react-icons/lu";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-
 import { RiMenuFoldLine } from "react-icons/ri";
 
 import useAuth from "@/hooks/users/useAuth";
-
 import useUserStore from "@/zustand/useUserStore";
 
 import MenuItem from "@/components/admins/aside/MenuItem";
 
-const TrainerAsideDashboard = ({
+const StudentAsideDashboard = ({
   selectedMenuItem,
   setSelectedMenuItem,
   menuOpen,
@@ -75,14 +72,6 @@ const TrainerAsideDashboard = ({
           />
 
           <MenuItem
-            label={"Ajouter Cours"}
-            icon={<LuBookPlus className="mr-2" size={20} />}
-            menuItem={"AddCourse"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-
-          <MenuItem
             label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
@@ -124,4 +113,4 @@ const TrainerAsideDashboard = ({
   );
 };
 
-export default TrainerAsideDashboard;
+export default StudentAsideDashboard;

@@ -67,7 +67,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen, userRole }) => {
       modalOpen={modalOpen}
       label={"Ajouter Un Nouvel Utilisateur"}
     >
-      <InputsForm col={3}>
+      <InputsForm col={2}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Prénom"}

@@ -32,6 +32,26 @@ const useAuth = () => {
     return await response.data;
   };
 
+  const toggleUserCourseInCart = async (user) => {
+    const response = await api.put(`/api/users/toggle/${user.id}`, user, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    return await response.data;
+  };
+
+  const buyCourseInCart = async (user) => {
+    const response = await api.put(`/api/users/buy/${user.id}`, user, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    return await response.data;
+  };
+
   const removeUser = async (userId, user) => {
     const response = await api.delete(`/api/users/delete/${userId}`, {
       headers: {
@@ -48,6 +68,8 @@ const useAuth = () => {
     loginUser,
     logoutUser,
     removeUser,
+    toggleUserCourseInCart,
+    buyCourseInCart
   };
 };
 

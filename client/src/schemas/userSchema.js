@@ -1,5 +1,42 @@
 import { object, string } from "zod";
 
+const registerUserSchema = object({
+  email: string({
+    required_error: "L'adresse email est requise",
+  }).email({
+    message: "Le format de l'email est invalide",
+  }),
+  role: string().optional(),
+  password: string({
+    invalid_type_error: "Le type de mot de passe est invalide",
+    required_error: "Le mot de passe est requis",
+  }).min(8, {
+    message: "Le mot de passe doit contenir au moins 8 caractères",
+  }),
+  confirmPassword: string({
+    invalid_type_error:
+      "Le type de la confirmation du mot de passe est invalide",
+    required_error: "La confirmation du mot de passe est requise",
+  }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confirmPassword"],
+});
+
+const loginUserSchema = object({
+  email: string({
+    required_error: "L'adresse email est requise",
+  }).email({
+    message: "Le format de l'adresse email est invalide",
+  }),
+  password: string({
+    invalid_type_error: "Le type de mot de passe est invalide",
+    required_error: "Le mot de passe est requis",
+  }).min(8, {
+    message: "Le mot de passe doit contenir au moins 8 caractères",
+  }),
+});
+
 const addUserSchema = object({
   firstName: string({
     invalid_type_error: "Le type du prénom est invalide",
@@ -155,4 +192,4 @@ const updateUserSchema = object({
     }),
 });
 
-export { addUserSchema, updateUserSchema };
+export { addUserSchema, updateUserSchema, registerUserSchema, loginUserSchema };

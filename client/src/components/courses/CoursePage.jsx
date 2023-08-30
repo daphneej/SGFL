@@ -120,7 +120,9 @@ const CoursePage = () => {
                 </p>
               ) : (
                 <Courses
-                  courses={filteredCourses.filter((course) => course.published)}
+                  courses={filteredCourses?.filter((course) => {
+                    return course?.published
+                  })}
                 />
               )}
             </div>

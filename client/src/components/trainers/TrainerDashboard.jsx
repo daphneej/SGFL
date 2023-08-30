@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RiMenuUnfoldLine } from "react-icons/ri";
 
-import useDashboardStore from "@/zustand/useDashboardStore";
+import useTrainerDashboardStore from "@/zustand/useTrainerDashboardStore";
 
 import CourseAddForm from "@/components/trainers/CourseAddForm";
 import CreatedCourses from "@/components/trainers/CreatedCourses";
@@ -9,7 +9,7 @@ import TrainerAsideDashboard from "@/components/trainers/TrainerAsideDashboard";
 
 const TrainerDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(true);
-  const { selectedMenuItem, setSelectedMenuItem } = useDashboardStore();
+  const { selectedMenuItem, setSelectedMenuItem } = useTrainerDashboardStore();
 
   return (
     <div className="flex flex-col w-screen md:h-screen md:overflow-hidden bg-base-100 md:flex-row">
@@ -35,7 +35,10 @@ const TrainerDashboard = () => {
 
         <div className="w-full h-screen px-4 py-8 overflow-y-auto md:px-8">
           <div className="w-full mx-auto mt-10 md:w-1/2">
-            {selectedMenuItem === "Dashboard" && <CourseAddForm />}
+            {selectedMenuItem === "Dashboard" && <></>}
+          </div>
+          <div className="w-full mx-auto mt-10 md:w-1/2">
+            {selectedMenuItem === "AddCourse" && <CourseAddForm />}
           </div>
           {selectedMenuItem === "Courses" && <CreatedCourses />}
         </div>

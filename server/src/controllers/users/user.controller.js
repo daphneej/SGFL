@@ -149,8 +149,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     gender,
     address,
     phone,
-    status,
-    coursesInCart: updatedCoursesInCart,
+    status
   } = req.body;
 
   if (
@@ -177,70 +176,39 @@ export const updateUser = asyncHandler(async (req, res) => {
     );
   }
 
-  if (updatedCoursesInCart && Array.isArray(updatedCoursesInCart)) {
-    const removedCourses = updatedCoursesInCart.filter((course) =>
-      user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
-    );
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      firstName:
+        firstName && firstName.length > 0 ? firstName : user.firstName,
+      lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
+      email: email && email.length > 0 ? email : user.email,
+      role: role && role.length > 0 ? role : user.role,
+      gender:
+        gender && gender.length > 0
+          ? gender.toLocaleUpperCase()
+          : user.gender,
+      address: address && address.length > 0 ? address : user.address,
+      phone: phone && phone.length > 0 ? phone : user.phone,
+      status: status && status.length > 0 ? status : user.status,
+      password:
+        password && password.length > 0
+          ? await hashPassword(password)
+          : user.password,
+    },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
 
-    const addedCourses = updatedCoursesInCart.filter(
-      (updatedCourse) =>
-        !user.coursesInCart.some((course) => course.id === updatedCourse.id)
-    );
+  delete updatedUser.password;
 
-    const updatedUser = await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        coursesInCart: {
-          connect: addedCourses.map((course) => ({ id: course.id })),
-          disconnect: removedCourses.map((course) => ({ id: course.id })),
-        },
-      },
-      include: {
-        coursesInCart: true,
-        createdCourses: true,
-        enrolledCourses: true,
-      },
-    });
-
-    res.status(200).json({
-      message: "Course added to your cart successfuly.",
-      user: { ...updatedUser, token },
-    });
-  } else {
-    const updatedUser = await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        firstName:
-          firstName && firstName.length > 0 ? firstName : user.firstName,
-        lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
-        email: email && email.length > 0 ? email : user.email,
-        role: role && role.length > 0 ? role : user.role,
-        gender:
-          gender && gender.length > 0
-            ? gender.toLocaleUpperCase()
-            : user.gender,
-        address: address && address.length > 0 ? address : user.address,
-        phone: phone && phone.length > 0 ? phone : user.phone,
-        status: status && status.length > 0 ? status : user.status,
-        password:
-          password && password.length > 0
-            ? await hashPassword(password)
-            : user.password,
-      },
-      include: {
-        coursesInCart: true,
-        createdCourses: true,
-        enrolledCourses: true,
-      },
-    });
-
-    delete updatedUser.password;
-
-    res.status(200).json({
-      message: "Votre profil a ete mis à jour avec succès.",
-      user: { ...updatedUser, token },
-    });
-  }
+  res.status(200).json({
+    message: "Votre profil a ete mis à jour avec succès.",
+    user: { ...updatedUser, token },
+  });
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {
@@ -261,3 +229,113 @@ export const deleteUser = asyncHandler(async (req, res) => {
     message: "Compte supprimé avec succès. Merci pour votre confiance.",
   });
 });
+
+export const toggleCourseInCart = async (req, res) => {
+  const { id, token } = req.credentials;
+
+  const user = await prisma.user.findFirst({
+    where: { id: parseInt(id) },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
+
+  if (!user) {
+    res.status(404);
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+    );
+  }
+
+  const { coursesInCart: updatedCoursesInCart } = req.body;
+
+  const removedCourses = updatedCoursesInCart.filter((course) =>
+    user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
+  );
+
+  const addedCourses = updatedCoursesInCart.filter(
+    (updatedCourse) =>
+      !user.coursesInCart.some((course) => course.id === updatedCourse.id)
+  );
+
+  let message = "";
+
+  if (removedCourses.length > 0) {
+    message = "Le cours a bien été supprimé de votre panier";
+  } else {
+    message = "Le cours a bien été ajouté à votre panier";
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      coursesInCart: {
+        connect: addedCourses.map((course) => ({ id: course.id })),
+        disconnect: removedCourses.map((course) => ({ id: course.id })),
+      },
+    },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
+
+  res.status(200).json({
+    message,
+    user: { ...updatedUser, token },
+  });
+}
+
+export const buyCourseInCart = async (req, res) => {
+  const { id, token } = req.credentials;
+
+  
+  
+  const user = await prisma.user.findFirst({
+    where: { id: parseInt(id) },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
+  
+  
+  if (!user) {
+    res.status(404);
+    throw new Error(
+      "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
+      );
+    }
+    
+  const { enrolledCourses: updatedBoughtCourses } = req.body;
+  
+  const removedCourses = updatedBoughtCourses.filter((course) =>
+    user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
+  );
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      enrolledCourses: {
+        connect: removedCourses.map((course) => ({ id: course.id })),
+      },
+      coursesInCart: {
+        disconnect: removedCourses.map((course) => ({ id: course.id })),
+      }
+    },
+    include: {
+      coursesInCart: true,
+      createdCourses: true,
+      enrolledCourses: true,
+    },
+  });
+
+  res.status(200).json({
+    message: "Le cours a bien été acheté",
+    user: { ...updatedUser, token },
+  });
+}
