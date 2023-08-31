@@ -22,7 +22,7 @@ const GENDERS = ["MALE", "FEMALE"];
 const STATUS = ["ACTIVE", "INACTIVE"];
 const ROLES = ["ADMIN", "TRAINER", "STUDENT", "USER"];
 
-const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
+const UserAddFormModal = ({ modalOpen, setModalOpen, userRole }) => {
   const { user } = useUserStore();
   const { addUser } = useUser();
 
@@ -31,7 +31,12 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(addUserSchema) });
+  } = useForm({
+    resolver: zodResolver(addUserSchema),
+    values: {
+      role: userRole && userRole,
+    },
+  });
 
   const { isLoading, mutate } = useMutation({
     mutationFn: addUser,
@@ -62,7 +67,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
       modalOpen={modalOpen}
       label={"Ajouter Un Nouvel Utilisateur"}
     >
-      <InputsForm col={3}>
+      <InputsForm col={2}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Prénom"}
@@ -127,15 +132,17 @@ const UserAddFormModal = ({ modalOpen, setModalOpen }) => {
           type={"password"}
         />
 
-        <SelectField
-          uuid={crypto.randomUUID()}
-          label={"Rôle"}
-          errors={errors}
-          register={register}
-          field={"role"}
-          optionLabel={"Sélectionner Le Rôle"}
-          options={ROLES.map((role) => ({ key: role, value: role }))}
-        />
+        {!userRole && (
+          <SelectField
+            uuid={crypto.randomUUID()}
+            label={"Rôle"}
+            errors={errors}
+            register={register}
+            field={"role"}
+            optionLabel={"Sélectionner Le Rôle"}
+            options={ROLES.map((role) => ({ key: role, value: role }))}
+          />
+        )}
 
         <SelectField
           uuid={crypto.randomUUID()}

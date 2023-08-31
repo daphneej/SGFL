@@ -62,7 +62,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between flex-1 w-full gap-2 overflow-auto text-center">
+    <div className="flex flex-col justify-between flex-1 w-full gap-4 overflow-auto text-center">
       <div className="flex flex-col-reverse items-center justify-between gap-2 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">Liste Des Cours</h2>
 
@@ -97,7 +97,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
             Aucun cours n'a été trouvé
           </p>
         ) : (
-          <>
+          <div className="flex flex-col gap-4">
             <table className="flex-1 w-full mx-auto">
               <thead className="bg-base-300">
                 <tr>
@@ -184,7 +184,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
             />
-          </>
+          </div>
         )}
       </div>
     </div>

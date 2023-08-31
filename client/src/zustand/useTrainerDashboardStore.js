@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useDashboardStore = create(
+const useTrainerDashboardStore = create(
   persist(
     (set) => ({
       selectedMenuItem: "Dashboard",
@@ -11,9 +11,9 @@ const useDashboardStore = create(
         })),
     }),
     {
-      name: "admin-dashboard-store",
+      name: "trainer-dashboard-store",
     }
   )
 );
 
-export default useDashboardStore;
+export default useTrainerDashboardStore;

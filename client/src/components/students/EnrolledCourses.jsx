@@ -1,43 +1,24 @@
-import { useQuery } from "react-query";
-
-import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
-import { useEffect } from "react";
 
-const CreatedCourses = () => {
-  const { getCourses } = useCourse();
+const EnrolledCourses = () => {
   const { user } = useUserStore();
-
-  const { isLoading, data: courses } = useQuery({
-    queryKey: ["courses"],
-    queryFn: getCourses,
-  });
 
   return (
     <>
       <h2 className="mt-10 mb-4 text-2xl font-bold text-center md:text-right">
-        Mes Cours
+        Cours
       </h2>
 
       <div className="flex flex-col">
-        {isLoading && (
-          <div className="flex items-center justify-center w-full">
-            <div className="loading"></div>
-          </div>
-        )}
-
-        {courses?.filter((course) => course?.trainer?.id === user?.id)
-          .length === 0 ? (
+        {user?.enrolledCourses?.length === 0 ? (
           <div className="flex items-center justify-center w-full">
             <h2 className="text-xl font-bold text-center">
-              No Courses Created Yet
+              No Courses Bought Yet
             </h2>
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {courses
-              ?.filter((course) => course?.trainer?.id === user?.id)
-              .map((course) => (
+            {user?.enrolledCourses?.map((course) => (
                 <li
                   key={course?.id}
                   className="flex items-center justify-between px-6 py-4 transition duration-300 rounded-lg shadow-sm cursor-pointer bg-base-300 shadow-primary hover:shadow-lg"
@@ -60,4 +41,4 @@ const CreatedCourses = () => {
   );
 };
 
-export default CreatedCourses;
+export default EnrolledCourses;

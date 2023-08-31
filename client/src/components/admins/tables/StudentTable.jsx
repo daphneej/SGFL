@@ -1,7 +1,7 @@
-import { useMutation } from "react-query";
-import { useState } from "react";
-import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { useState } from "react";
+import { useMutation } from "react-query";
+import { toast } from "react-toastify";
 
 import useUser from "@/hooks/users/useUser";
 import useUserStore from "@/zustand/useUserStore";
@@ -14,18 +14,19 @@ import UserAddFormModal from "@/components/admins/users/UserAddFormModal";
 import UserUpdateFormModal from "@/components/admins/users/UserUpdateFormModal";
 import UserViewModal from "@/components/admins/users/UserViewModal";
 
-import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
   { label: "Prénom", key: "firstName" },
   { label: "Nom", key: "lastName" },
   { label: "Adresse Email", key: "email" },
-  { label: "Rôle", key: "role" },
+  {label: "Role", key: "role"},
+  { label: "Cours Achetés", key: "courses" },
   { label: "Actions", key: "actions" },
 ];
 
-const UserTable = ({ isLoadingUsers: isLoading, users }) => {
+const StudentTable = ({ isLoadingUsers: isLoading, users: students }) => {
   const { user } = useUserStore();
   const { removeUser } = useUser();
   const itemsPerPage = 10;
@@ -39,7 +40,7 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = users?.slice(indexOfFirstItem, indexOfLastItem);
+  const currentStudents = students?.slice(indexOfFirstItem, indexOfLastItem);
 
   const { mutate } = useMutation({
     mutationKey: "users",
@@ -56,21 +57,21 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   });
 
   const handleRemoveUser = async (userId) => {
-    mutate({ userId, token: user.token });
+    mutate({ userId, token: user?.token });
   };
 
   return (
     <div className="flex flex-col justify-between flex-1 w-full gap-4 overflow-auto text-center">
       <div className="flex flex-col-reverse items-center justify-between gap-2 md:flex-row">
         <h2 className="text-2xl font-semibold text-left">
-          Liste Des Utilisateurs
+          Liste Des Etudiants
         </h2>
 
         <button
           className="w-full text-white border-none outline-none btn bg-primary hover:bg-neutral md:w-fit"
           onClick={() => setModalAddOpen(true)}
         >
-          Ajouter Un Nouvel Utilisateur
+          Ajouter Un Nouveau Etudiant
         </button>
       </div>
 
@@ -78,6 +79,7 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
         <UserAddFormModal
           modalOpen={modalAddOpen}
           setModalOpen={setModalAddOpen}
+          userRole={"STUDENT"}
         />
 
         <UserUpdateFormModal
@@ -92,9 +94,9 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
           setModalOpen={setModalViewOpen}
         />
 
-        {users?.length === 0 ? (
+        {students?.length === 0 ? (
           <p className="mx-auto my-8 text-xl font-bold text-center text-neutral-500">
-            Aucun utilisateur n'est enregistré
+            Aucun Etudiant n'est actuellement enregistré
           </p>
         ) : (
           <div className="flex flex-col gap-4">
@@ -117,29 +119,36 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
                   </tr>
                 )}
 
-                {currentUsers?.map((user) => (
+                {currentStudents?.map((student) => (
                   <tr
-                    key={user.id}
+                    key={student?.id}
                     className={`hover:bg-base-100 ${
-                      user.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
+                      student?.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
                     }`}
                   >
-                    <td className="p-3 border border-base-100">{user.id}</td>
+                    <td className="p-3 border border-base-100">{student?.id}</td>
                     <td className="p-3 border border-base-100">
-                      {user.firstName}
+                      {student?.firstName}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {user.lastName}
+                      {student?.lastName}
                     </td>
-                    <td className="p-3 border border-base-100">{user.email}</td>
-                    <td className="p-3 border border-base-100">{user.role}</td>
+                    <td className="p-3 border border-base-100">
+                      {student?.email}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      {student?.role}
+                    </td>
+                    <td className="p-3 border border-base-100">
+                      {student?.enrolledCourses?.length}
+                    </td>
                     <td className="p-3 border border-base-100">
                       <div className="flex justify-center gap-3 mx-auto">
                         <FiEye
                           className="cursor-pointer text-primary hover:underline"
                           size={18}
                           onClick={() => {
-                            setSelectedUser(user);
+                            setSelectedUser(student);
                             setModalViewOpen(true);
                           }}
                         />
@@ -147,12 +156,12 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
                           className="text-green-500 cursor-pointer hover:underline"
                           size={18}
                           onClick={() => {
-                            setSelectedUser(user);
+                            setSelectedUser(student);
                             setModalUpdateOpen(true);
                           }}
                         />
                         <FiTrash2
-                          onClick={() => handleRemoveUser(user.id)}
+                          onClick={() => handleRemoveUser(student?.id)}
                           className="text-red-500 cursor-pointer hover:underline"
                           size={18}
                         />
@@ -165,7 +174,7 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
 
             {/* Pagination */}
             <Pagination
-              contents={users}
+              contents={students}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
@@ -177,4 +186,4 @@ const UserTable = ({ isLoadingUsers: isLoading, users }) => {
   );
 };
 
-export default UserTable;
+export default StudentTable;

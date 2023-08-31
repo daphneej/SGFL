@@ -1,9 +1,9 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
-import { FiUsers, FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
-
-import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
+import { FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
+import { LuBookPlus } from "react-icons/lu";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 
 import { RiMenuFoldLine } from "react-icons/ri";
 
@@ -37,7 +37,7 @@ const TrainerAsideDashboard = ({
   };
   return (
     <aside
-      className={`ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+      className={`fixed md:relative ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
         !menuOpen && "hidden"
       }`}
     >
@@ -73,8 +73,17 @@ const TrainerAsideDashboard = ({
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
+
           <MenuItem
-            label={"Mes Cours"}
+            label={"Ajouter Cours"}
+            icon={<LuBookPlus className="mr-2" size={20} />}
+            menuItem={"AddCourse"}
+            selectedMenuItem={selectedMenuItem}
+            setSelectedMenuItem={setSelectedMenuItem}
+          />
+
+          <MenuItem
+            label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
             selectedMenuItem={selectedMenuItem}

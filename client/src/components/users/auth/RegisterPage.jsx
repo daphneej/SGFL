@@ -1,25 +1,47 @@
-import { useState, useEffect } from "react";
+import { AxiosError } from "axios";
+import { useEffect } from "react";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useMutation } from "react-query";
-import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import useAuth from "@/hooks/users/useAuth";
 import useUserStore from "@/zustand/useUserStore";
+import { registerUserSchema } from "@/schemas/userSchema";
 
-const RegisterPage = () => {
+import InputField from "@/components/forms/InputField";
+import ButtonForm from "@/components/forms/ButtonForm";
+import SimpleForm from "@/components/forms/SimpleForm";
+import InputsForm from "@/components/forms/InputsForm";
+import ButtonsForm from "@/components/forms/ButtonsForm";
+
+const Register = () => {
   const navigate = useNavigate();
   const { registerUser } = useAuth();
-
   const { user, setUser } = useUserStore();
-  const [emptyInput, setEmptyInput] = useState(true);
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
+
+  useEffect(() => {
+    if (user && user.role === "ADMIN") {
+      navigate("/dashboard/admins");
+    } else if (user && user.role === "TRAINER") {
+      navigate("/dashboard/trainers");
+    } else if (user && user.role === "STUDENT") {
+      navigate("/dashboard/students");
+    } else if (user && user.role === "USER") {
+      navigate("/dashboard/users");
+    }
+  }, [user, navigate]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerUserSchema),
   });
 
-  const { isLoading, mutate } = useMutation("user", registerUser, {
+  const { isLoading, mutate } = useMutation(["user"], registerUser, {
     onSuccess: (data) => {
       toast.success(data.message);
       setUser(data.user);
@@ -31,111 +53,52 @@ const RegisterPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (user) {
-      navigate("/profile");
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
-    let hasEmptyInput = false;
-
-    const values = Object.values(inputs);
-
-    values.forEach((value) => {
-      if (value.length === 0) {
-        hasEmptyInput = true;
-      }
-    });
-
-    setEmptyInput(hasEmptyInput);
-  }, [inputs]);
-
-  const handleRegisterUser = async (e) => {
-    e.preventDefault();
-    mutate(inputs);
+  const handleRegisterUser = (data) => {
+    mutate(data);
   };
 
   return (
-    <div className="flex justify-center px-4 py-24 h-fit bg-base-100">
-      <div className="w-full max-w-md p-8 rounded-md h-fit bg-base-300">
-        <h2 className="mb-6 text-3xl font-bold text-center">Inscription</h2>
-
-        <form onSubmit={handleRegisterUser}>
-          <div className="mb-4">
-            <label htmlFor="email" className="font-medium text-md">
-              Adresse Email
-            </label>
-            <input
-              id="email"
-              value={inputs.email}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  email: e.target.value,
-                })
-              }
-              type="text"
-              placeholder="Veuillez saisir votre email"
-              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
+    <div className="flex justify-center w-full px-4 py-24 h-fit bg-base-100">
+      <div className="w-full max-w-md">
+        <SimpleForm
+          handler={handleSubmit(handleRegisterUser)}
+          label={"Creation de Compte"}
+        >
+          <InputsForm col={1}>
+            <InputField
+              label={"Adresse Email"}
+              errors={errors}
+              register={register}
+              field={"email"}
+              type={"email"}
             />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="font-medium text-md">
-              Mot De Passe
-            </label>
-            <input
-              id="password"
-              value={inputs.password}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  password: e.target.value,
-                })
-              }
-              type="password"
-              autoComplete="true"
-              placeholder="Veuillez saisir votre mot de passe"
-              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
+            <InputField
+              label={"Mot De Passe"}
+              errors={errors}
+              register={register}
+              field={"password"}
+              type={"password"}
             />
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="confirmPassword" className="font-medium text-md">
-              Confirmation Mot De Passe
-            </label>
-            <input
-              id="confirmPassword"
-              value={inputs.confirmPassword}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  confirmPassword: e.target.value,
-                })
-              }
-              type="password"
-              autoComplete="true"
-              placeholder="Veuillez confirmer votre mot de passe"
-              className="w-full px-4 py-2 mt-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
+            <InputField
+              label={"Confirmez Mot De Passe"}
+              errors={errors}
+              register={register}
+              field={"confirmPassword"}
+              type={"password"}
             />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full text-white btn bg-primary hover:bg-neutral"
-            disabled={emptyInput || isLoading}
-          >
-            {isLoading ? (
-              <div className="loading"></div>
-            ) : (
-              <span>Inscription</span>
-            )}
-          </button>
-        </form>
+          </InputsForm>
+          <ButtonsForm>
+            <ButtonForm
+              isLoading={isLoading}
+              primary={true}
+              label={"Creer Compte"}
+              handleClick={() => {}}
+            />
+          </ButtonsForm>
+        </SimpleForm>
       </div>
     </div>
   );
 };
 
-export default RegisterPage;
+export default Register;

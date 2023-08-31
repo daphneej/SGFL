@@ -69,7 +69,7 @@ const CategoryUpdateFormModal = ({
       modalOpen={modalOpen}
       label={"Mettre À Jour La Catégorie"}
     >
-      <InputsForm col={3}>
+      <InputsForm col={1}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Nom De La Catégorie"}

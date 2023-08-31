@@ -1,35 +1,28 @@
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
-import { FiBook, FiLogOut, FiHome, FiUser, FiUserCheck } from "react-icons/fi";
-
-import { PiStudentThin, PiUsersFour } from "react-icons/pi";
-
-import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
-
+import { FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { RiMenuFoldLine } from "react-icons/ri";
 
 import useAuth from "@/hooks/users/useAuth";
-
 import useUserStore from "@/zustand/useUserStore";
 
 import MenuItem from "@/components/admins/aside/MenuItem";
 
-const AsideDashboard = ({
+const StudentAsideDashboard = ({
   selectedMenuItem,
   setSelectedMenuItem,
   menuOpen,
   setMenuOpen,
 }) => {
   const { user, setUser } = useUserStore();
-
   const { logoutUser } = useAuth();
 
   const { mutate } = useMutation("user", logoutUser, {
     onSuccess: (data) => {
       toast.success(data.message);
       setUser(data.user);
-      setSelectedMenuItem("Dashboard");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -41,7 +34,7 @@ const AsideDashboard = ({
   };
   return (
     <aside
-      className={`ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
+      className={`fixed md:relative ease-in-out duration-300 z-10 w-full overflow-hidden font-semibold overflow-y-auto h-screen md:overflow-y-auto sm:w-72 bg-base-300 ${
         !menuOpen && "hidden"
       }`}
     >
@@ -77,40 +70,11 @@ const AsideDashboard = ({
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
-          <MenuItem
-            label={"Utilisateurs"}
-            icon={<PiUsersFour className="mr-2" size={20} />}
-            menuItem={"Users"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-          <MenuItem
-            label={"Catégories"}
-            icon={<MdOutlineCategory className="mr-2" size={20} />}
-            menuItem={"Categories"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
+
           <MenuItem
             label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-
-          <MenuItem
-            label={"Formateurs"}
-            icon={<FiUserCheck className="mr-2" size={20} />}
-            menuItem={"Trainers"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-
-          <MenuItem
-            label={"Etudiants"}
-            icon={<PiStudentThin className="mr-2" size={20} />}
-            menuItem={"Students"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
@@ -149,4 +113,4 @@ const AsideDashboard = ({
   );
 };
 
-export default AsideDashboard;
+export default StudentAsideDashboard;
