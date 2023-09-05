@@ -1,6 +1,32 @@
 import { object, string, number } from "zod";
 
-const addCourseSchema = object({
+// Custom validation function to check allowed video file extensions
+function allowedVideoExtensions(extensions) {
+  return string().refine(
+    (value) => {
+      const fileExtension = value.split(".").pop().toLowerCase();
+      return extensions.includes(fileExtension);
+    },
+    {
+      message: "Le type du fichier vidéo est invalide",
+    }
+  );
+}
+
+// Custom validation function to check allowed image file extensions
+function allowedImageExtensions(extensions) {
+  return string().refine(
+    (value) => {
+      const fileExtension = value.split(".").pop().toLowerCase();
+      return extensions.includes(fileExtension);
+    },
+    {
+      message: "Le type du fichier image est invalide",
+    }
+  );
+}
+
+export const addCourseSchema = object({
   title: string({
     required_error: "Le titre est requis",
   }).min(1, "Le titre est requis"),
@@ -16,6 +42,45 @@ const addCourseSchema = object({
   categoryId: number({
     required_error: "La catégorie est requise",
   }).min(1, "La catégorie est requise"),
+  thumbnail: object({
+    0: object(
+      {
+        name: string(),
+        size: number(),
+        type: allowedImageExtensions([
+          "image/png",
+          "image/jpg",
+          "image/gif",
+          "image/jpeg",
+          "image/webp",
+        ]),
+      },
+      {
+        required_error: "La photo de couverture est requise",
+      }
+    ),
+  }),
+  video: object({
+    0: object(
+      {
+        name: string(),
+        size: number(),
+        type: allowedVideoExtensions([
+          "video/mp4",
+          "video/webm",
+          "video/ogg",
+          "video/quicktime",
+          "video/x-flv",
+          "video/x-matroska",
+          "video/x-msvideo",
+          "video/x-ms-wmv",
+          "video/x-ms-asf",
+        ]),
+      },
+      {
+        required_error: "La vidéo du cours est requise",
+      }
+    ),
+  }),
+  published: number().optional().default(0),
 });
-
-export { addCourseSchema };

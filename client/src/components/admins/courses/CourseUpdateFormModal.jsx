@@ -38,7 +38,7 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       categoryId: selectedCourse?.categoryId,
       price: selectedCourse?.price,
       trainerId: selectedCourse?.trainerId,
-      published: selectedCourse?.published,
+      published: selectedCourse?.published ? 1 : 0,
     },
   });
 
@@ -58,7 +58,7 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
 
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(user.token),
+    queryFn: () => getCategories(),
     enabled: Boolean(user),
   });
 
@@ -73,7 +73,7 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       course: {
         ...data,
         id: selectedCourse.id,
-        published: Boolean(data?.published),
+        published: parseInt(data?.published) === 0 ? false : true,
       },
       token: user.token,
     });
@@ -157,9 +157,10 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
           field={"published"}
           optionLabel={"Sélectionner Le Status"}
           options={[
-            { key: false, value: "En Attente" },
-            { key: true, value: "Publié" },
+            { key: 0, value: "En Attente" },
+            { key: 1, value: "Publié" },
           ]}
+          type={"number"}
         />
       </InputsForm>
       <ButtonsForm>

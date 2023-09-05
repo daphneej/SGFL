@@ -37,6 +37,8 @@ model Course {
   price                    Float
   trainerId                Int?
   categoryId               Int
+  thumbnailUrl             String
+  videoUrl                 String
   createdAt                DateTime @default(now())
   published                Boolean  @default(false)
   trainer                  User?    @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])

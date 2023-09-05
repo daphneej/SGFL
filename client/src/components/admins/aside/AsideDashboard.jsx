@@ -45,9 +45,7 @@ const AsideDashboard = ({
         !menuOpen && "hidden"
       }`}
     >
-      <div
-        className={`sticky top-0 right-0 flex justify-end p-4 backdrop-blur`}
-      >
+      <div className="sticky top-0 right-0 flex justify-end p-4">
         <RiMenuFoldLine
           className="cursor-pointer"
           size={30}
