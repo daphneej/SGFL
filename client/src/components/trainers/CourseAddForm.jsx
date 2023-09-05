@@ -2,7 +2,6 @@ import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { queryClient } from "@/index";
 
@@ -60,7 +59,7 @@ const CourseAddForm = () => {
 
   const handleAddCourse = async (data) => {
     mutate({
-      course: { ...data, thumbnail: data?.thumbnail, video: data?.video },
+      course: { ...data, thumbnail: data?.thumbnail[0], video: data?.video[0] },
       token: user.token,
     });
   };

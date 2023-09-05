@@ -3,7 +3,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "../index.js";
 import { storage } from "../../utils/firebase.js";
-import fs from "fs";
 
 // import { addCourseSchema } from "../../models/course.models.js";
 
