@@ -49,7 +49,7 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
 
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(user.token),
+    queryFn: () => getCategories(),
     enabled: Boolean(user),
   });
 
@@ -60,7 +60,8 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
   });
 
   const handleAddCourse = (data) => {
-    mutate({ course: data, token: user.token });
+    // mutate({ course: data, token: user.token });
+    console.log(data);
   };
 
   const handleCancelClick = () => {

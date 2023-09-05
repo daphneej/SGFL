@@ -36,7 +36,7 @@ const AdminDashboard = () => {
 
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(user.token),
+    queryFn: () => getCategories(),
     enabled: Boolean(user),
   });
 

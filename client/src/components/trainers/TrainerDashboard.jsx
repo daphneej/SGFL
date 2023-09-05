@@ -33,14 +33,21 @@ const TrainerDashboard = () => {
           />
         </div>
 
-        <div className="w-full h-screen px-4 py-8 overflow-y-auto md:px-8">
-          <div className="w-full mx-auto mt-10 md:w-1/2">
+        <div className="flex justify-center w-full px-4 py-8 md:px-8">
+          {/* <div className="w-full mx-auto mt-10 md:w-1/2">
             {selectedMenuItem === "Dashboard" && <></>}
-          </div>
-          <div className="w-full mx-auto mt-10 md:w-1/2">
-            {selectedMenuItem === "AddCourse" && <CourseAddForm />}
-          </div>
-          {selectedMenuItem === "Courses" && <CreatedCourses />}
+          </div> */}
+
+          {selectedMenuItem === "AddCourse" && (
+            <div className="flex items-center w-full mx-auto mt-24 md:w-5/6">
+              <CourseAddForm />{" "}
+            </div>
+          )}
+          {selectedMenuItem === "Courses" && (
+            <div className="flex w-full h-[85vh] mx-auto mt-10 md:w-5/6">
+              <CreatedCourses />
+            </div>
+          )}
         </div>
       </main>
     </div>

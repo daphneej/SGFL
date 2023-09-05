@@ -139,9 +139,9 @@ const Navbar = () => {
                     <li>
                       <Link
                         to={`/dashboard/${
-                          user?.role === "ADMIN" && "admins" ||
-                          user?.role === "TRAINER" && "trainers" ||
-                          user?.role === "STUDENT" && "students"
+                          (user?.role === "ADMIN" && "admins") ||
+                          (user?.role === "TRAINER" && "trainers") ||
+                          (user?.role === "STUDENT" && "students")
                         }`}
                       >
                         <MdOutlineSpaceDashboard />

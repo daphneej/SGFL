@@ -4,7 +4,8 @@ import { persist } from "zustand/middleware";
 const useTrainerDashboardStore = create(
   persist(
     (set) => ({
-      selectedMenuItem: "Dashboard",
+      // selectedMenuItem: "Dashboard",
+      selectedMenuItem: "AddCourse",
       setSelectedMenuItem: (newMenuItem) =>
         set(() => ({
           selectedMenuItem: newMenuItem,

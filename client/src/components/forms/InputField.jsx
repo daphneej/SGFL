@@ -1,5 +1,3 @@
-import ErrorInputMessage from "@/components/forms/ErrorInputMessage";
-
 const InputField = ({
   uuid,
   label,
@@ -23,7 +21,10 @@ const InputField = ({
         autoComplete={`${type === "password" && "current-password"}`}
         disabled={disabled}
       />
-      <ErrorInputMessage errors={errors} field={field} />
+
+      {errors[field] && (
+        <p className="mt-1 text-xs text-red-500">{errors[field].message}</p>
+      )}
     </div>
   );
 };

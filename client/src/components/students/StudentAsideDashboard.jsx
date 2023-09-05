@@ -38,9 +38,7 @@ const StudentAsideDashboard = ({
         !menuOpen && "hidden"
       }`}
     >
-      <div
-        className={`sticky top-0 right-0 flex justify-end p-4 backdrop-blur`}
-      >
+      <div className="sticky top-0 right-0 flex justify-end p-4">
         <RiMenuFoldLine
           className="cursor-pointer"
           size={30}
@@ -64,21 +62,12 @@ const StudentAsideDashboard = ({
         </div>
         <ul>
           <MenuItem
-            label={"Dashboard"}
-            icon={<MdOutlineSpaceDashboard className="mr-2" size={20} />}
-            menuItem={"Dashboard"}
-            selectedMenuItem={selectedMenuItem}
-            setSelectedMenuItem={setSelectedMenuItem}
-          />
-
-          <MenuItem
-            label={"Cours"}
+            label={"Cours Achetés"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />
-
           <div className="mt-4">
             <li>
               <p className="text-xl font-extrabold">Utilisateur</p>

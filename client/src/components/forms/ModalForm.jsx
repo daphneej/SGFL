@@ -5,6 +5,7 @@ const ModalForm = ({ label, handler, modalOpen, children }) => {
         modalOpen && "modal-open"
       }`}
       onSubmit={handler}
+      encType="multipart/form-data"
     >
       <div className="flex flex-col w-full gap-4 p-8 text-left rounded-md shadow-md md:w-3/4 h-fit bg-base-300 shadow-primary">
         <h2 className="text-2xl font-bold">{label}</h2>

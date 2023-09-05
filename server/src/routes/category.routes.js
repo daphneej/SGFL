@@ -16,7 +16,7 @@ import {
 const router = Router();
 
 router.post("/", protectUserRoutes, protectAdminRoutes, createCategory);
-router.get("/", protectUserRoutes, getCategories);
+router.get("/", getCategories);
 router.get("/:id", protectUserRoutes, protectAdminRoutes, getCategory);
 router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCategory);
 router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCategory);

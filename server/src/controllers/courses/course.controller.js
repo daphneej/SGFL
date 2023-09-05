@@ -1,19 +1,40 @@
-import { prisma } from "../index.js";
 import asyncHandler from "express-async-handler";
-import { addCourseSchema } from "../../models/course.models.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { prisma } from "../index.js";
+import { storage } from "../../utils/firebase.js";
+import fs from "fs";
+
+// import { addCourseSchema } from "../../models/course.models.js";
 
 export const createCourse = asyncHandler(async (req, res) => {
-  const { title, description, price, categoryId } = addCourseSchema.parse(
-    req.body
-  );
+  const { title, description, price, categoryId } = req.body;
+  const thumbnail = req.files.thumbnail[0];
+  const video = req.files.video[0];
+
+  const thumbnailRef = ref(storage, `images/${uuidv4()}`);
+  const videoRef = ref(storage, `video/${uuidv4()}`);
+
+  const thumbnailSnapshot = await uploadBytes(thumbnailRef, thumbnail.buffer, {
+    contentType: thumbnail.mimetype,
+  });
+
+  const videoSnapshot = await uploadBytes(videoRef, video.buffer, {
+    contentType: video.mimetype,
+  });
+
+  const thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
+  const videoUrl = await getDownloadURL(videoSnapshot.ref);
 
   await prisma.course.create({
     data: {
-      title: title,
-      description: description,
+      title,
+      description,
       price: parseInt(price),
-      trainerId: parseInt(req.credentials.id),
       categoryId: parseInt(categoryId),
+      trainerId: parseInt(req.credentials.id),
+      thumbnailUrl,
+      videoUrl,
     },
   });
 
@@ -30,6 +51,7 @@ export const getCourses = asyncHandler(async (req, res) => {
       students: true,
     },
   });
+
   res.status(200).json(courses);
 });
 
@@ -38,6 +60,9 @@ export const getCourse = asyncHandler(async (req, res) => {
 
   const course = await prisma.course.findFirst({
     where: { id: parseInt(courseId) },
+    include: {
+      trainer: true,
+    },
   });
 
   if (!course) {
@@ -68,7 +93,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
       title: title ? title : course.title,
       description: description ? description : course.description,
       price: price ? price : course.price,
-      published: published ? published : course.published,
+      published,
     },
   });
 

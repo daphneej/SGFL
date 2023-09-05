@@ -1,4 +1,7 @@
+import multer from "multer";
+
 import { Router } from "express";
+
 import {
   createCourse,
   deleteCourse,
@@ -15,8 +18,19 @@ import {
 
 const router = Router();
 
+const upload = multer({ storage: multer.memoryStorage() });
+
 // Define routes
-router.post("/", protectUserRoutes, protectTrainerRoutes, createCourse);
+router.post(
+  "/",
+  protectUserRoutes,
+  protectTrainerRoutes,
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  createCourse
+);
 router.get("/", getCourses);
 router.get("/:id", protectUserRoutes, getCourse);
 router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCourse);

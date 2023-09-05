@@ -149,7 +149,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     gender,
     address,
     phone,
-    status
+    status,
   } = req.body;
 
   if (
@@ -179,15 +179,12 @@ export const updateUser = asyncHandler(async (req, res) => {
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
     data: {
-      firstName:
-        firstName && firstName.length > 0 ? firstName : user.firstName,
+      firstName: firstName && firstName.length > 0 ? firstName : user.firstName,
       lastName: lastName && lastName.length > 0 ? lastName : user.lastName,
       email: email && email.length > 0 ? email : user.email,
       role: role && role.length > 0 ? role : user.role,
       gender:
-        gender && gender.length > 0
-          ? gender.toLocaleUpperCase()
-          : user.gender,
+        gender && gender.length > 0 ? gender.toLocaleUpperCase() : user.gender,
       address: address && address.length > 0 ? address : user.address,
       phone: phone && phone.length > 0 ? phone : user.phone,
       status: status && status.length > 0 ? status : user.status,
@@ -287,13 +284,11 @@ export const toggleCourseInCart = async (req, res) => {
     message,
     user: { ...updatedUser, token },
   });
-}
+};
 
 export const buyCourseInCart = async (req, res) => {
   const { id, token } = req.credentials;
 
-  
-  
   const user = await prisma.user.findFirst({
     where: { id: parseInt(id) },
     include: {
@@ -302,17 +297,16 @@ export const buyCourseInCart = async (req, res) => {
       enrolledCourses: true,
     },
   });
-  
-  
+
   if (!user) {
     res.status(404);
     throw new Error(
       "Malheureusement, nous n'avons pas pu trouver d'utilisateur avec ces informations."
-      );
-    }
-    
+    );
+  }
+
   const { enrolledCourses: updatedBoughtCourses } = req.body;
-  
+
   const removedCourses = updatedBoughtCourses.filter((course) =>
     user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
   );
@@ -325,12 +319,22 @@ export const buyCourseInCart = async (req, res) => {
       },
       coursesInCart: {
         disconnect: removedCourses.map((course) => ({ id: course.id })),
-      }
+      },
+      role: user.role !== "USER" ? user.role : "STUDENT",
     },
     include: {
       coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: true,
+      enrolledCourses: {
+        include: {
+          trainer: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -338,4 +342,4 @@ export const buyCourseInCart = async (req, res) => {
     message: "Le cours a bien été acheté",
     user: { ...updatedUser, token },
   });
-}
+};

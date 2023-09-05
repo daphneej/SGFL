@@ -9,9 +9,11 @@ import { queryClient } from "@/index";
 import useUserStore from "@/zustand/useUserStore";
 import useCategory from "@/hooks/useCategory";
 import useCourse from "@/hooks/useCourse";
-import { addCourseSchema } from "@/schemas/courseSchema";
+
+// import { addCourseSchema } from "@/schemas/courseSchema";
 
 import InputField from "@/components/forms/InputField";
+import MediaInputForm from "@/components/forms/MediaInputForm";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
 import SimpleForm from "@/components/forms/SimpleForm";
@@ -29,7 +31,7 @@ const CourseAddForm = () => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(addCourseSchema),
+    // resolver: zodResolver(addCourseSchema),
     values: {
       trainerId: user?.id,
     },
@@ -52,12 +54,15 @@ const CourseAddForm = () => {
 
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(user.token),
+    queryFn: () => getCategories(),
     enabled: Boolean(user),
   });
 
-  const handleAddCourse = (data) => {
-    mutate({ course: data, token: user.token });
+  const handleAddCourse = async (data) => {
+    mutate({
+      course: { ...data, thumbnail: data?.thumbnail, video: data?.video },
+      token: user.token,
+    });
   };
 
   return (
@@ -65,7 +70,7 @@ const CourseAddForm = () => {
       handler={handleSubmit(handleAddCourse)}
       label={"Ajouter Un Nouveau Cours"}
     >
-      <InputsForm col={1}>
+      <InputsForm col={2}>
         <InputField
           uuid={crypto.randomUUID()}
           label={"Titre"}
@@ -74,7 +79,6 @@ const CourseAddForm = () => {
           field={"title"}
           type={"text"}
         />
-
         <InputField
           uuid={crypto.randomUUID()}
           label={"Description"}
@@ -83,7 +87,6 @@ const CourseAddForm = () => {
           field={"description"}
           type={"text"}
         />
-
         <SelectField
           uuid={crypto.randomUUID()}
           label={"Catégorie"}
@@ -106,6 +109,30 @@ const CourseAddForm = () => {
           register={register}
           field={"price"}
           type={"number"}
+        />
+
+        <MediaInputForm
+          id={crypto.randomUUID()}
+          label={"Photo De Couverture"}
+          field={"thumbnail"}
+          name={"thumbnail"}
+          type={"file"}
+          accept="image/*"
+          register={register}
+          disabled={isLoading}
+          errors={errors}
+        />
+
+        <MediaInputForm
+          id={crypto.randomUUID()}
+          label={"Vidéo Du Cours"}
+          field={"video"}
+          name={"video"}
+          type={"file"}
+          accept="video/*"
+          register={register}
+          disabled={isLoading}
+          errors={errors}
         />
       </InputsForm>
       <ButtonsForm>

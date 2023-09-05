@@ -42,14 +42,14 @@ const DashboardChart = ({ users, categories, courses }) => {
 
       <h2 className="my-4 text-2xl font-semibold text-left">Dashboard</h2>
 
-      <div className="flex flex-wrap items-center gap-8 py-4 rounded-md bg-base-200">
-        <div className="w-full md:w-[40vw] mx-auto">
+      <div className="grid items-start grid-cols-1 gap-8 p-8 rounded-md md:grid-cols-2 bg-base-200">
+        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
           <BarChart categories={categories} />
         </div>
-        <div className="w-full md:w-[40vw] mx-auto">
+        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
           <ScatterPlot courses={courses} />
         </div>
-        <div className="w-full md:w-[40vw] mx-auto">
+        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
           <StackedBarChart
             userStats={users?.reduce((stats, user) => {
               const { role, status } = user;
@@ -68,7 +68,7 @@ const DashboardChart = ({ users, categories, courses }) => {
             }, {})}
           />
         </div>
-        <div className="w-full md:w-[40vw] mx-auto">
+        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
           <PieChart users={users} />
         </div>
       </div>

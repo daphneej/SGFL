@@ -29,7 +29,7 @@ const LoginPage = () => {
     } else if (user && user.role === "STUDENT") {
       navigate("/dashboard/students");
     } else if (user && user.role === "USER") {
-      navigate("/dashboard/users");
+      navigate("/courses");
     }
   }, [user, navigate]);
 

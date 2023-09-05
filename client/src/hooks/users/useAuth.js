@@ -9,7 +9,6 @@ const useAuth = () => {
 
   const loginUser = async (user) => {
     const response = await api.post(`/api/users/login`, user);
-
     return await response.data;
   };
 
@@ -69,7 +68,7 @@ const useAuth = () => {
     logoutUser,
     removeUser,
     toggleUserCourseInCart,
-    buyCourseInCart
+    buyCourseInCart,
   };
 };
 

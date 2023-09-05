@@ -1,5 +1,3 @@
-import ErrorInputMessage from "@/components/forms/ErrorInputMessage";
-
 const SelectField = ({
   uuid,
   label,
@@ -34,7 +32,10 @@ const SelectField = ({
           </option>
         ))}
       </select>
-      <ErrorInputMessage errors={errors} field={field} />
+
+      {errors[field] && (
+        <p className="mt-1 text-xs text-red-500">{errors[field].message}</p>
+      )}
     </div>
   );
 };
