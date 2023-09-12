@@ -1,4 +1,4 @@
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
 import SimpleForm from "@/components/forms/SimpleForm";
@@ -17,43 +17,48 @@ const UserProfileUpdate = ({
   return (
     <SimpleForm handler={handler} label={"Modifier Votre Profile"}>
       <InputsForm col={2}>
-        <InputField
+        <InputText
+          id={crypto.randomUUID()}
+          name={"firstName"}
           label={"Prénom"}
-          errors={errors}
-          register={register}
-          field={"firstName"}
+          error={errors?.firstName}
+          register={register("firstName")}
           type={"text"}
         />
 
-        <InputField
+        <InputText
+          id={crypto.randomUUID()}
+          name={"lastName"}
           label={"Nom De Famille"}
-          errors={errors}
-          register={register}
-          field={"lastName"}
+          error={errors?.lastName}
+          register={register("lastName")}
           type={"text"}
         />
 
-        <InputField
+        <InputText
+          id={crypto.randomUUID()}
+          name={"email"}
           label={"Adresse Email"}
-          errors={errors}
-          register={register}
-          field={"email"}
+          error={errors?.email}
+          register={register("email")}
           type={"email"}
         />
 
-        <InputField
+        <InputText
+          id={crypto.randomUUID()}
+          name={"address"}
           label={"Adresse"}
-          errors={errors}
-          register={register}
-          field={"address"}
+          error={errors?.address}
+          register={register("address")}
           type={"text"}
         />
 
-        <InputField
+        <InputText
+          id={crypto.randomUUID()}
+          name={"phone"}
           label={"Numéro De Téléphone"}
-          errors={errors}
-          register={register}
-          field={"phone"}
+          error={errors?.phone}
+          register={register("phone")}
           type={"tel"}
         />
 

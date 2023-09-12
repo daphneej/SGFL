@@ -6,6 +6,7 @@ const InputField = ({
   type,
   errors,
   disabled,
+  ...inputProps
 }) => {
   return (
     <div className="flex-col">
@@ -20,6 +21,7 @@ const InputField = ({
         className="w-full px-4 py-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
         autoComplete={`${type === "password" && "current-password"}`}
         disabled={disabled}
+        {...inputProps}
       />
 
       {errors[field] && (

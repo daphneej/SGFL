@@ -10,7 +10,7 @@ import useAuth from "@/hooks/users/useAuth";
 import useUserStore from "@/zustand/useUserStore";
 import { loginUserSchema } from "@/schemas/userSchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import ButtonForm from "@/components/forms/ButtonForm";
 import SimpleForm from "@/components/forms/SimpleForm";
 import InputsForm from "@/components/forms/InputsForm";
@@ -62,18 +62,20 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         <SimpleForm handler={handleSubmit(handleLoginUser)} label={"Connexion"}>
           <InputsForm col={1}>
-            <InputField
+            <InputText
+              id={crypto.randomUUID()}
+              name={"email"}
               label={"Adresse Email"}
-              errors={errors}
-              register={register}
-              field={"email"}
+              error={errors?.email}
+              register={register("email")}
               type={"email"}
             />
-            <InputField
+            <InputText
+              id={crypto.randomUUID()}
+              name={"password"}
               label={"Mot De Passe"}
-              errors={errors}
-              register={register}
-              field={"password"}
+              error={errors?.password}
+              register={register("password")}
               type={"password"}
             />
           </InputsForm>

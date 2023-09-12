@@ -70,13 +70,17 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   });
 
   const handleUpdateCourse = (data) => {
-    mutate({
-      course: {
-        ...data,
-        id: selectedCourse.id,
-      },
-      token: user.token,
-    });
+    console.log("====================================");
+    console.log(data);
+    console.log("====================================");
+
+    // mutate({
+    //   course: {
+    //     ...data,
+    //     id: selectedCourse.id,
+    //   },
+    //   token: user.token,
+    // });
   };
 
   const handleCancelClick = () => {
@@ -130,6 +134,7 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
           register={register}
           field={"price"}
           type={"number"}
+          step={"0.01"}
         />
 
         <SelectField

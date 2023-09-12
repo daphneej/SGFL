@@ -33,9 +33,9 @@ const addCourseSchema = object({
   description: string({
     required_error: "La description est requise",
   }).min(1, "La description est requise"),
-  price: number({
-    required_error: "Le prix est requis",
-  }).min(1, "Le prix est requis"),
+  price: number()
+    .nonnegative("Le prix doit être un nombre positif")
+    .step(0.01, "Le prix doit être un nombre positif"),
   trainerId: number({
     required_error: "Le formateur est requis",
   }).min(1, "Le formateur est requis"),
@@ -91,7 +91,9 @@ const addCourseSchema = object({
 const updateCourseSchema = object({
   title: string().min(1, "Le titre est requis"),
   description: string().min(1, "La description est requise"),
-  price: number().min(1, "Le prix est requis"),
+  price: number()
+    .nonnegative("Le prix doit être un nombre positif")
+    .step(0.01, "Le prix doit être un nombre positif"),
   trainerId: number().min(1, "Le formateur est requis"),
   categoryId: number().min(1, "La catégorie est requise"),
   published: string().optional().default("PENDING"),

@@ -10,7 +10,7 @@ import useAuth from "@/hooks/users/useAuth";
 import useUserStore from "@/zustand/useUserStore";
 import { registerUserSchema } from "@/schemas/userSchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import ButtonForm from "@/components/forms/ButtonForm";
 import SimpleForm from "@/components/forms/SimpleForm";
 import InputsForm from "@/components/forms/InputsForm";
@@ -22,14 +22,8 @@ const Register = () => {
   const { user, setUser } = useUserStore();
 
   useEffect(() => {
-    if (user && user.role === "ADMIN") {
-      navigate("/dashboard/admins");
-    } else if (user && user.role === "TRAINER") {
-      navigate("/dashboard/trainers");
-    } else if (user && user.role === "STUDENT") {
-      navigate("/dashboard/students");
-    } else if (user && user.role === "USER") {
-      navigate("/dashboard/users");
+    if (user) {
+      navigate("/profile");
     }
   }, [user, navigate]);
 
@@ -65,26 +59,29 @@ const Register = () => {
           label={"Creation de Compte"}
         >
           <InputsForm col={1}>
-            <InputField
-              label={"Adresse Email"}
-              errors={errors}
-              register={register}
-              field={"email"}
+            <InputText
+              id={crypto.randomUUID()}
+              name={"email"}
               type={"email"}
+              label={"Adresse Email"}
+              error={errors?.email}
+              register={register("email")}
             />
-            <InputField
+            <InputText
+              id={crypto.randomUUID()}
+              name={"password"}
+              type={"password"}
               label={"Mot De Passe"}
-              errors={errors}
-              register={register}
-              field={"password"}
-              type={"password"}
+              error={errors?.password}
+              register={register("password")}
             />
-            <InputField
-              label={"Confirmez Mot De Passe"}
-              errors={errors}
-              register={register}
-              field={"confirmPassword"}
+            <InputText
+              id={crypto.randomUUID()}
+              name={"confirmPassword"}
               type={"password"}
+              label={"Confirmez Mot De Passe"}
+              error={errors?.confirmPassword}
+              register={register("confirmPassword")}
             />
           </InputsForm>
           <ButtonsForm>

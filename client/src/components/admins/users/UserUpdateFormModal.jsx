@@ -10,7 +10,7 @@ import useUser from "@/hooks/users/useUser";
 import useUserStore from "@/zustand/useUserStore";
 import { updateUserSchema } from "@/schemas/userSchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
@@ -72,53 +72,53 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
       label={"Mettre à Jour le Nouvel Utilisateur"}
     >
       <InputsForm col={2}>
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"firstName"}
           label={"Prénom"}
-          errors={errors}
-          register={register}
-          field={"firstName"}
+          error={errors?.firstName}
+          register={register("firstName")}
           type={"text"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"lastName"}
           label={"Nom De Famille"}
-          errors={errors}
-          register={register}
-          field={"lastName"}
+          error={errors?.lastName}
+          register={register("lastName")}
           type={"text"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"email"}
           label={"Adresse Email"}
-          errors={errors}
-          register={register}
-          field={"email"}
+          error={errors?.email}
+          register={register("email")}
           type={"email"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"address"}
           label={"Adresse"}
-          errors={errors}
-          register={register}
-          field={"address"}
+          error={errors?.address}
+          register={register("address")}
           type={"text"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"phone"}
           label={"Numéro De Téléphone"}
-          errors={errors}
-          register={register}
-          field={"phone"}
+          error={errors?.phone}
+          register={register("phone")}
           type={"tel"}
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Sexe"}
           errors={errors}
           register={register}
@@ -128,7 +128,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Rôle"}
           errors={errors}
           register={register}
@@ -138,7 +138,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Statut"}
           errors={errors}
           register={register}
