@@ -34,7 +34,7 @@ const CreatedCourses = () => {
             </h2>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-8 px-4 py-8 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="flex flex-wrap justify-center gap-8 py-8 text-center">
             {courses
               ?.filter((course) => course?.trainer?.id === user?.id)
               .map((course) => (
@@ -80,7 +80,7 @@ const CreatedCourses = () => {
                         </p>
 
                         <p className="text-xs font-bold">
-                          {course?.published ? (
+                          {course?.published === "PUBLISHED" ? (
                             <span className="text-success">Publié</span>
                           ) : (
                             <span className="text-warning">En Attente</span>

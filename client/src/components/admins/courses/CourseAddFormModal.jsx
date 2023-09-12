@@ -133,6 +133,21 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
           disabled={isLoadingUsers}
           type={"number"}
         />
+
+        <SelectField
+          uuid={crypto.randomUUID()}
+          label={"Status"}
+          errors={errors}
+          register={register}
+          field={"published"}
+          optionLabel={"Sélectionner Le Status"}
+          options={["PENDING", "PUBLISHED"].map((status) => ({
+            key: status,
+            value: status === "PUBLISHED" ? "Publié" : "En Attente",
+          }))}
+          disabled={isLoadingUsers}
+          type={"text"}
+        />
       </InputsForm>
       <ButtonsForm>
         <ButtonForm

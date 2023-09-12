@@ -1,12 +1,16 @@
 import { api } from "./index.js";
 
 const useCourse = () => {
-  const getCourses = async (type = null) => {
+  const getCourses = async () => {
     const response = await api.get(`/api/courses`);
     const data = await response.data;
-    return type !== "published"
-      ? data
-      : data.filter((course) => course.published);
+    return data;
+  };
+
+  const getPublishedCourses = async () => {
+    const response = await api.get(`/api/courses/published`);
+    const data = await response.data;
+    return data;
   };
 
   const addCourse = async ({ course, token }) => {
@@ -45,7 +49,13 @@ const useCourse = () => {
     return data;
   };
 
-  return { getCourses, addCourse, updateCourse, removeCourse };
+  return {
+    getCourses,
+    getPublishedCourses,
+    addCourse,
+    updateCourse,
+    removeCourse,
+  };
 };
 
 export default useCourse;

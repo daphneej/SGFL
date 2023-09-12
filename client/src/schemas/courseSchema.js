@@ -94,7 +94,7 @@ const updateCourseSchema = object({
   price: number().min(1, "Le prix est requis"),
   trainerId: number().min(1, "Le formateur est requis"),
   categoryId: number().min(1, "La catégorie est requise"),
-  published: number().optional(),
+  published: string().optional().default("PENDING"),
 });
 
 export { addCourseSchema, updateCourseSchema };

@@ -31,7 +31,7 @@ model Category {
 }
 
 model Course {
-  id                       Int      @id @default(autoincrement())
+  id                       Int          @id @default(autoincrement())
   title                    String
   description              String
   price                    Float
@@ -39,12 +39,12 @@ model Course {
   categoryId               Int
   thumbnailUrl             String
   videoUrl                 String
-  createdAt                DateTime @default(now())
-  published                Boolean  @default(false)
-  trainer                  User?    @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
-  students                 User[]   @relation("StudentEnrolledCourses")
-  studentsWithCourseInCart User[]   @relation("StudentCartCourses")
-  category                 Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt                DateTime     @default(now())
+  published                CourseStatus @default(PENDING)
+  trainer                  User?        @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
+  students                 User[]       @relation("StudentEnrolledCourses")
+  studentsWithCourseInCart User[]       @relation("StudentCartCourses")
+  category                 Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([trainerId])
   @@index([categoryId])
@@ -71,6 +71,11 @@ model StudentEnrolledCourses {
 enum Status {
   ACTIVE
   INACTIVE
+}
+
+enum CourseStatus {
+  PENDING
+  PUBLISHED
 }
 
 enum Role {

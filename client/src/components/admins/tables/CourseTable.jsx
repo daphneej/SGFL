@@ -141,7 +141,7 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
                       $<span className="text-primary">{course?.price}</span> US
                     </td>
                     <td className="p-3 border border-base-100">
-                      {course?.published ? (
+                      {course?.published === "PUBLISHED" ? (
                         <p className="text-success">Publié</p>
                       ) : (
                         <p className="text-warning">En Attente</p>

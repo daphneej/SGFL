@@ -19,6 +19,7 @@ import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
+import { useEffect } from "react";
 
 const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
@@ -38,7 +39,7 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       categoryId: selectedCourse?.categoryId,
       price: selectedCourse?.price,
       trainerId: selectedCourse?.trainerId,
-      published: selectedCourse?.published ? 1 : 0,
+      published: selectedCourse?.published,
     },
   });
 
@@ -73,7 +74,6 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       course: {
         ...data,
         id: selectedCourse.id,
-        published: parseInt(data?.published) === 0 ? false : true,
       },
       token: user.token,
     });
@@ -157,10 +157,10 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
           field={"published"}
           optionLabel={"Sélectionner Le Status"}
           options={[
-            { key: 0, value: "En Attente" },
-            { key: 1, value: "Publié" },
+            { key: "PENDING", value: "En Attente" },
+            { key: "PUBLISHED", value: "Publié" },
           ]}
-          type={"number"}
+          type={"text"}
         />
       </InputsForm>
       <ButtonsForm>

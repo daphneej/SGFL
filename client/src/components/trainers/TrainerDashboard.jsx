@@ -44,7 +44,7 @@ const TrainerDashboard = () => {
             </div>
           )}
           {selectedMenuItem === "Courses" && (
-            <div className="flex w-full h-[85vh] mx-auto mt-10 md:w-5/6">
+            <div className="flex w-full mx-auto mt-10">
               <CreatedCourses />
             </div>
           )}

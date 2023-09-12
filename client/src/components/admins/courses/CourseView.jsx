@@ -29,14 +29,14 @@ const CourseView = ({ course }) => {
       {course?.students && (
         <ViewBlock label="Étudiants" value={course?.students?.length} />
       )}
-      {(course?.published || course?.published === false) && (
+      {course?.published && (
         <ViewBlock
           label="Statut"
           value={
-            course?.published ? (
+            course?.published === "PUBLISHED" ? (
               <span className="text-success">Publié</span>
             ) : (
-              <span className="text-warning">Non publié</span>
+              <span className="text-warning">En Attente</span>
             )
           }
         />

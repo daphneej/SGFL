@@ -4,14 +4,11 @@ import { useQuery } from "react-query";
 import useCourse from "@/hooks/useCourse";
 import useCategory from "@/hooks/useCategory";
 
-import useUserStore from "@/zustand/useUserStore";
-
 import Courses from "@/components/courses/Courses";
 
 const CoursePage = () => {
-  const { getCourses } = useCourse();
+  const { getPublishedCourses } = useCourse();
   const { getCategories } = useCategory();
-  const { user } = useUserStore();
 
   const [selectedCategoryCourse, setSelectedCategoryCourse] =
     useState("Toutes");
@@ -20,7 +17,7 @@ const CoursePage = () => {
 
   const { isLoading, data: courses } = useQuery({
     queryKey: "courses",
-    queryFn: () => getCourses("published"),
+    queryFn: () => getPublishedCourses(),
     onSuccess: (data) => {
       setFilteredCourses(data);
     },

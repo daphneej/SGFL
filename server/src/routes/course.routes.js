@@ -7,6 +7,7 @@ import {
   deleteCourse,
   getCourse,
   getCourses,
+  getPublishedCourses,
   updateCourse,
 } from "../controllers/courses/course.controller.js";
 
@@ -32,6 +33,7 @@ router.post(
   createCourse
 );
 router.get("/", getCourses);
+router.get("/published", getPublishedCourses);
 router.get("/:id", protectUserRoutes, getCourse);
 router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCourse);
 router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCourse);

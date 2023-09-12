@@ -54,6 +54,21 @@ export const getCourses = asyncHandler(async (req, res) => {
   res.status(200).json(courses);
 });
 
+export const getPublishedCourses = asyncHandler(async (req, res) => {
+  const courses = await prisma.course.findMany({
+    where: {
+      published: "PUBLISHED",
+    },
+    include: {
+      category: true,
+      trainer: true,
+      students: true,
+    },
+  });
+
+  res.status(200).json(courses);
+});
+
 export const getCourse = asyncHandler(async (req, res) => {
   const courseId = req.params.id;
 

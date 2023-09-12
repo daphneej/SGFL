@@ -43,32 +43,16 @@ const DashboardChart = ({ users, categories, courses }) => {
       <h2 className="my-4 text-2xl font-semibold text-left">Dashboard</h2>
 
       <div className="grid items-start grid-cols-1 gap-8 p-8 rounded-md md:grid-cols-2 bg-base-200">
-        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
+        <div className="w-full p-4 mx-auto">
           <BarChart categories={categories} />
         </div>
-        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
+        <div className="w-full p-4 mx-auto">
           <ScatterPlot courses={courses} />
         </div>
-        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
-          <StackedBarChart
-            userStats={users?.reduce((stats, user) => {
-              const { role, status } = user;
-
-              if (!stats[role]) {
-                stats[role] = {};
-              }
-
-              if (!stats[role][status]) {
-                stats[role][status] = 1;
-              } else {
-                stats[role][status]++;
-              }
-
-              return stats;
-            }, {})}
-          />
+        <div className="w-full p-4 mx-auto">
+          <StackedBarChart users={users} />
         </div>
-        <div className="w-full p-4 mx-auto rounded-md bg-base-100">
+        <div className="w-full md:w-1/2 p-4 mx-auto">
           <PieChart users={users} />
         </div>
       </div>
