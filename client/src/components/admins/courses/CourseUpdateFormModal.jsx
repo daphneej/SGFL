@@ -13,13 +13,12 @@ import useUserStore from "@/zustand/useUserStore";
 
 import { updateCourseSchema } from "@/schemas/courseSchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
 import ButtonsForm from "@/components/forms/ButtonsForm";
-import { useEffect } from "react";
 
 const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   const { user } = useUserStore();
@@ -70,17 +69,13 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
   });
 
   const handleUpdateCourse = (data) => {
-    console.log("====================================");
-    console.log(data);
-    console.log("====================================");
-
-    // mutate({
-    //   course: {
-    //     ...data,
-    //     id: selectedCourse.id,
-    //   },
-    //   token: user.token,
-    // });
+    mutate({
+      course: {
+        ...data,
+        id: selectedCourse.id,
+      },
+      token: user.token,
+    });
   };
 
   const handleCancelClick = () => {
@@ -94,26 +89,26 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
       label={"Mettre A Jour Le Cours"}
     >
       <InputsForm col={2}>
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"title"}
           label={"Titre"}
-          errors={errors}
-          register={register}
-          field={"title"}
+          error={errors?.title}
+          register={register("title")}
           type={"text"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"description"}
           label={"Description"}
-          errors={errors}
-          register={register}
-          field={"description"}
+          error={errors?.description}
+          register={register("description")}
           type={"text"}
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Catégorie"}
           errors={errors}
           register={register}
@@ -127,18 +122,18 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
           type={"number"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"price"}
           label={"Prix"}
-          errors={errors}
-          register={register}
-          field={"price"}
+          error={errors?.price}
+          register={register("price", { valueAsNumber: true })}
           type={"number"}
           step={"0.01"}
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Formateur"}
           errors={errors}
           register={register}
@@ -148,14 +143,18 @@ const CourseUpdateFormModal = ({ selectedCourse, modalOpen, setModalOpen }) => {
             ?.filter((user) => user.role === "TRAINER" || user.role === "ADMIN")
             .map((trainer) => ({
               key: trainer.id,
-              value: `${trainer.firstName} ${trainer.lastName}`,
+              value: `${
+                user.id === trainer.id
+                  ? "Vous"
+                  : `${trainer.firstName} ${trainer.lastName}`
+              } (${trainer.role === "ADMIN" ? "Administrateur" : "Formateur"})`,
             }))}
           disabled={isLoadingUsers}
           type={"number"}
         />
 
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Status"}
           errors={errors}
           register={register}
