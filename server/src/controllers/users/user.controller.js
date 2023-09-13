@@ -227,7 +227,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
   });
 });
 
-export const toggleCourseInCart = async (req, res) => {
+export const toggleCourseInCart = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
   const user = await prisma.user.findFirst({
@@ -260,7 +260,11 @@ export const toggleCourseInCart = async (req, res) => {
   let message = "";
 
   if (removedCourses.length > 0) {
-    message = "Le cours a bien été supprimé de votre panier";
+    if (removedCourses.length > 1) {
+      message = "Les cours ont bien été supprimés de votre panier";
+    } else {
+      message = "Le cours a bien été supprimé de votre panier";
+    }
   } else {
     message = "Le cours a bien été ajouté à votre panier";
   }
@@ -284,9 +288,9 @@ export const toggleCourseInCart = async (req, res) => {
     message,
     user: { ...updatedUser, token },
   });
-};
+});
 
-export const buyCourseInCart = async (req, res) => {
+export const buyCourseInCart = asyncHandler(async (req, res) => {
   const { id, token } = req.credentials;
 
   const user = await prisma.user.findFirst({
@@ -342,4 +346,4 @@ export const buyCourseInCart = async (req, res) => {
     message: "Le cours a bien été acheté",
     user: { ...updatedUser, token },
   });
-};
+});

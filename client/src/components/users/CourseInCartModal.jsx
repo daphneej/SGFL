@@ -23,23 +23,23 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
     },
   });
 
-  const { isLoading: isLoadingBoughtCourses, mutate: buyCourseMutation } = useMutation(
-    ["user"], buyCourseInCart, {
-    onSuccess: (data) => {
-      toast.success(data.message);
-      setUser(data.user);
-    },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        toast.error(error?.response?.data?.message);
-      }
-    },
-  });
+  const { isLoading: isLoadingBoughtCourses, mutate: buyCourseMutation } =
+    useMutation(["user"], buyCourseInCart, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        setUser(data.user);
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          toast.error(error?.response?.data?.message);
+        }
+      },
+    });
 
-  const handleToggleCourseInCart = (courseId) => {
+  const handleToggleCourseInCart = (courseIds) => {
     mutate({
       ...user,
-      coursesInCart: [{ id: courseId }],
+      coursesInCart: courseIds,
       token: user.token,
     });
   };
@@ -105,7 +105,9 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                       <div className="loading"></div>
                     ) : (
                       <RiDeleteBin2Line
-                        onClick={() => handleToggleCourseInCart(course?.id)}
+                        onClick={() =>
+                          handleToggleCourseInCart([{ id: course?.id }])
+                        }
                         size={25}
                         className="cursor-pointer text-error"
                       />
@@ -120,6 +122,30 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
               ))}
             </ul>
           )}
+        </div>
+        <div className="w-full mt-10 rounded-md flex justify-between items-center">
+          <button
+            type="button"
+            className="btn bg-primary text-white"
+            disabled={user?.coursesInCart?.length === 0}
+            onClick={() =>
+              handleToggleCourseInCart(
+                user?.coursesInCart?.map((course) => {
+                  return { id: course?.id };
+                })
+              )
+            }
+          >
+            Vider le panier
+          </button>
+          <button
+            type="button"
+            className="btn bg-primary text-white"
+            disabled={user?.coursesInCart?.length === 0}
+            onClick={() => toast.success("Tous les cours ont été achetés")}
+          >
+            Acheter tous les cours
+          </button>
         </div>
       </div>
     </div>
