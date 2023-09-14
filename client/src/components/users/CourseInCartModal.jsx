@@ -44,10 +44,10 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
     });
   };
 
-  const handleBuyCourseInCart = (courseId) => {
+  const handleBuyCourseInCart = (courseIds) => {
     buyCourseMutation({
       ...user,
-      enrolledCourses: [{ id: courseId }],
+      enrolledCourses: courseIds,
       token: user.token,
     });
   };
@@ -68,7 +68,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           <div className="flex flex-col items-center justify-between gap-1 my-8 md:flex-row">
             <h2 className="text-2xl font-bold cart-title">Votre panier</h2>
             <p className="text-gray-600 cart-subtitle">
-              Total: $
+              Total: ${" "}
               <span className="font-bold text-primary">
                 {user?.coursesInCart
                   ?.reduce((acc, course) => acc + course?.price, 0)
@@ -93,7 +93,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                       {course?.title}
                     </h3>
                     <p className="text-gray-600 course-price">
-                      $
+                      ${" "}
                       <span className="font-bold text-primary">
                         {course?.price.toFixed(2)}
                       </span>{" "}
@@ -101,21 +101,20 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                     </p>
                   </div>
                   <div className="flex items-center justify-center gap-2">
-                    {isLoading ? (
-                      <div className="loading"></div>
-                    ) : (
-                      <RiDeleteBin2Line
-                        onClick={() =>
-                          handleToggleCourseInCart([{ id: course?.id }])
-                        }
-                        size={25}
-                        className="cursor-pointer text-error"
-                      />
-                    )}
+                    <RiDeleteBin2Line
+                      onClick={() =>
+                        handleToggleCourseInCart([{ id: course?.id }])
+                      }
+                      size={25}
+                      className="cursor-pointer text-error"
+                      disabled={isLoading || isLoadingBoughtCourses}
+                    />
                     <RiShoppingCart2Line
                       size={25}
                       className="cursor-pointer text-success"
-                      onClick={() => handleBuyCourseInCart(course?.id)}
+                      onClick={() =>
+                        handleBuyCourseInCart([{ id: course?.id }])
+                      }
                     />
                   </div>
                 </li>
@@ -123,11 +122,14 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
             </ul>
           )}
         </div>
-        <div className="w-full mt-10 rounded-md flex justify-between items-center">
+        <div
+          className={`w-full mt-10 rounded-md flex justify-between items-center ${
+            user?.coursesInCart?.length === 0 && "hidden"
+          }`}
+        >
           <button
             type="button"
             className="btn bg-primary text-white"
-            disabled={user?.coursesInCart?.length === 0}
             onClick={() =>
               handleToggleCourseInCart(
                 user?.coursesInCart?.map((course) => {
@@ -141,8 +143,13 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           <button
             type="button"
             className="btn bg-primary text-white"
-            disabled={user?.coursesInCart?.length === 0}
-            onClick={() => toast.success("Tous les cours ont été achetés")}
+            onClick={() =>
+              handleBuyCourseInCart(
+                user?.coursesInCart?.map((course) => {
+                  return { id: course?.id };
+                })
+              )
+            }
           >
             Acheter tous les cours
           </button>

@@ -15,7 +15,7 @@ const MediaInputForm = ({
       <input
         id={id}
         className="w-full px-4 py-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary bg-base-200"
-        {...register(field)}
+        {...register}
         {...inputProps}
       />
 

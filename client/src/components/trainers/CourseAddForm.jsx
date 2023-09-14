@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { queryClient } from "@/index";
 
@@ -9,9 +10,9 @@ import useUserStore from "@/zustand/useUserStore";
 import useCategory from "@/hooks/useCategory";
 import useCourse from "@/hooks/useCourse";
 
-// import { addCourseSchema } from "@/schemas/courseSchema";
+import { addCourseSchema } from "@/schemas/courseSchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import MediaInputForm from "@/components/forms/MediaInputForm";
 import SelectField from "@/components/forms/SelectField";
 import ButtonForm from "@/components/forms/ButtonForm";
@@ -30,10 +31,7 @@ const CourseAddForm = () => {
     reset,
     formState: { errors },
   } = useForm({
-    // resolver: zodResolver(addCourseSchema),
-    values: {
-      trainerId: user?.id,
-    },
+    resolver: zodResolver(addCourseSchema),
   });
 
   const { isLoading, mutate } = useMutation({
@@ -70,24 +68,24 @@ const CourseAddForm = () => {
       label={"Ajouter Un Nouveau Cours"}
     >
       <InputsForm col={2}>
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"title"}
           label={"Titre"}
-          errors={errors}
-          register={register}
-          field={"title"}
+          error={errors?.title}
+          register={register("title")}
           type={"text"}
         />
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"description"}
           label={"Description"}
-          errors={errors}
-          register={register}
-          field={"description"}
+          error={errors?.description}
+          register={register("description")}
           type={"text"}
         />
         <SelectField
-          uuid={crypto.randomUUID()}
+          id={crypto.randomUUID()}
           label={"Catégorie"}
           errors={errors}
           register={register}
@@ -101,35 +99,36 @@ const CourseAddForm = () => {
           type={"number"}
         />
 
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"price"}
           label={"Prix"}
-          errors={errors}
-          register={register}
-          field={"price"}
+          error={errors?.price}
+          register={register("price", { valueAsNumber: true })}
           type={"number"}
+          step={0.01}
         />
 
         <MediaInputForm
           id={crypto.randomUUID()}
+          name={"thumbnail"}
           label={"Photo De Couverture"}
           field={"thumbnail"}
-          name={"thumbnail"}
           type={"file"}
           accept="image/*"
-          register={register}
+          register={register("thumbnail")}
           disabled={isLoading}
           errors={errors}
         />
 
         <MediaInputForm
           id={crypto.randomUUID()}
+          name={"video"}
           label={"Vidéo Du Cours"}
           field={"video"}
-          name={"video"}
           type={"file"}
           accept="video/*"
-          register={register}
+          register={register("video")}
           disabled={isLoading}
           errors={errors}
         />

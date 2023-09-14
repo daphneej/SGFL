@@ -1,91 +1,53 @@
-import { object, string, number } from "zod";
-
-// Custom validation function to check allowed video file extensions
-function allowedVideoExtensions(extensions) {
-  return string().refine(
-    (value) => {
-      const fileExtension = value.split(".").pop().toLowerCase();
-      return extensions.includes(fileExtension);
-    },
-    {
-      message: "Le type du fichier vidéo est invalide",
-    }
-  );
-}
-
-// Custom validation function to check allowed image file extensions
-function allowedImageExtensions(extensions) {
-  return string().refine(
-    (value) => {
-      const fileExtension = value.split(".").pop().toLowerCase();
-      return extensions.includes(fileExtension);
-    },
-    {
-      message: "Le type du fichier image est invalide",
-    }
-  );
-}
+import { object, string, number, date, instanceof as instanceof_ } from "zod";
+import {
+  allowedImageExtensions,
+  allowedVideoExtensions,
+} from "@/schemas/index";
 
 const addCourseSchema = object({
   title: string({
     required_error: "Le titre est requis",
-  }).min(1, "Le titre est requis"),
+  })
+    .min(1, "Le titre est requis")
+    .max(30, "Le titre ne peut pas dépasser 30 caractères")
+    .refine((value) => value.trim() !== "", {
+      message: "Le titre est requis",
+    }),
   description: string({
     required_error: "La description est requise",
-  }).min(1, "La description est requise"),
-  price: number()
+  })
+    .min(1, "La description est requise")
+    .max(160, "La description ne peut pas dépasser 160 caractères")
+    .refine((value) => value.trim() !== "", {
+      message: "La description est requise",
+    }),
+  price: number({
+    invalid_type_error: "Le prix doit être un nombre",
+  })
     .nonnegative("Le prix doit être un nombre positif")
     .step(0.01, "Le prix doit être un nombre positif"),
-  trainerId: number({
-    required_error: "Le formateur est requis",
-  }).min(1, "Le formateur est requis"),
   categoryId: number({
     required_error: "La catégorie est requise",
+    invalid_type_error: "Veuillez choisir une catégorie",
   }).min(1, "La catégorie est requise"),
   thumbnail: object({
-    0: object(
-      {
-        name: string(),
-        size: number(),
-        type: allowedImageExtensions([
-          "image/png",
-          "image/jpg",
-          "image/gif",
-          "image/jpeg",
-          "image/webp",
-        ]),
-      },
-      {
-        required_error: "La photo de couverture est requise",
-      }
-    ),
+    0: instanceof_(File, {
+      message: "Le type du fichier image est invalide",
+    }).refine((file) => allowedImageExtensions.includes(file.type), {
+      message: "Le type du fichier image est invalide",
+    }),
   }),
   video: object(
     {
-      0: object(
-        {
-          name: string(),
-          size: number(),
-          type: allowedVideoExtensions([
-            "video/mp4",
-            "video/webm",
-            "video/ogg",
-            "video/quicktime",
-            "video/x-flv",
-            "video/x-matroska",
-            "video/x-msvideo",
-            "video/x-ms-wmv",
-            "video/x-ms-asf",
-          ]),
-        },
-        {
-          required_error: "La vidéo du cours est requise",
-        }
-      ),
+      0: instanceof_(File, {
+        message: "Le type du fichier vidéo est invalide",
+      }).refine((file) => allowedVideoExtensions.includes(file.type), {
+        message: "Le type du fichier vidéo est invalide",
+      }),
     },
     { required_error: "La vidéo du cours est requise" }
   ),
-  published: number().optional().default(0),
+  published: string().optional().default("PENDING"),
 });
 
 const updateCourseSchema = object({

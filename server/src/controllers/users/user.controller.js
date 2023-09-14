@@ -311,18 +311,26 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
 
   const { enrolledCourses: updatedBoughtCourses } = req.body;
 
-  const removedCourses = updatedBoughtCourses.filter((course) =>
+  const boughtCourses = updatedBoughtCourses.filter((course) =>
     user.coursesInCart.some((updatedCourse) => updatedCourse.id === course.id)
   );
+
+  let message = "";
+
+  if (boughtCourses?.length === 1) {
+    message = "Le cours a bien été acheté";
+  } else if (boughtCourses?.length > 1) {
+    message = "Les cours ont bien été achetés";
+  }
 
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
     data: {
       enrolledCourses: {
-        connect: removedCourses.map((course) => ({ id: course.id })),
+        connect: boughtCourses.map((course) => ({ id: course.id })),
       },
       coursesInCart: {
-        disconnect: removedCourses.map((course) => ({ id: course.id })),
+        disconnect: boughtCourses.map((course) => ({ id: course.id })),
       },
       role: user.role !== "USER" ? user.role : "STUDENT",
     },
@@ -343,7 +351,7 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
   });
 
   res.status(200).json({
-    message: "Le cours a bien été acheté",
+    message,
     user: { ...updatedUser, token },
   });
 });

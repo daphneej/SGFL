@@ -4,12 +4,20 @@ import { v4 as uuidv4 } from "uuid";
 import { prisma } from "../index.js";
 import { storage } from "../../utils/firebase.js";
 
-// import { addCourseSchema } from "../../models/course.models.js";
+import {
+  addCourseBodySchema,
+  addCourseFilesSchema,
+} from "../../models/course.models.js";
 
 export const createCourse = asyncHandler(async (req, res) => {
-  const { title, description, price, categoryId } = req.body;
-  const thumbnail = req.files.thumbnail[0];
-  const video = req.files.video[0];
+  const { title, description, price, categoryId, published } =
+    addCourseBodySchema.parse(req.body);
+
+  const { thumbnail: thumbnailFiles, video: videoFiles } =
+    addCourseFilesSchema.parse(req.files);
+
+  const thumbnail = thumbnailFiles[0];
+  const video = videoFiles[0];
 
   const thumbnailRef = ref(storage, `images/${uuidv4()}`);
   const videoRef = ref(storage, `video/${uuidv4()}`);
@@ -34,6 +42,7 @@ export const createCourse = asyncHandler(async (req, res) => {
       trainerId: parseInt(req.credentials.id),
       thumbnailUrl,
       videoUrl,
+      published,
     },
   });
 
