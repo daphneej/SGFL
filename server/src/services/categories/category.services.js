@@ -1,13 +1,6 @@
 import { prisma } from "../index.js";
-import { createCategorySchemas } from "../../models/category.models.js";
 
-export const createCategoryService = async (categoryBody) => {
-  const { name } = createCategorySchemas.parse(categoryBody);
-
-  if (await getCategoryByNameService(name)) {
-    throw new Error("La catégorie existe déjà.");
-  }
-
+export const createCategoryService = async (name) => {
   const category = await prisma.category.create({
     data: {
       name,
@@ -19,12 +12,18 @@ export const createCategoryService = async (categoryBody) => {
 
 export const getCategoriesService = async () => {
   const categories = await prisma.category.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+
+  return categories;
+};
+
+export const getCategoriesWithCoursesService = async () => {
+  const categories = await prisma.category.findMany({
     include: {
-      courses: {
-        select: {
-          id: true,
-        },
-      },
+      courses: true,
     },
     orderBy: {
       id: "asc",

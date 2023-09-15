@@ -1,13 +1,29 @@
 import asyncHandler from "express-async-handler";
+
 import {
   createCategoryService,
-  deleteCategoryService,
   getCategoriesService,
+  getCategoriesWithCoursesService,
   getCategoryByIdService,
+  getCategoryByNameService,
   updateCategoryService,
+  deleteCategoryService,
 } from "../../services/categories/category.services.js";
 
+import {
+  createCategorySchema,
+  getCategoryByIdSchema,
+  updateCategorySchema,
+} from "../../models/category.models.js";
+
 export const createCategory = asyncHandler(async (req, res) => {
+  const { name } = createCategorySchema.parse(req.body);
+
+  if (await getCategoryByNameService(name)) {
+    res.status(409);
+    throw new Error("La catégorie existe déjà.");
+  }
+
   const createdCategory = await createCategoryService(req.body);
 
   if (!createdCategory) {
@@ -26,32 +42,41 @@ export const getCategories = asyncHandler(async (req, res) => {
   res.status(200).json(categories);
 });
 
+export const getCategoriesWithCourses = asyncHandler(async (req, res) => {
+  const categories = await getCategoriesWithCoursesService();
+  res.status(200).json(
+    categories.map((category) => {
+      return { ...category, coursesLength: category?.courses?.length };
+    })
+  );
+});
+
 export const getCategory = asyncHandler(async (req, res) => {
-  const categoryId = req.params.id;
+  const { id } = getCategoryByIdSchema.parse(req.params);
 
-  const category = await getCategoryByIdService(categoryId);
+  const foundedCategory = await getCategoryByIdService(id);
 
-  if (!category) {
+  if (!foundedCategory) {
     res.status(404);
-    throw new Error(`Categorie id: ${categoryId} not found`);
+    throw new Error(`Category id: ${id} not found`);
   }
 
-  res.status(200).json(category);
+  res.status(200).json(foundedCategory);
 });
 
 export const updateCategory = asyncHandler(async (req, res) => {
-  const categoryId = req.params.id;
+  const { id } = getCategoryByIdSchema.parse(req.params);
 
-  const { name } = req.body;
+  const { name } = updateCategorySchema.parse(req.body);
 
-  const category = await getCategoryByIdService(categoryId);
+  const category = await getCategoryByIdService(id);
 
   if (!category) {
     res.status(404);
-    throw new Error(`Category id: ${categoryId} not found`);
+    throw new Error(`Category id: ${id} not found`);
   }
 
-  const updatedCategry = await updateCategoryService(categoryId, name);
+  const updatedCategry = await updateCategoryService(category.id, name);
 
   if (!updateCategory) {
     res.status(500);
@@ -65,16 +90,16 @@ export const updateCategory = asyncHandler(async (req, res) => {
 });
 
 export const deleteCategory = asyncHandler(async (req, res) => {
-  const categoryId = req.params.id;
+  const { id } = getCategoryByIdSchema.parse(req.params);
 
-  const category = await getCategoryByIdService(categoryId);
+  const category = await getCategoryByIdService(id);
 
   if (!category) {
     res.status(404);
-    throw new Error(`Category id: ${categoryId} not found`);
+    throw new Error(`Category id: ${id} not found`);
   }
 
-  const deletedCategory = await deleteCategoryService(categoryId);
+  const deletedCategory = await deleteCategoryService(category.id);
 
   if (!deletedCategory) {
     res.status(500);

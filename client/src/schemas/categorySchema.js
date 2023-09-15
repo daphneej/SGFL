@@ -1,15 +1,23 @@
 import { object, string } from "zod";
 
-const addCategorySchema = object({
+export const createCategorySchema = object({
   name: string({
-    required_error: "Le nom est requis",
-  }).min(1, "Le nom est requis"),
+    required_error: "Le nom de la catégorie est requis.",
+  })
+    .min(1, "Le nom de la catégorie est requis.")
+    .max(20, "Le nom ne peut pas dépasser 20 caractères")
+    .refine((value) => value.trim() !== "", {
+      message: "Le nom de la catégorie est requis.",
+    }),
 });
 
-const updateCategorySchema = object({
+export const updateCategorySchema = object({
   name: string({
-    required_error: "Le nom est requis",
-  }).min(1, "Le nom est requis"),
+    required_error: "Le nom de la catégorie est requis.",
+  })
+    .min(1, "Le nom de la catégorie est requis.")
+    .max(20, "Le nom ne peut pas dépasser 20 caractères")
+    .refine((value) => value.trim() !== "", {
+      message: "Le nom de la catégorie est requis.",
+    }),
 });
-
-export { addCategorySchema, updateCategorySchema };

@@ -8,7 +8,7 @@ import { queryClient } from "@/index";
 
 import useCategory from "@/hooks/useCategory";
 import useUserStore from "@/zustand/useUserStore";
-import { addCategorySchema } from "@/schemas/categorySchema";
+import { createCategorySchema } from "@/schemas/categorySchema";
 
 import InputField from "@/components/forms/InputField";
 import ButtonForm from "@/components/forms/ButtonForm";
@@ -25,7 +25,7 @@ const CategoryAddFormModal = ({ modalOpen, setModalOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(addCategorySchema) });
+  } = useForm({ resolver: zodResolver(createCategorySchema) });
 
   const { isLoading, mutate } = useMutation({
     mutationKey: ["categories"],

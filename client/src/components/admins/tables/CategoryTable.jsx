@@ -15,6 +15,7 @@ import Pagination from "@/components/Pagination";
 import CategoryAddFormModal from "@/components/admins/categories/CategoryAddFormModal";
 import CategoryUpdateFormModal from "@/components/admins/categories/CategoryUpdateFormModal";
 import CategoryViewModal from "@/components/admins/categories/CategoryViewModal";
+import { useEffect } from "react";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
@@ -132,7 +133,7 @@ const CategoryTable = ({ isLoadingCategories: isLoading, categories }) => {
                       {category.name}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {category?.courses?.length}
+                      {category?.coursesLength}
                     </td>
                     <td className="p-3 border border-base-100">
                       <div className="flex justify-center gap-3 mx-auto">

@@ -5,8 +5,19 @@ import { prisma } from "../index.js";
 import { storage } from "../../utils/firebase.js";
 
 import {
+  createCourseService,
+  deleteCourseService,
+  getCourseByIdService,
+  getCoursesService,
+  getPublishedCoursesService,
+  updateCourseService,
+} from "../../services/courses/course.services.js";
+
+import {
   addCourseBodySchema,
   addCourseFilesSchema,
+  getCourseByIdSchema,
+  updateCourseBodySchema,
 } from "../../models/course.models.js";
 
 export const createCourse = asyncHandler(async (req, res) => {
@@ -33,115 +44,105 @@ export const createCourse = asyncHandler(async (req, res) => {
   const thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
   const videoUrl = await getDownloadURL(videoSnapshot.ref);
 
-  await prisma.course.create({
-    data: {
-      title,
-      description,
-      price: parseInt(price),
-      categoryId: parseInt(categoryId),
-      trainerId: parseInt(req.credentials.id),
-      thumbnailUrl,
-      videoUrl,
-      published,
-    },
-  });
+  const course = {
+    title,
+    description,
+    price: parseInt(price),
+    categoryId: parseInt(categoryId),
+    trainerId: parseInt(req.credentials.id),
+    thumbnailUrl,
+    videoUrl,
+    published,
+  };
+
+  const createdCourse = await createCourseService(course);
+
+  if (!createdCourse) {
+    res.status(500);
+    throw new Error("Le cours n'a pas pu être créé.");
+  }
 
   res.status(201).json({
+    createdCourse,
     message: "Le cours a bien été créé.",
   });
 });
 
 export const getCourses = asyncHandler(async (req, res) => {
-  const courses = await prisma.course.findMany({
-    include: {
-      category: true,
-      trainer: true,
-      students: true,
-    },
-  });
-
+  const courses = await getCoursesService();
   res.status(200).json(courses);
 });
 
 export const getPublishedCourses = asyncHandler(async (req, res) => {
-  const courses = await prisma.course.findMany({
-    where: {
-      published: "PUBLISHED",
-    },
-    include: {
-      category: true,
-      trainer: true,
-      students: true,
-    },
-  });
-
+  const courses = await getPublishedCoursesService();
   res.status(200).json(courses);
 });
 
 export const getCourse = asyncHandler(async (req, res) => {
-  const courseId = req.params.id;
+  const { id } = getCourseByIdSchema.parse(req.params);
 
-  const course = await prisma.course.findFirst({
-    where: { id: parseInt(courseId) },
-    include: {
-      trainer: true,
-    },
-  });
+  const course = await getCourseByIdService(id);
 
   if (!course) {
     res.status(404);
-    throw new Error(`Course id: ${courseId} not found`);
+    throw new Error(`Course id: ${id} not found`);
   }
 
   res.status(200).json(course);
 });
 
 export const updateCourse = asyncHandler(async (req, res) => {
-  const courseId = req.params.id;
+  const { id } = req.params;
 
-  const { title, description, price, published } = req.body;
+  const { title, description, price, published, categoryId, trainerId } =
+    updateCourseBodySchema.parse(req.body);
 
-  const course = await prisma.course.findFirst({
-    where: { id: parseInt(courseId) },
-  });
+  const course = await getCourseByIdService(id);
 
   if (!course) {
     res.status(404);
-    throw new Error(`Course id: ${courseId} not found`);
+    throw new Error(`Course id: ${id} not found`);
   }
 
-  await prisma.course.update({
-    where: { id: course.id },
-    data: {
-      title: title ? title : course.title,
-      description: description ? description : course.description,
-      price: price ? price : course.price,
-      published,
-    },
-  });
+  const courseToUpdate = {
+    ...course,
+    title: title ? title : course.title,
+    description: description ? description : course.description,
+    price: price ? parseFloat(price) : course.price,
+    categoryId: categoryId ? parseInt(categoryId) : course.categoryId,
+    trainerId: trainerId ? parseInt(trainerId) : course.trainerId,
+    published,
+  };
+
+  const updatedCourse = await updateCourseService(courseToUpdate);
+
+  if (!updatedCourse) {
+    res.status(500);
+    throw new Error("Le cours n'a pas pu être modifié.");
+  }
 
   res.status(200).json({
+    updatedCourse,
     message: "Le cours a bien été modifié.",
   });
 });
 
 export const deleteCourse = asyncHandler(async (req, res) => {
-  const courseId = req.params.id;
+  const { id } = getCourseByIdSchema.parse(req.params);
 
   const course = await prisma.course.findFirst({
-    where: { id: parseInt(courseId) },
+    where: { id: parseInt(id) },
   });
 
   if (!course) {
     res.status(404);
-    throw new Error(`Course id: ${courseId} not found`);
+    throw new Error(`Course id: ${course.id} not found`);
   }
 
-  const deletedCourse = await prisma.course.delete({
-    where: { id: course.id },
-  });
+  const deletedCourse = await deleteCourseService(course.id);
 
   res.status(200).json({
+    deletedCourse,
     message: "Le cours a bien été supprimé.",
   });
 });

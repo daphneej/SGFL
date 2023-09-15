@@ -30,6 +30,7 @@ const useCourse = () => {
     const response = await api.put(`/api/courses/${course.id}`, course, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     const data = await response.data;

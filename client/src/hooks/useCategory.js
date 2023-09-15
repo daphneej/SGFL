@@ -7,6 +7,16 @@ const useCategory = () => {
     return data;
   };
 
+  const getCategoriesWithCourses = async ({ token }) => {
+    const response = await api.get(`/api/categories/courses`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.data;
+    return data;
+  };
+
   const addCategory = async ({ category, token }) => {
     const response = await api.post(`/api/categories`, category, {
       headers: {
@@ -42,7 +52,13 @@ const useCategory = () => {
     return data;
   };
 
-  return { getCategories, addCategory, updateCategory, removeCategory };
+  return {
+    getCategories,
+    getCategoriesWithCourses,
+    addCategory,
+    updateCategory,
+    removeCategory,
+  };
 };
 
 export default useCategory;

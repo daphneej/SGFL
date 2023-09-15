@@ -35,7 +35,16 @@ router.post(
 router.get("/", getCourses);
 router.get("/published", getPublishedCourses);
 router.get("/:id", protectUserRoutes, getCourse);
-router.put("/:id", protectUserRoutes, protectAdminRoutes, updateCourse);
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  protectUserRoutes,
+  protectAdminRoutes,
+  updateCourse
+);
 router.delete("/:id", protectUserRoutes, protectAdminRoutes, deleteCourse);
 
 // Export the router

@@ -25,7 +25,7 @@ const AdminDashboard = () => {
   const { selectedMenuItem, setSelectedMenuItem } = useDashboardStore();
 
   const { getUsers } = useUser();
-  const { getCategories } = useCategory();
+  const { getCategoriesWithCourses } = useCategory();
   const { getCourses } = useCourse();
 
   const { isLoading: isLoadingUsers, data: users } = useQuery({
@@ -36,7 +36,7 @@ const AdminDashboard = () => {
 
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(),
+    queryFn: () => getCategoriesWithCourses({ token: user?.token }),
     enabled: Boolean(user),
   });
 
