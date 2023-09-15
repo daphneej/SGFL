@@ -11,6 +11,7 @@ const ContactSection = () => {
         <div className="flex flex-col gap-8 text-center md:text-left md:flex-row-reverse">
           <div className="flex justify-center rounded-md">
             <img
+              loading="lazy"
               src={contactImage}
               alt="Contact Image"
               className="object-contain w-2/3 h-2/3"

@@ -4,14 +4,11 @@ import {
   deleteCategoryService,
   getCategoriesService,
   getCategoryByIdService,
-  getCategoryByNameService,
   updateCategoryService,
 } from "../../services/categories/category.services.js";
 
 export const createCategory = asyncHandler(async (req, res) => {
-  const { name } = req.body;
-
-  const createdCategory = await createCategoryService(name);
+  const createdCategory = await createCategoryService(req.body);
 
   if (!createdCategory) {
     res.status(500);

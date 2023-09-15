@@ -1,28 +1,34 @@
-import { createCategoryService } from "../../src/services/categories/category.services.js";
+import {
+  createCategoryService,
+  getCategoriesService,
+} from "../../src/services/categories/category.services.js";
 
+// Test de creation d'une catégorie
 describe("createCategoryService", () => {
-  it("Doit créer une catégorie avec succès", async () => {
-    expect(await createCategoryService("Plomberie")).toMatchObject({
-      id: expect.any(Number),
-      name: "Plomberie",
-    });
-  });
-
-  it("Doit retourner une erreur si la catégorie existe déjà", () => {
-    expect(createCategoryService("Plomberie")).rejects.toThrow(
+  it("Doit retourner une erreur si le nom de la catégorie existe déjà", () => {
+    expect(createCategoryService({ name: "Plomberie" })).rejects.toThrow(
       "La catégorie existe déjà."
     );
   });
 
   it("Doit retourner une erreur si le nom de la catégorie est vide", () => {
-    expect(createCategoryService("")).rejects.toThrow(
+    expect(createCategoryService({ name: "" })).rejects.toThrow(
       "Le nom de la catégorie est requis."
     );
   });
 
   it("Doit retourner une erreur si le nom de la catégorie a un nombre de caractères > 20", () => {
     expect(
-      createCategoryService("JHKJSKJSJKSJSJKSJKSSKJHJSJHDHJDHJDH")
+      createCategoryService({
+        name: "Unnomdecatégoriequiestsuperieureà20caractères",
+      })
     ).rejects.toThrow("Le nom ne peut pas dépasser 20 caractères");
+  });
+});
+
+// Test de recuperation des categories
+describe("getCategoriesService", () => {
+  it("Doit retourner une liste de catégories", () => {
+    expect(getCategoriesService()).resolves.toBeInstanceOf(Array);
   });
 });

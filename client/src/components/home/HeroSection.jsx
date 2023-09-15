@@ -40,6 +40,7 @@ const HeroSection = () => {
           </div>
           <div className="justify-end hidden md:flex">
             <img
+              loading="lazy"
               src={heroImage}
               alt="Hero Image"
               className="object-cover rounded-lg"

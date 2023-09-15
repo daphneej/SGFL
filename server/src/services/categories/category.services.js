@@ -1,8 +1,8 @@
 import { prisma } from "../index.js";
 import { createCategorySchemas } from "../../models/category.models.js";
 
-export const createCategoryService = async (categoryName) => {
-  const name = createCategorySchemas.parse(categoryName);
+export const createCategoryService = async (categoryBody) => {
+  const { name } = createCategorySchemas.parse(categoryBody);
 
   if (await getCategoryByNameService(name)) {
     throw new Error("La catégorie existe déjà.");

@@ -8,6 +8,7 @@ const AboutSection = () => {
         <div className="grid items-start grid-cols-1 gap-8 md:grid-cols-2">
           <div className="justify-end md:flex">
             <img
+              loading="lazy"
               src={aboutImage}
               alt="About Image"
               className="object-cover w-full h-full rounded-lg"

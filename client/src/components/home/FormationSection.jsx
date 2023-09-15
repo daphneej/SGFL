@@ -39,6 +39,7 @@ const FormationSection = () => {
               className="p-6 rounded-lg shadow-sm w-96 shadow-primary"
             >
               <img
+                loading="lazy"
                 src={formation.icon}
                 alt={formation.title}
                 className="w-16 h-16 p-3 mx-auto mb-4 bg-gray-100 rounded-full shadow-md"
