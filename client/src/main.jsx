@@ -30,6 +30,7 @@ import { queryClient } from "@/index";
 
 import "react-toastify/dist/ReactToastify.css";
 import "@/index.css";
+import WatchCourse from "./components/students/WatchCourse";
 
 const router = createBrowserRouter(
   createRoutesFromElements([

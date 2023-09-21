@@ -15,7 +15,7 @@ export const protectUserRoutes = asyncHandler(async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const { id, role } = jwt.verify(token, process.env.JWT_SECRET);
+    const { id, role } = jwt.verify(token, process.env.JWT_ACCESS_SECRET_TOKEN);
 
     req.credentials = { id, role, token };
 

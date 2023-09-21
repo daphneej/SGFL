@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 const useStudentDashboardStore = create(
   persist(
     (set) => ({
-      selectedMenuItem: "Dashboard",
+      selectedMenuItem: "Courses",
       setSelectedMenuItem: (newMenuItem) =>
         set(() => ({
           selectedMenuItem: newMenuItem,

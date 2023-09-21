@@ -13,7 +13,15 @@ export const unHashPassword = async (password, hashedPassword) => {
 };
 
 export const generateToken = (payload) => {
-  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+  const token = jwt.sign(payload, process.env.JWT_ACCESS_SECRET_TOKEN, {
+    expiresIn: "1d",
+  });
+
+  return token;
+};
+
+export const generateRefreshToken = (payload) => {
+  const token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET_TOKEN, {
     expiresIn: "1d",
   });
 

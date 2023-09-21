@@ -1,0 +1,44 @@
+import React, { useEffect } from "react";
+
+import { formatDate } from "../../utils/index";
+
+const WatchCourse = ({
+  modalOpen,
+  setModalOpen,
+  setSelectedCourse,
+  course,
+}) => {
+  return (
+    <div
+      className={`flex justify-center p-2 items-center bg-red-200 flex-col modal ${
+        modalOpen && "modal-open"
+      } w-full`}
+    >
+      <div className="flex flex-col md:w-1/2 mx-auto bg-base-100 px-8 pt-4 pb-8 rounded-md">
+        <div
+          className="w-full flex items-center justify-end ml-auto rounded-full mb-4 text-xl font-bold cursor-pointer"
+          onClick={() => {
+            setSelectedCourse(null);
+            setModalOpen(false);
+          }}
+        >
+          <p className="text-gray-500 text-center">&times;</p>
+        </div>
+
+        <video controls className="rounded-xl">
+          <source src={course?.videoUrl} type="video/mp4" />
+        </video>
+
+        <div className="mt-3">
+          <p className="mt-2 text-xl font-bold">{course?.title}</p>
+          <p className="text-sm text-gray-500">
+            {course?.trainer?.firstName} {course?.trainer?.lastName} •{" "}
+            {formatDate(course?.createdAt)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WatchCourse;

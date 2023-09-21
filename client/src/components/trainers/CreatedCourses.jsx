@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
 import { formatDate } from "../../utils/index";
+import { useEffect } from "react";
 
 const CreatedCourses = () => {
   const { getCourses } = useCourse();
@@ -12,6 +13,14 @@ const CreatedCourses = () => {
     queryKey: ["courses"],
     queryFn: getCourses,
   });
+
+  useEffect(() => {
+    if (courses) {
+      console.log("====================================");
+      console.log(courses);
+      console.log("====================================");
+    }
+  }, [courses]);
 
   return (
     <div className="flex flex-col w-full">
@@ -26,8 +35,8 @@ const CreatedCourses = () => {
           </div>
         )}
 
-        {courses?.filter((course) => course?.trainer?.id === user?.id)
-          .length === 0 ? (
+        {courses?.filter((course) => course?.trainerId === user?.id).length ===
+        0 ? (
           <div className="flex items-center justify-center w-full">
             <h2 className="text-xl font-bold text-center">
               No Courses Created Yet
@@ -36,7 +45,7 @@ const CreatedCourses = () => {
         ) : (
           <ul className="flex flex-wrap justify-center gap-8 py-8 text-center">
             {courses
-              ?.filter((course) => course?.trainer?.id === user?.id)
+              ?.filter((course) => course?.trainerId === user?.id)
               .map((course) => (
                 <li
                   key={course?.id}
