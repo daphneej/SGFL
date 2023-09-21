@@ -58,8 +58,8 @@ const CreatedCourses = () => {
                     alt="Image Preview"
                   />
 
-                  <div className="flex flex-col justify-between flex-1 py-4">
-                    <div className="flex flex-col h-full">
+                  <div className="flex flex-col justify-between flex-1 pt-4">
+                    <div className="flex flex-col h-1/2">
                       <p className="text-xl font-bold text-left">
                         {course?.title?.length > 20
                           ? `${course?.title?.substring(0, 20)}...`
@@ -71,7 +71,7 @@ const CreatedCourses = () => {
                           : course?.description}
                       </p>
                     </div>
-                    <div className="flex flex-col justify-between flex-1 mt-4">
+                    <div className="flex flex-col justify-between flex-1">
                       <div className="flex gap-1 my-2 text-sm font-bold text-gray-500">
                         <p>
                           {course?.trainer?.firstName}{" "}
@@ -83,7 +83,7 @@ const CreatedCourses = () => {
                         </p>
                       </div>
                       <div className="flex flex-col-reverse items-start justify-between md:flex-row md:items-center">
-                        <p className="my-2 font-bold text-gray-600 md:text-right md:my-0">
+                        <p className="font-bold text-gray-600 md:text-right md:my-0">
                           $<span className="text-primary">{course?.price}</span>{" "}
                           US
                         </p>

@@ -53,7 +53,16 @@ export const loginUser = asyncHandler(async (req, res) => {
     include: {
       coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: true,
+      enrolledCourses: {
+        include: {
+          trainer: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
     },
   });
 
