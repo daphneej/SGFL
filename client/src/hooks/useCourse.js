@@ -50,12 +50,29 @@ const useCourse = () => {
     return data;
   };
 
+  const buyCourseInCart = async ({ items, token }) => {
+    const response = await api.post(
+      `/api/courses/buy`,
+      { items },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.data;
+
+    return data;
+  };
+
   return {
     getCourses,
     getPublishedCourses,
     addCourse,
     updateCourse,
     removeCourse,
+    buyCourseInCart,
   };
 };
 

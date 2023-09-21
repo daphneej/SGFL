@@ -3,6 +3,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "../index.js";
 import { storage } from "../../utils/firebase.js";
+import stripe from "stripe";
+
+const stripePromise = stripe(process.env.STRIPE_PRIVATE_KEY);
 
 import {
   createCourseService,
@@ -144,5 +147,42 @@ export const deleteCourse = asyncHandler(async (req, res) => {
   res.status(200).json({
     deletedCourse,
     message: "Le cours a bien été supprimé.",
+  });
+});
+
+export const buyCourseInCart = asyncHandler(async (req, res) => {
+  const { id } = req.credentials;
+  const { items } = req.body;
+
+  const itemsFound = await prisma.course.findMany({
+    select: {
+      id: true,
+      title: true,
+      price: true,
+      thumbnailUrl: true,
+    },
+    where: { id: { in: items.map((item) => item.id) } },
+  });
+
+  const checkoutSession = await stripePromise.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: itemsFound.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.title,
+          images: [item.thumbnailUrl],
+        },
+        unit_amount: Math.floor(item.price) * 100,
+      },
+      quantity: 1,
+    })),
+    mode: "payment",
+    success_url: `${process.env.CLIENT_URL}/dashboard/students`,
+    cancel_url: `${process.env.CLIENT_URL}/courses`,
+  });
+
+  res.status(200).json({
+    url: checkoutSession.url,
   });
 });

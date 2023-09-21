@@ -2,6 +2,7 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
 import useAuth from "@/hooks/users/useAuth";
+import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
 
 import { AiOutlineClose } from "react-icons/ai";
@@ -9,7 +10,8 @@ import { RiDeleteBin2Line, RiShoppingCart2Line } from "react-icons/ri";
 
 const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
   const { user, setUser } = useUserStore();
-  const { toggleUserCourseInCart, buyCourseInCart } = useAuth();
+  const { toggleUserCourseInCart } = useAuth();
+  const { buyCourseInCart } = useCourse();
 
   const { isLoading, mutate } = useMutation(["user"], toggleUserCourseInCart, {
     onSuccess: (data) => {
@@ -26,8 +28,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
   const { isLoading: isLoadingBoughtCourses, mutate: buyCourseMutation } =
     useMutation(["user"], buyCourseInCart, {
       onSuccess: (data) => {
-        toast.success(data.message);
-        setUser(data.user);
+        window.open(data.url, "_blank");
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -44,12 +45,8 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
     });
   };
 
-  const handleBuyCourseInCart = (courseIds) => {
-    buyCourseMutation({
-      ...user,
-      enrolledCourses: courseIds,
-      token: user.token,
-    });
+  const handleBuyCourseInCart = (items) => {
+    buyCourseMutation({ items, token: user.token });
   };
 
   return (
@@ -100,7 +97,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                       US
                     </p>
                   </div>
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex flex-col-reverse items-center justify-center gap-2">
                     <RiDeleteBin2Line
                       onClick={() =>
                         handleToggleCourseInCart([{ id: course?.id }])
@@ -113,7 +110,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                       size={25}
                       className="cursor-pointer text-success"
                       onClick={() =>
-                        handleBuyCourseInCart([{ id: course?.id }])
+                        handleBuyCourseInCart([{ id: course?.id, quantity: 1 }])
                       }
                     />
                   </div>
@@ -123,13 +120,13 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           )}
         </div>
         <div
-          className={`w-full mt-10 rounded-md flex justify-between items-center ${
+          className={`w-full md:mt-10 rounded-md flex flex-col md:flex-row justify-between items-center ${
             user?.coursesInCart?.length === 0 && "hidden"
           }`}
         >
           <button
             type="button"
-            className="btn bg-primary text-white"
+            className="w-full md:w-fit btn bg-primary text-white"
             onClick={() =>
               handleToggleCourseInCart(
                 user?.coursesInCart?.map((course) => {
@@ -142,7 +139,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           </button>
           <button
             type="button"
-            className="btn bg-primary text-white"
+            className="w-full md:w-fit btn bg-primary text-white"
             onClick={() =>
               handleBuyCourseInCart(
                 user?.coursesInCart?.map((course) => {

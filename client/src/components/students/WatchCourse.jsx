@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
 import { formatDate } from "../../utils/index";
 
@@ -15,17 +15,13 @@ const WatchCourse = ({
       } w-full`}
     >
       <div className="flex flex-col md:w-1/2 mx-auto bg-base-100 md:px-8 md:pt-4 md:pb-8 rounded-md px-3 py-4">
-        <div
-          className="w-full flex items-center justify-end ml-auto rounded-full mb-4 text-xl font-bold cursor-pointer"
+        <AiOutlineClose
+          className="absolute cursor-pointer top-4 right-4"
           onClick={() => {
             setSelectedCourse(null);
             setModalOpen(false);
           }}
-        >
-          <p className="text-gray-500 text-center font-bold text-4xl">
-            &times;
-          </p>
-        </div>
+        />
 
         <video controls className="rounded-xl">
           <source src={course?.videoUrl} type="video/mp4" />
