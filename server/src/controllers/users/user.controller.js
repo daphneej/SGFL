@@ -31,7 +31,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     include: {
       coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -53,14 +53,10 @@ export const loginUser = asyncHandler(async (req, res) => {
     include: {
       coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: {
-        include: {
-          trainer: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
-          },
+      enrolledCourses: true,
+      paidCourses: {
+        select: {
+          course: true,
         },
       },
     },
@@ -95,6 +91,7 @@ export const getUsers = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -115,6 +112,7 @@ export const getUser = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -206,6 +204,7 @@ export const updateUser = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -245,6 +244,7 @@ export const toggleCourseInCart = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -308,6 +308,7 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -346,16 +347,8 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
     include: {
       coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: {
-        include: {
-          trainer: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
-          },
-        },
-      },
+      enrolledCourses: true,
+      paidCourses: true,
     },
   });
 

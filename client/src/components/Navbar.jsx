@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { MdOutlineSpaceDashboard, MdOutlineBook } from "react-icons/md";
 
 import useUserStore from "@/zustand/useUserStore";
 import useAuth from "@/hooks/users/useAuth.js";
+import useCourse from "@/hooks/useCourse.js";
 
 import logoColor from "@/assets/images/logo-color.png";
 
@@ -15,8 +16,15 @@ import CourseInCartModal from "@/components/users/CourseInCartModal";
 const Navbar = () => {
   const { logoutUser } = useAuth();
   const { user, setUser } = useUserStore();
+  const { getCartCourses } = useCourse();
 
   const [openCourseInCart, setOpenCourseInCart] = useState(false);
+
+  const { isLoading: isLoadingCart, data: coursesInCart } = useQuery({
+    queryKey: ["cart"],
+    queryFn: () => getCartCourses({ token: user?.token }),
+    enabled: Boolean(user?.token),
+  });
 
   const { mutate } = useMutation("user", logoutUser, {
     onSuccess: (data) => {
@@ -51,7 +59,11 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center justify-center gap-4 mt-2 md:w-auto md:mt-0">
               {/* Panier */}
-              {user?.role !== "ADMIN" && (
+              {user?.role !== "ADMIN" && isLoadingCart ? (
+                <div className="flex items-center justify-center w-full">
+                  <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
+                </div>
+              ) : (
                 <div className="dropdown md:dropdown-end">
                   <label
                     tabIndex={0}
@@ -73,7 +85,7 @@ const Navbar = () => {
                         />
                       </svg>
                       <span className="badge badge-xs indicator-item">
-                        {user?.coursesInCart?.length}
+                        {coursesInCart?.length}
                       </span>
                     </div>
                   </label>
@@ -83,12 +95,12 @@ const Navbar = () => {
                   >
                     <div className="rounded-md bg-base-300 card-body">
                       <span className="text-lg font-bold">
-                        {user?.coursesInCart?.length} Cours
+                        {coursesInCart?.length} Cours
                       </span>
                       <p>
-                        Total :{" "}
+                        Total : ${" "}
                         <span className="text-info">
-                          {user?.coursesInCart
+                          {coursesInCart
                             ?.reduce((sum, course) => {
                               return sum + course.price;
                             }, 0)

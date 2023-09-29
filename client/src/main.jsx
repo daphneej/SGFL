@@ -19,6 +19,8 @@ import AdminDashboard from "@/components/admins/AdminDashboard";
 import TrainerDashboard from "@/components/trainers/TrainerDashboard";
 import StudentDashboard from "@/components/students/StudentDashboard";
 import UserDashboard from "@/components/users/UserDashboard";
+import Success from "@/components/users/Success";
+import Canceled from "@/components/users/Canceled";
 
 import HomePage from "@/components/home/HomePage";
 import LoginPage from "@/components/users/auth/LoginPage";
@@ -30,7 +32,6 @@ import { queryClient } from "@/index";
 
 import "react-toastify/dist/ReactToastify.css";
 import "@/index.css";
-import WatchCourse from "./components/students/WatchCourse";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -46,7 +47,9 @@ const router = createBrowserRouter(
     </Route>,
     <Route path="/" element={<PrivateRoutes />}>
       <Route path="dashboard/students" element={<StudentDashboard />} />
-      <Route path="dashboard/trainers" element={<TrainerDashboard />} />,
+      <Route path="dashboard/trainers" element={<TrainerDashboard />} />
+      <Route path="dashboard/success" element={<Success />} />
+      <Route path="dashboard/canceled" element={<Canceled />} />
     </Route>,
     <Route path="/" element={<AdminRoute />}>
       <Route path="dashboard/admins" element={<AdminDashboard />} />

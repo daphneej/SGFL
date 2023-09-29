@@ -9,19 +9,20 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   firstName       String?
   lastName        String?
-  email           String   @unique
+  email           String          @unique
   password        String
   gender          Gender?
   address         String?
-  phone           String?  @unique
-  status          Status   @default(ACTIVE)
-  role            Role     @default(USER)
-  createdCourses  Course[] @relation("TrainerCreatedCourses")
-  enrolledCourses Course[] @relation("StudentEnrolledCourses")
-  coursesInCart   Course[] @relation("StudentCartCourses")
+  phone           String?         @unique
+  status          Status          @default(ACTIVE)
+  role            Role            @default(USER)
+  createdCourses  Course[]        @relation("TrainerCreatedCourses")
+  enrolledCourses Course[]        @relation("StudentEnrolledCourses")
+  coursesInCart   Course[]        @relation("StudentCartCourses")
+  paidCourses     CoursePayment[]
 }
 
 model Category {
@@ -31,7 +32,7 @@ model Category {
 }
 
 model Course {
-  id                       Int          @id @default(autoincrement())
+  id                       Int             @id @default(autoincrement())
   title                    String
   description              String
   price                    Float
@@ -39,15 +40,33 @@ model Course {
   categoryId               Int
   thumbnailUrl             String
   videoUrl                 String
-  createdAt                DateTime     @default(now())
-  published                CourseStatus @default(PENDING)
-  trainer                  User?        @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
-  students                 User[]       @relation("StudentEnrolledCourses")
-  studentsWithCourseInCart User[]       @relation("StudentCartCourses")
-  category                 Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt                DateTime        @default(now())
+  published                CourseStatus    @default(PENDING)
+  trainer                  User?           @relation("TrainerCreatedCourses", fields: [trainerId], references: [id])
+  students                 User[]          @relation("StudentEnrolledCourses")
+  studentsWithCourseInCart User[]          @relation("StudentCartCourses")
+  category                 Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  coursePayments           CoursePayment[]
 
   @@index([trainerId])
   @@index([categoryId])
+}
+
+model CoursePayment {
+  id              Int           @id @default(autoincrement())
+  courseId        Int
+  userId          Int
+  paymentIntentId String
+  paymentStatus   PaymentStatus
+  paymentAmount   Float
+  paymentMethod   PaymentMethod @default(STRIPE)
+  createdAt       DateTime      @default(now())
+
+  course Course @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([courseId])
+  @@index([userId])
 }
 
 model StudentCartCourses {
@@ -88,4 +107,14 @@ enum Role {
 enum Gender {
   MALE
   FEMALE
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+enum PaymentMethod {
+  STRIPE
 }

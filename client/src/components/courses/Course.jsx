@@ -1,22 +1,56 @@
-import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
+import { queryClient } from "../../index";
 
-import useAuth from "@/hooks/users/useAuth";
+import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
 
 import { formatDate } from "@/utils/index";
 
-// import video from "@/assets/videos/lesson.mp4";
-import image from "@/assets/images/lesson.jpeg";
-
 const Course = ({ course }) => {
-  const { user, setUser } = useUserStore();
-  const { toggleUserCourseInCart } = useAuth();
+  const { user } = useUserStore();
+  const navigate = useNavigate();
 
-  const { isLoading, mutate } = useMutation(["user"], toggleUserCourseInCart, {
+  const {
+    getCartCourses,
+    getPaidCourses,
+    addCourseToUserCart,
+    removeCourseToUserCart,
+  } = useCourse();
+
+  const { data: coursesInCart } = useQuery({
+    queryKey: ["cart"],
+    queryFn: () => getCartCourses({ token: user?.token }),
+    enabled: Boolean(user?.token),
+  });
+
+  const { data: paidCourses } = useQuery({
+    queryKey: ["paid-courses"],
+    queryFn: () => getPaidCourses({ token: user?.token }),
+    enabled: Boolean(user?.token),
+  });
+
+  const { isLoading: isLoadingAddToCart, mutate: addCourseToUserCartMutate } =
+    useMutation(["cart"], addCourseToUserCart, {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["cart"]);
+        toast.success(data?.message);
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          toast.error(error?.response?.data?.message);
+        }
+      },
+    });
+
+  const {
+    isLoading: isLoadingRemoveFromCart,
+    mutate: removeCourseToUserCartMutate,
+  } = useMutation(["cart"], removeCourseToUserCart, {
     onSuccess: (data) => {
-      toast.success(data.message);
-      setUser(data.user);
+      queryClient.invalidateQueries(["cart"]);
+      toast.success(data?.message);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -25,11 +59,14 @@ const Course = ({ course }) => {
     },
   });
 
-  const handleToggleCourseInCart = () => {
-    mutate({
-      ...user,
-      coursesInCart: [{ id: course?.id }],
-      token: user.token,
+  const handleAddCourseToCart = () => {
+    addCourseToUserCartMutate({ courseId: course?.id, token: user?.token });
+  };
+
+  const handleRemoveCourseToCart = () => {
+    removeCourseToUserCartMutate({
+      coursesIds: [course?.id],
+      token: user?.token,
     });
   };
 
@@ -67,35 +104,37 @@ const Course = ({ course }) => {
             {user && (
               <button
                 className={`btn rounded-xl w-full md:w-fit ${
-                  user?.enrolledCourses?.find(
+                  paidCourses?.find(
                     (eachCourse) => eachCourse?.id === course?.id
                   )
                     ? "bg-black text-white hover:bg-warning-focus"
-                    : user?.coursesInCart?.find(
+                    : coursesInCart?.find(
                         (eachCourse) => eachCourse?.id === course?.id
                       )
                     ? "btn-outline"
                     : "bg-primary text-white hover:bg-gray-400 hover:text-black"
                 }`}
                 onClick={
-                  user.enrolledCourses?.find(
+                  paidCourses?.find(
                     (eachCourse) => eachCourse?.id === course?.id
                   )
                     ? () => {
-                        toast.success(
-                          "Fonctionnalité en cours de développement"
-                        );
+                        navigate("/dashboard/students");
                       }
-                    : handleToggleCourseInCart
+                    : coursesInCart?.find(
+                        (eachCourse) => eachCourse?.id === course?.id
+                      )
+                    ? handleRemoveCourseToCart
+                    : handleAddCourseToCart
                 }
               >
-                {isLoading ? (
+                {isLoadingAddToCart || isLoadingRemoveFromCart ? (
                   <div className="loading"></div>
-                ) : user.enrolledCourses?.find(
+                ) : paidCourses?.find(
                     (eachCourse) => eachCourse?.id === course?.id
                   ) ? (
-                  <span>Suivre Le Cours</span>
-                ) : user.coursesInCart?.find(
+                  <span>Déjà Acheté</span>
+                ) : coursesInCart?.find(
                     (eachCourse) => eachCourse?.id === course?.id
                   ) ? (
                   <span>Retirer au panier</span>

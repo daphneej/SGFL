@@ -12,7 +12,11 @@ import {
   deleteCourseService,
   getCourseByIdService,
   getCoursesService,
+  getUserCoursesService,
+  addCourseToUserCartService,
+  removeCourseToUserCartService,
   getPublishedCoursesService,
+  getCoursesInUserCartService,
   updateCourseService,
 } from "../../services/courses/course.services.js";
 
@@ -94,6 +98,48 @@ export const getCourse = asyncHandler(async (req, res) => {
   res.status(200).json(course);
 });
 
+export const getUserCourses = asyncHandler(async (req, res) => {
+  const { id } = req.credentials;
+
+  const courses = await getUserCoursesService(id);
+
+  res.status(200).json(courses);
+});
+
+export const getCourseInUserCart = asyncHandler(async (req, res) => {
+  const { id } = req.credentials;
+  const courses = await getCoursesInUserCartService(id);
+  res.status(200).json(courses);
+});
+
+export const addCourseToUserCart = asyncHandler(async (req, res) => {
+  const { id } = req.credentials;
+  const { courseId } = req.body;
+
+  await addCourseToUserCartService(courseId, id);
+
+  res.status(200).json({
+    message: "Le cours a bien été ajouté au panier.",
+  });
+});
+
+export const removeCourseToUserCart = asyncHandler(async (req, res) => {
+  const { id } = req.credentials;
+  const { coursesIds } = req.body;
+
+  const removedCoursesCount = await removeCourseToUserCartService(
+    coursesIds,
+    id
+  );
+
+  res.status(200).json({
+    message:
+      removedCoursesCount <= 1
+        ? "Le cours a bien été retiré du panier."
+        : "Le panier a bien été vidé.",
+  });
+});
+
 export const updateCourse = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -150,8 +196,8 @@ export const deleteCourse = asyncHandler(async (req, res) => {
   });
 });
 
-export const buyCourseInCart = asyncHandler(async (req, res) => {
-  const { id } = req.credentials;
+export const checkoutCourseInCart = asyncHandler(async (req, res) => {
+  const { id: userId } = req.credentials;
   const { items } = req.body;
 
   const itemsFound = await prisma.course.findMany({
@@ -164,7 +210,8 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
     where: { id: { in: items.map((item) => item.id) } },
   });
 
-  const checkoutSession = await stripePromise.checkout.sessions.create({
+  // Step 1: Create a Stripe session
+  const session = await stripePromise.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: itemsFound.map((item) => ({
       price_data: {
@@ -173,16 +220,82 @@ export const buyCourseInCart = asyncHandler(async (req, res) => {
           name: item.title,
           images: [item.thumbnailUrl],
         },
-        unit_amount: Math.floor(item.price) * 100,
+        unit_amount: Math.floor(item.price * 100),
       },
       quantity: 1,
     })),
     mode: "payment",
-    success_url: `${process.env.CLIENT_URL}/dashboard/students`,
-    cancel_url: `${process.env.CLIENT_URL}/courses`,
+    // Pass the payment intent ID to the success URL
+    success_url: `${process.env.CLIENT_URL}/dashboard/success?sessionId={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.CLIENT_URL}/dashboard/canceled?sessionId={CHECKOUT_SESSION_ID}`,
   });
 
-  res.status(200).json({
-    url: checkoutSession.url,
+  // Step 2: Insert payment information into the database after creating the Stripe session
+  const coursePayments = await prisma.coursePayment.createMany({
+    data: itemsFound.map((item, index) => ({
+      courseId: item.id,
+      userId: userId,
+      paymentAmount: item.price,
+      paymentMethod: "STRIPE", // Assuming Stripe payment method
+      paymentStatus: "PENDING", // Set the initial status to PENDING
+      // Store the payment intent ID from the Stripe session
+      paymentIntentId: session.id,
+    })),
   });
+
+  res.status(200).json({ session });
+});
+
+export const processPaymentSession = asyncHandler(async (req, res) => {
+  const { sessionId } = req.params;
+
+  const session = await stripePromise.checkout.sessions.retrieve(sessionId);
+
+  await prisma.coursePayment.updateMany({
+    where: { paymentIntentId: session.id },
+    data: {
+      paymentStatus: "SUCCEEDED",
+    },
+  });
+
+  const paidCourses = await prisma.course.findMany({
+    where: {
+      coursePayments: {
+        some: {
+          paymentStatus: "SUCCEEDED",
+          paymentIntentId: session.id,
+        },
+      },
+    },
+  });
+
+  const { userId } = await prisma.coursePayment.findFirst({
+    where: { paymentIntentId: session.id },
+    select: { userId: true },
+  });
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      coursesInCart: {
+        disconnect: paidCourses.map((course) => ({ id: course.id })),
+      },
+    },
+  });
+
+  res.status(200).json();
+});
+
+export const cancelPaymentSession = asyncHandler(async (req, res) => {
+  const { sessionId } = req.params;
+
+  const session = await stripePromise.checkout.sessions.retrieve(sessionId);
+
+  await prisma.coursePayment.deleteMany({
+    where: { paymentIntentId: session.id },
+  });
+
+  res.sendStatus(200);
 });

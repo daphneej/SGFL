@@ -2,7 +2,6 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 
 import { FiBook, FiLogOut, FiHome, FiUser } from "react-icons/fi";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { RiMenuFoldLine } from "react-icons/ri";
 
 import useAuth from "@/hooks/users/useAuth";
@@ -74,15 +73,21 @@ const StudentAsideDashboard = ({
             </li>
 
             <MenuItem
-              label={"Home"}
+              label={"Accueil"}
               icon={<FiHome className="mr-2" size={20} />}
               link={"/"}
             />
 
             <MenuItem
-              label={"Profile"}
+              label={"Profil"}
               icon={<FiUser className="mr-2" size={20} />}
               link={"/profile"}
+            />
+
+            <MenuItem
+              label={"Cours"}
+              icon={<FiBook className="mr-2" size={20} />}
+              link={"/courses"}
             />
           </div>
 

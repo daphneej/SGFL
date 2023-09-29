@@ -8,6 +8,9 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.2.0
     version: 3.2.0(react-hook-form@7.45.2)
+  '@stripe/stripe-js':
+    specifier: ^2.1.6
+    version: 2.1.6
   axios:
     specifier: ^1.4.0
     version: 1.4.0
@@ -659,6 +662,10 @@ packages:
   /@remix-run/router@1.7.1:
     resolution: {integrity: sha512-bgVQM4ZJ2u2CM8k1ey70o1ePFXsEzYVZoWghh6WjM8p59jQ7HxzbHW4SbnWFG7V9ig9chLawQxDTZ3xzOF8MkQ==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@stripe/stripe-js@2.1.6:
+    resolution: {integrity: sha512-QSzqQIcowgap7a40f3a7oUR+59Xet/i8fp1EsnzzwxK5oPRQsCbbLQ4Cd6qM0y1pdZMonFnCrAWayWdE9Lr0iA==}
     dev: false
 
   /@types/prop-types@15.7.5:

@@ -13,6 +13,58 @@ const useCourse = () => {
     return data;
   };
 
+  const getPaidCourses = async ({ token }) => {
+    const response = await api.get(`/api/courses/paid`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.data;
+    return data;
+  };
+
+  const getCartCourses = async ({ token }) => {
+    const response = await api.get(`/api/courses/cart`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.data;
+    return data;
+  };
+
+  const addCourseToUserCart = async ({ courseId, token }) => {
+    const response = await api.post(
+      `/api/courses/cart-add`,
+      { courseId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.data;
+
+    return data;
+  };
+
+  const removeCourseToUserCart = async ({ coursesIds, token }) => {
+    const response = await api.post(
+      `/api/courses/cart-remove`,
+      { coursesIds },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.data;
+
+    return data;
+  };
+
   const addCourse = async ({ course, token }) => {
     const response = await api.post(`/api/courses`, course, {
       headers: {
@@ -52,7 +104,7 @@ const useCourse = () => {
 
   const buyCourseInCart = async ({ items, token }) => {
     const response = await api.post(
-      `/api/courses/buy`,
+      `/api/courses/checkout`,
       { items },
       {
         headers: {
@@ -66,13 +118,31 @@ const useCourse = () => {
     return data;
   };
 
+  const processStripePaymentSession = async ({ sessionId }) => {
+    const response = await api.get(`/api/courses/session/process/${sessionId}`);
+    const data = await response.data;
+    return data;
+  };
+
+  const cancelStripePaymentSession = async ({ sessionId }) => {
+    const response = await api.get(`/api/courses/session/cancel/${sessionId}`);
+    const data = await response.data;
+    return data;
+  };
+
   return {
     getCourses,
     getPublishedCourses,
+    getPaidCourses,
+    getCartCourses,
+    addCourseToUserCart,
+    removeCourseToUserCart,
     addCourse,
     updateCourse,
     removeCourse,
     buyCourseInCart,
+    processStripePaymentSession,
+    cancelStripePaymentSession,
   };
 };
 

@@ -7,9 +7,15 @@ import {
   deleteCourse,
   getCourse,
   getCourses,
+  getUserCourses,
   getPublishedCourses,
-  buyCourseInCart,
   updateCourse,
+  checkoutCourseInCart,
+  processPaymentSession,
+  cancelPaymentSession,
+  getCourseInUserCart,
+  addCourseToUserCart,
+  removeCourseToUserCart,
 } from "../controllers/courses/course.controller.js";
 
 import {
@@ -35,7 +41,13 @@ router.post(
 );
 router.get("/", getCourses);
 router.get("/published", getPublishedCourses);
-router.post("/buy", protectUserRoutes, buyCourseInCart);
+router.get("/cart", protectUserRoutes, getCourseInUserCart);
+router.post("/cart-add", protectUserRoutes, addCourseToUserCart);
+router.post("/cart-remove", protectUserRoutes, removeCourseToUserCart);
+router.get("/paid", protectUserRoutes, getUserCourses);
+router.post("/checkout", protectUserRoutes, checkoutCourseInCart);
+router.get("/session/process/:sessionId", processPaymentSession);
+router.get("/session/cancel/:sessionId", cancelPaymentSession);
 router.get("/:id", protectUserRoutes, getCourse);
 router.put(
   "/:id",

@@ -16,14 +16,14 @@ const WatchCourse = ({
     >
       <div className="flex flex-col md:w-1/2 mx-auto bg-base-100 md:px-8 md:pt-4 md:pb-8 rounded-md px-3 py-4">
         <AiOutlineClose
-          className="absolute cursor-pointer top-4 right-4"
+          className="cursor-pointer ml-auto mb-4 text-2xl"
           onClick={() => {
             setSelectedCourse(null);
             setModalOpen(false);
           }}
         />
 
-        <video controls className="rounded-xl">
+        <video controls className="rounded-xl h-72 md:h-96">
           <source src={course?.videoUrl} type="video/mp4" />
         </video>
 

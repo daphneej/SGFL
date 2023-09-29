@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RiMenuUnfoldLine } from "react-icons/ri";
 
 import StudentAsideDashboard from "@/components/students/StudentAsideDashboard";
-import EnrolledCourses from "@/components/students/EnrolledCourses";
+import PaidCourses from "@/components/students/PaidCourses";
 
 import useStudentDashboardStore from "@/zustand/useStudentDashboardStore";
 
@@ -36,7 +36,7 @@ const StudentDashboard = () => {
           <div className="w-full mx-auto mt-10 md:w-1/2">
             {selectedMenuItem === "Dashboard" && <></>}
           </div>
-          {selectedMenuItem === "Courses" && <EnrolledCourses />}
+          {selectedMenuItem === "Courses" && <PaidCourses />}
         </div>
       </main>
     </div>

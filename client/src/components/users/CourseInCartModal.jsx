@@ -1,22 +1,33 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import { queryClient } from "../../index";
 import { toast } from "react-toastify";
+import { loadStripe } from "@stripe/stripe-js";
 
-import useAuth from "@/hooks/users/useAuth";
 import useCourse from "@/hooks/useCourse";
 import useUserStore from "@/zustand/useUserStore";
 
 import { AiOutlineClose } from "react-icons/ai";
 import { RiDeleteBin2Line, RiShoppingCart2Line } from "react-icons/ri";
 
-const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
-  const { user, setUser } = useUserStore();
-  const { toggleUserCourseInCart } = useAuth();
-  const { buyCourseInCart } = useCourse();
+const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-  const { isLoading, mutate } = useMutation(["user"], toggleUserCourseInCart, {
+const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
+  const { user } = useUserStore();
+  const { buyCourseInCart, getCartCourses, removeCourseToUserCart } =
+    useCourse();
+
+  const { isLoading: isLoadingCart, data: coursesInCart } = useQuery({
+    queryKey: ["cart"],
+    queryFn: () => getCartCourses({ token: user?.token }),
+    enabled: Boolean(user?.token),
+  });
+
+  const { isLoading, mutate: removeCourseToUserCartMutate } = useMutation({
+    mutationKey: ["cart"],
+    mutationFn: removeCourseToUserCart,
     onSuccess: (data) => {
-      toast.success(data.message);
-      setUser(data.user);
+      queryClient.invalidateQueries(["cart"]);
+      toast.success(data?.message);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -28,7 +39,9 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
   const { isLoading: isLoadingBoughtCourses, mutate: buyCourseMutation } =
     useMutation(["user"], buyCourseInCart, {
       onSuccess: (data) => {
-        window.open(data.url, "_blank");
+        stripePromise.redirectToCheckout({
+          sessionId: data?.session?.id,
+        });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -37,10 +50,9 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
       },
     });
 
-  const handleToggleCourseInCart = (courseIds) => {
-    mutate({
-      ...user,
-      coursesInCart: courseIds,
+  const handleRemoveCourseInCart = (coursesIds) => {
+    removeCourseToUserCartMutate({
+      coursesIds,
       token: user.token,
     });
   };
@@ -61,26 +73,32 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           onClick={() => setOpenCourseInCart(false)}
         />
 
+        {isLoadingCart && (
+          <div className="flex items-center justify-center w-full">
+            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
+          </div>
+        )}
+
         <div className="my-4 cart-container">
           <div className="flex flex-col items-center justify-between gap-1 my-8 md:flex-row">
             <h2 className="text-2xl font-bold cart-title">Votre panier</h2>
             <p className="text-gray-600 cart-subtitle">
               Total: ${" "}
               <span className="font-bold text-primary">
-                {user?.coursesInCart
+                {coursesInCart
                   ?.reduce((acc, course) => acc + course?.price, 0)
                   .toFixed(2)}
               </span>{" "}
               US
             </p>
           </div>
-          {user?.coursesInCart?.length === 0 ? (
+          {coursesInCart?.length === 0 ? (
             <p className="font-bold text-center text-gray-600">
               Votre panier est vide
             </p>
           ) : (
             <ul className="flex flex-col gap-4">
-              {user?.coursesInCart?.map((course) => (
+              {coursesInCart?.map((course) => (
                 <li
                   key={course?.id}
                   className="flex items-start justify-between gap-1 p-4 rounded-lg shadow-sm bg-base-100 shadow-primary cart-item"
@@ -99,9 +117,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
                   </div>
                   <div className="flex flex-col-reverse items-center justify-center gap-2">
                     <RiDeleteBin2Line
-                      onClick={() =>
-                        handleToggleCourseInCart([{ id: course?.id }])
-                      }
+                      onClick={() => handleRemoveCourseInCart([course?.id])}
                       size={25}
                       className="cursor-pointer text-error"
                       disabled={isLoading || isLoadingBoughtCourses}
@@ -121,17 +137,15 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
         </div>
         <div
           className={`w-full md:mt-10 rounded-md flex flex-col md:flex-row justify-between items-center ${
-            user?.coursesInCart?.length === 0 && "hidden"
+            coursesInCart?.length === 0 && "hidden"
           }`}
         >
           <button
             type="button"
             className="w-full md:w-fit btn bg-primary text-white"
             onClick={() =>
-              handleToggleCourseInCart(
-                user?.coursesInCart?.map((course) => {
-                  return { id: course?.id };
-                })
+              handleRemoveCourseInCart(
+                coursesInCart?.map((course) => course?.id)
               )
             }
           >
@@ -142,7 +156,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
             className="w-full md:w-fit btn bg-primary text-white"
             onClick={() =>
               handleBuyCourseInCart(
-                user?.coursesInCart?.map((course) => {
+                coursesInCart?.map((course) => {
                   return { id: course?.id };
                 })
               )
