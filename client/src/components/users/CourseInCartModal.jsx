@@ -9,8 +9,6 @@ import useUserStore from "@/zustand/useUserStore";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiDeleteBin2Line, RiShoppingCart2Line } from "react-icons/ri";
 
-const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
   const { user } = useUserStore();
   const { buyCourseInCart, getCartCourses, removeCourseToUserCart } =
@@ -39,9 +37,15 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
   const { isLoading: isLoadingBoughtCourses, mutate: buyCourseMutation } =
     useMutation(["user"], buyCourseInCart, {
       onSuccess: (data) => {
-        stripePromise.redirectToCheckout({
-          sessionId: data?.session?.id,
-        });
+        (async () => {
+          const stripe = await loadStripe(
+            import.meta.env.VITE_STRIPE_PUBLIC_KEY
+          );
+
+          stripe.redirectToCheckout({
+            sessionId: data?.session?.id,
+          });
+        })();
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
