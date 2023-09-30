@@ -60,9 +60,7 @@ const Navbar = () => {
             <div className="flex items-center justify-center gap-4 mt-2 md:w-auto md:mt-0">
               {/* Panier */}
               {user?.role !== "ADMIN" && isLoadingCart ? (
-                <div className="flex items-center justify-center w-full">
-                  <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
-                </div>
+                <div className="loading"></div>
               ) : (
                 <div className="dropdown md:dropdown-end">
                   <label

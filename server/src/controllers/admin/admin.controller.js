@@ -60,6 +60,7 @@ export const getUsers = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -80,6 +81,7 @@ export const getUser = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 
@@ -166,6 +168,7 @@ export const updateUser = asyncHandler(async (req, res) => {
       coursesInCart: true,
       createdCourses: true,
       enrolledCourses: true,
+      paidCourses: true,
     },
   });
 

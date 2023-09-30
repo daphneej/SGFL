@@ -15,13 +15,14 @@ import UserUpdateFormModal from "@/components/admins/users/UserUpdateFormModal";
 import UserViewModal from "@/components/admins/users/UserViewModal";
 
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
+import { useEffect } from "react";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
   { label: "Prénom", key: "firstName" },
   { label: "Nom", key: "lastName" },
   { label: "Adresse Email", key: "email" },
-  {label: "Role", key: "role"},
+  { label: "Role", key: "role" },
   { label: "Cours Achetés", key: "courses" },
   { label: "Actions", key: "actions" },
 ];
@@ -126,7 +127,9 @@ const StudentTable = ({ isLoadingUsers: isLoading, users: students }) => {
                       student?.id % 2 !== 0 ? "bg-base-300" : "bg-base-200"
                     }`}
                   >
-                    <td className="p-3 border border-base-100">{student?.id}</td>
+                    <td className="p-3 border border-base-100">
+                      {student?.id}
+                    </td>
                     <td className="p-3 border border-base-100">
                       {student?.firstName}
                     </td>
@@ -140,7 +143,11 @@ const StudentTable = ({ isLoadingUsers: isLoading, users: students }) => {
                       {student?.role}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {student?.enrolledCourses?.length}
+                      {
+                        student?.paidCourses?.filter(
+                          (course) => course?.paymentStatus === "SUCCEEDED"
+                        )?.length
+                      }
                     </td>
                     <td className="p-3 border border-base-100">
                       <div className="flex justify-center gap-3 mx-auto">

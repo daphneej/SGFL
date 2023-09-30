@@ -29,11 +29,7 @@ const PaidCourses = () => {
         Cours Achetés
       </h2>
 
-      {isLoading && (
-        <div className="flex items-center justify-center w-full">
-          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
-        </div>
-      )}
+      {isLoading && <div className="loading"></div>}
 
       {selectedCourse && (
         <WatchCourse

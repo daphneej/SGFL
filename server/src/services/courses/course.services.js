@@ -18,11 +18,7 @@ export const getCoursesService = async () => {
           lastName: true,
         },
       },
-      students: {
-        select: {
-          id: true,
-        },
-      },
+      coursePayments: true,
     },
   });
 

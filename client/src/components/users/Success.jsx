@@ -17,7 +17,9 @@ const Success = () => {
   return (
     <>
       {isLoading ? (
-        "Processing Payment..."
+        <div className="flex items-center justify-center w-full">
+          <div className="loading"></div>
+        </div>
       ) : (
         <Navigate to="/dashboard/students" />
       )}

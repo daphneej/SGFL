@@ -1,5 +1,5 @@
 const SelectField = ({
-  uuid,
+  id,
   label,
   field,
   register,
@@ -11,11 +11,11 @@ const SelectField = ({
 }) => {
   return (
     <div className="flex-col">
-      <label htmlFor={`${uuid}${field}`} className="block mb-2 font-semibold">
+      <label htmlFor={id} className="block mb-2 font-semibold">
         {label}
       </label>
       <select
-        id={`${uuid}${field}`}
+        id={id}
         {...register(field, {
           valueAsNumber: type === "number",
         })}

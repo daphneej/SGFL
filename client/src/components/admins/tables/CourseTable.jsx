@@ -15,6 +15,7 @@ import Pagination from "@/components/Pagination";
 import CourseAddFormModal from "@/components/admins/courses/CourseAddFormModal";
 import CourseUpdateFormModal from "@/components/admins/courses/CourseUpdateFormModal";
 import CourseViewModal from "@/components/admins/courses/CourseViewModal";
+import { useEffect } from "react";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
@@ -135,7 +136,11 @@ const CourseTable = ({ isLoadingCourses: isLoading, courses }) => {
                       {course?.category?.name}
                     </td>
                     <td className="p-3 border border-base-100">
-                      {course?.students?.length}
+                      {
+                        course?.coursePayments.filter(
+                          (course) => course.paymentStatus === "SUCCEEDED"
+                        )?.length
+                      }
                     </td>
                     <td className="p-3 border border-base-100">
                       $<span className="text-primary">{course?.price}</span> US

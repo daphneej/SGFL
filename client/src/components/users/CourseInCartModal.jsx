@@ -38,11 +38,9 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
     useMutation(["user"], buyCourseInCart, {
       onSuccess: (data) => {
         (async () => {
-          const stripe = await loadStripe(
-            import.meta.env.VITE_STRIPE_PUBLIC_KEY
-          );
-
-          stripe.redirectToCheckout({
+          await (
+            await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+          ).redirectToCheckout({
             sessionId: data?.session?.id,
           });
         })();
@@ -77,11 +75,7 @@ const CourseInCartModal = ({ openCourseInCart, setOpenCourseInCart }) => {
           onClick={() => setOpenCourseInCart(false)}
         />
 
-        {isLoadingCart && (
-          <div className="flex items-center justify-center w-full">
-            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
-          </div>
-        )}
+        {isLoadingCart && <div className="loading"></div>}
 
         <div className="my-4 cart-container">
           <div className="flex flex-col items-center justify-between gap-1 my-8 md:flex-row">

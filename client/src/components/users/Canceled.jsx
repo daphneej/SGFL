@@ -14,7 +14,17 @@ const Canceled = () => {
     enabled: Boolean(sessionId),
   });
 
-  return <>{isLoading ? "Canceling Payment..." : <Navigate to="/" />}</>;
+  return (
+    <>
+      {isLoading ? (
+        <div className="flex items-center justify-center w-full">
+          <div className="loading"></div>
+        </div>
+      ) : (
+        <Navigate to="/" />
+      )}
+    </>
+  );
 };
 
 export default Canceled;
