@@ -10,11 +10,11 @@ const WatchCourse = ({
 }) => {
   return (
     <div
-      className={`flex justify-center p-2 items-center bg-red-200 flex-col modal ${
+      className={`flex justify-center p-2 items-center flex-col modal ${
         modalOpen && "modal-open"
       } w-full`}
     >
-      <div className="flex flex-col md:w-1/2 mx-auto bg-base-100 md:px-8 md:pt-4 md:pb-8 rounded-md px-3 py-4">
+      <div className="flex flex-col w-full md:w-1/2 mx-auto bg-base-100 md:px-8 md:pt-4 md:pb-8 rounded-md px-3 py-4">
         <AiOutlineClose
           className="cursor-pointer ml-auto mb-4 text-2xl"
           onClick={() => {
@@ -23,7 +23,7 @@ const WatchCourse = ({
           }}
         />
 
-        <video controls className="rounded-xl h-72 md:h-96">
+        <video controls className="rounded-xl h-72 md:h-96 w-full object-cover">
           <source src={course?.videoUrl} type="video/mp4" />
         </video>
 

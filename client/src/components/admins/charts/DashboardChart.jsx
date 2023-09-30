@@ -19,11 +19,11 @@ const DashboardChart = ({ users, categories, courses }) => {
     },
     {
       title: "Cours",
-      description: `Pourcentage de cours publiés ${
+      description: `Pourcentage de cours publiés ${(
         (courses?.filter((course) => course.published === "PUBLISHED")?.length /
           courses?.length) *
         100
-      } %`,
+      ).toFixed(2)} %`,
       numbers: courses?.length || 0,
       icon: <FiBook className="mr-2" size={25} />,
     },
