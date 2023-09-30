@@ -112,7 +112,6 @@ enum Gender {
 enum PaymentStatus {
   PENDING
   SUCCEEDED
-  FAILED
 }
 
 enum PaymentMethod {
