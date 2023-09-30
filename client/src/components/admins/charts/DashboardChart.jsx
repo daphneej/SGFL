@@ -8,7 +8,7 @@ import ScatterPlot from "@/components/admins/charts/ScatterPlot";
 const DashboardChart = ({ users, categories, courses }) => {
   const cardsData = [
     {
-      title: "Total Users",
+      title: "Utilisateurs",
       description: `Pourcentage d'étudiants ${(
         (users?.filter((user) => user.role === "STUDENT")?.length /
           users?.length) *
@@ -18,7 +18,7 @@ const DashboardChart = ({ users, categories, courses }) => {
       icon: <PiUsersFour className="mr-2" size={25} />,
     },
     {
-      title: "Total Courses",
+      title: "Cours",
       description: `Pourcentage de cours publiés ${
         (courses?.filter((course) => course.published === "PUBLISHED")?.length /
           courses?.length) *
@@ -28,7 +28,7 @@ const DashboardChart = ({ users, categories, courses }) => {
       icon: <FiBook className="mr-2" size={25} />,
     },
     {
-      title: "Total Formateurs",
+      title: "Formateurs",
       description: `Pourcentage de formateurs actifs ${(
         (users?.filter(
           (user) => user?.role === "TRAINER" && user?.status === "ACTIVE"
@@ -40,7 +40,7 @@ const DashboardChart = ({ users, categories, courses }) => {
       icon: <FiUserCheck className="mr-2" size={25} />,
     },
     {
-      title: "Total Etudiants",
+      title: "Etudiants",
       description: `Pourcentage d'étudiants qui ont payé au moins un cours ${(
         (users?.filter(
           (user) => user?.role === "STUDENT" && user?.paidCourses?.length > 0
