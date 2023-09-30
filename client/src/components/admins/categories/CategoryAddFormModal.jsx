@@ -10,7 +10,7 @@ import useCategory from "@/hooks/useCategory";
 import useUserStore from "@/zustand/useUserStore";
 import { createCategorySchema } from "@/schemas/categorySchema";
 
-import InputField from "@/components/forms/InputField";
+import InputText from "@/components/forms/InputText";
 import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
@@ -58,12 +58,12 @@ const CategoryAddFormModal = ({ modalOpen, setModalOpen }) => {
       label={"Ajouter Une Catégorie"}
     >
       <InputsForm col={1}>
-        <InputField
-          uuid={crypto.randomUUID()}
+        <InputText
+          id={crypto.randomUUID()}
+          name={"name"}
           label={"Nom De La Catégorie"}
-          errors={errors}
-          register={register}
-          field={"name"}
+          error={errors?.name}
+          register={register("name")}
           type={"text"}
         />
       </InputsForm>

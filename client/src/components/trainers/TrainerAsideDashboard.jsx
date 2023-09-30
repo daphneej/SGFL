@@ -65,6 +65,7 @@ const TrainerAsideDashboard = ({
         </div>
         <ul>
           {/* <MenuItem
+          setMenuOpen={setMenuOpen}
             label={"Dashboard"}
             icon={<MdOutlineSpaceDashboard className="mr-2" size={20} />}
             menuItem={"Dashboard"}
@@ -73,6 +74,7 @@ const TrainerAsideDashboard = ({
           /> */}
 
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Ajouter Cours"}
             icon={<LuBookPlus className="mr-2" size={20} />}
             menuItem={"AddCourse"}
@@ -81,6 +83,7 @@ const TrainerAsideDashboard = ({
           />
 
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
@@ -94,12 +97,14 @@ const TrainerAsideDashboard = ({
             </li>
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Home"}
               icon={<FiHome className="mr-2" size={20} />}
               link={"/"}
             />
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Profile"}
               icon={<FiUser className="mr-2" size={20} />}
               link={"/profile"}

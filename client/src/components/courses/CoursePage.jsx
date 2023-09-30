@@ -33,8 +33,9 @@ const CoursePage = () => {
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center w-full gap-2 px-8 py-4 md:flex-row md:justify-between">
           <h2 className="text-2xl font-bold text-left">Tous Les Cours</h2>
-          <div className="flex flex-col items-center w-full gap-2 md:flex-row md:justify-between md:gap-4 md:w-fit">
+          <form className="flex flex-col items-center w-full gap-2 md:flex-row md:justify-between md:gap-4 md:w-fit">
             <select
+              id={crypto.randomUUID()}
               onChange={(e) => {
                 const { value } = e.target;
 
@@ -74,6 +75,7 @@ const CoursePage = () => {
               ))}
             </select>
             <input
+              id={crypto.randomUUID()}
               onChange={(e) => {
                 const { value } = e.target;
 
@@ -104,7 +106,7 @@ const CoursePage = () => {
               placeholder="Rechercher un cours ..."
               disabled={courses?.length === 0}
             />
-          </div>
+          </form>
         </div>
 
         <div className="flex flex-col items-center justify-start flex-1 w-full mx-auto">

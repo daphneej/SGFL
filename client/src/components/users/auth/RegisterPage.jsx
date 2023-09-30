@@ -66,6 +66,7 @@ const Register = () => {
               label={"Adresse Email"}
               error={errors?.email}
               register={register("email")}
+              autoComplete={"email"}
             />
             <InputText
               id={crypto.randomUUID()}
@@ -74,6 +75,7 @@ const Register = () => {
               label={"Mot De Passe"}
               error={errors?.password}
               register={register("password")}
+              autoComplete={"current-password"}
             />
             <InputText
               id={crypto.randomUUID()}
@@ -82,6 +84,7 @@ const Register = () => {
               label={"Confirmez Mot De Passe"}
               error={errors?.confirmPassword}
               register={register("confirmPassword")}
+              autoComplete={"current-password"}
             />
           </InputsForm>
           <ButtonsForm>

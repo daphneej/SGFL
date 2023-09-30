@@ -61,6 +61,7 @@ const StudentAsideDashboard = ({
         </div>
         <ul>
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Cours Achetés"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
@@ -73,18 +74,21 @@ const StudentAsideDashboard = ({
             </li>
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Accueil"}
               icon={<FiHome className="mr-2" size={20} />}
               link={"/"}
             />
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Profil"}
               icon={<FiUser className="mr-2" size={20} />}
               link={"/profile"}
             />
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Cours"}
               icon={<FiBook className="mr-2" size={20} />}
               link={"/courses"}

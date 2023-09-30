@@ -40,7 +40,7 @@ const TrainerDashboard = () => {
 
           {selectedMenuItem === "AddCourse" && (
             <div className="flex items-center w-full mx-auto mt-24 md:w-5/6">
-              <CourseAddForm />{" "}
+              <CourseAddForm setMenuOpen={setMenuOpen} />{" "}
             </div>
           )}
           {selectedMenuItem === "Courses" && (

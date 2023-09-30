@@ -69,6 +69,7 @@ const LoginPage = () => {
               error={errors?.email}
               register={register("email")}
               type={"email"}
+              autoComplete={"email"}
             />
             <InputText
               id={crypto.randomUUID()}
@@ -77,6 +78,7 @@ const LoginPage = () => {
               error={errors?.password}
               register={register("password")}
               type={"password"}
+              autoComplete={"current-password"}
             />
           </InputsForm>
           <ButtonsForm>

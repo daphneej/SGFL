@@ -14,14 +14,6 @@ const CreatedCourses = () => {
     queryFn: getCourses,
   });
 
-  useEffect(() => {
-    if (courses) {
-      console.log("====================================");
-      console.log(courses);
-      console.log("====================================");
-    }
-  }, [courses]);
-
   return (
     <div className="flex flex-col w-full">
       <h2 className="mt-10 mb-4 text-2xl font-bold text-center md:text-right">
