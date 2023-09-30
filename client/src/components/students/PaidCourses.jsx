@@ -60,7 +60,7 @@ const PaidCourses = () => {
                   }}
                 >
                   <img
-                    className="rounded-xl h-1/2"
+                    className="rounded-xl max-h-52 object-cover"
                     src={course?.thumbnailUrl}
                     alt="Course Image"
                   />

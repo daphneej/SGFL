@@ -35,7 +35,11 @@ const ImagePreview = ({ fileId }) => {
   return (
     <div>
       {imageURL && (
-        <img className="rounded-xl h-1/2" src={imageURL} alt="Image Preview" />
+        <img
+          className="rounded-xl max-h-52 object-cover"
+          src={imageURL}
+          alt="Image Preview"
+        />
       )}
     </div>
   );

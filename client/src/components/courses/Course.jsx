@@ -73,7 +73,7 @@ const Course = ({ course }) => {
   return (
     <li className="flex flex-col w-full p-4 list-none rounded-lg shadow-sm md:w-72 shadow-primary">
       <img
-        className="rounded-xl h-1/2"
+        className="rounded-xl max-h-52 object-cover"
         loading="lazy"
         src={course?.thumbnailUrl}
         alt="Image Preview"
