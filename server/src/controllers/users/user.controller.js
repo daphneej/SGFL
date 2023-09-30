@@ -29,9 +29,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       password: await hashPassword(password),
     },
     include: {
-      coursesInCart: true,
       createdCourses: true,
-      paidCourses: true,
     },
   });
 
@@ -51,14 +49,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { email },
     include: {
-      coursesInCart: true,
       createdCourses: true,
-      enrolledCourses: true,
-      paidCourses: {
-        select: {
-          course: true,
-        },
-      },
     },
   });
 
