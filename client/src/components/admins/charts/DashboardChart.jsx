@@ -39,11 +39,23 @@ const DashboardChart = ({ users, categories, courses }) => {
       numbers: users?.filter((user) => user.role === "TRAINER")?.length || 0,
       icon: <FiUserCheck className="mr-2" size={25} />,
     },
+    {
+      title: "Total Etudiants",
+      description: `Pourcentage d'étudiants qui ont payé au moins un cours ${(
+        (users?.filter(
+          (user) => user?.role === "STUDENT" && user?.paidCourses?.length > 0
+        )?.length /
+          users?.filter((user) => user?.role === "STUDENT")?.length) *
+        100
+      ).toFixed(2)} %`,
+      numbers: users?.filter((user) => user.role === "STUDENT")?.length || 0,
+      icon: <FiUserCheck className="mr-2" size={25} />,
+    },
   ];
 
   return (
     <div className="flex flex-col">
-      <div className="p-4 shadow-sm shadow-primary stats">
+      <div className="p-4 shadow-sm shadow-primary stats gap-10">
         {cardsData.map((card, index) => (
           <div key={index} className="w-64 mx-auto md:w-full stat">
             <div className="stat-figure text-primary">{card.icon}</div>

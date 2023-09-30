@@ -7,6 +7,7 @@ const MenuItem = ({
   selectedMenuItem,
   setSelectedMenuItem,
   link,
+  setMenuOpen,
 }) => {
   const values = (
     <>
@@ -24,7 +25,10 @@ const MenuItem = ({
               ? "text-primary"
               : "hover:text-primary"
           }`}
-          onClick={() => setSelectedMenuItem(menuItem)}
+          onClick={() => {
+            setSelectedMenuItem(menuItem);
+            setMenuOpen(false);
+          }}
         >
           {values}
         </button>

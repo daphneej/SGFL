@@ -69,6 +69,7 @@ const AsideDashboard = ({
         </div>
         <ul>
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Dashboard"}
             icon={<MdOutlineSpaceDashboard className="mr-2" size={20} />}
             menuItem={"Dashboard"}
@@ -76,6 +77,7 @@ const AsideDashboard = ({
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Utilisateurs"}
             icon={<PiUsersFour className="mr-2" size={20} />}
             menuItem={"Users"}
@@ -83,6 +85,7 @@ const AsideDashboard = ({
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Catégories"}
             icon={<MdOutlineCategory className="mr-2" size={20} />}
             menuItem={"Categories"}
@@ -90,6 +93,7 @@ const AsideDashboard = ({
             setSelectedMenuItem={setSelectedMenuItem}
           />
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Cours"}
             icon={<FiBook className="mr-2" size={20} />}
             menuItem={"Courses"}
@@ -98,6 +102,7 @@ const AsideDashboard = ({
           />
 
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Formateurs"}
             icon={<FiUserCheck className="mr-2" size={20} />}
             menuItem={"Trainers"}
@@ -106,6 +111,7 @@ const AsideDashboard = ({
           />
 
           <MenuItem
+            setMenuOpen={setMenuOpen}
             label={"Etudiants"}
             icon={<PiStudentThin className="mr-2" size={20} />}
             menuItem={"Students"}
@@ -119,12 +125,14 @@ const AsideDashboard = ({
             </li>
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Home"}
               icon={<FiHome className="mr-2" size={20} />}
               link={"/"}
             />
 
             <MenuItem
+              setMenuOpen={setMenuOpen}
               label={"Profile"}
               icon={<FiUser className="mr-2" size={20} />}
               link={"/profile"}
