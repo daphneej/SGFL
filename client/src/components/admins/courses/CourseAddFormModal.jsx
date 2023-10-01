@@ -10,10 +10,11 @@ import useUserStore from "@/zustand/useUserStore";
 import useUser from "@/hooks/users/useUser";
 import useCategory from "@/hooks/useCategory";
 import useCourse from "@/hooks/useCourse";
-import { addCourseSchema } from "@/schemas/courseSchema";
+import { adminAddCourseSchema } from "@/schemas/courseSchema";
 
 import InputText from "@/components/forms/InputText";
 import SelectField from "@/components/forms/SelectField";
+import MediaInputForm from "@/components/forms/MediaInputForm";
 import ButtonForm from "@/components/forms/ButtonForm";
 import ModalForm from "@/components/forms/ModalForm";
 import InputsForm from "@/components/forms/InputsForm";
@@ -30,7 +31,7 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(addCourseSchema) });
+  } = useForm({ resolver: zodResolver(adminAddCourseSchema) });
 
   const { isLoading, mutate } = useMutation({
     mutationFn: addCourse,
@@ -50,19 +51,27 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
   const { isLoading: isLoadingCategories, data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: () => getCategories(),
-    enabled: Boolean(user),
+    enabled: Boolean(user?.token),
   });
 
   const { isLoading: isLoadingUsers, data: users } = useQuery({
     queryKey: ["users"],
-    queryFn: () => getUsers(user.token),
-    enabled: Boolean(user),
+    queryFn: () => getUsers(user?.token),
+    enabled: Boolean(user?.token),
   });
 
   // TODO: This is not working
   const handleAddCourse = (data) => {
-    // mutate({ course: data, token: user.token });
-    console.log(data);
+    delete data.published;
+
+    mutate({
+      course: {
+        ...data,
+        thumbnail: data?.thumbnail[0],
+        video: data?.video[0],
+      },
+      token: user?.token,
+    });
   };
 
   const handleCancelClick = () => {
@@ -153,6 +162,30 @@ const CourseAddFormModal = ({ modalOpen, setModalOpen }) => {
           }))}
           disabled={isLoadingUsers}
           type={"text"}
+        />
+
+        <MediaInputForm
+          id={crypto.randomUUID()}
+          name={"thumbnail"}
+          label={"Photo De Couverture"}
+          field={"thumbnail"}
+          type={"file"}
+          accept="image/*"
+          register={register("thumbnail")}
+          disabled={isLoading}
+          errors={errors}
+        />
+
+        <MediaInputForm
+          id={crypto.randomUUID()}
+          name={"video"}
+          label={"Vidéo Du Cours"}
+          field={"video"}
+          type={"file"}
+          accept="video/*"
+          register={register("video")}
+          disabled={isLoading}
+          errors={errors}
         />
       </InputsForm>
       <ButtonsForm>
