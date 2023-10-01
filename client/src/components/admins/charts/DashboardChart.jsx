@@ -32,9 +32,12 @@ const DashboardChart = ({ users, categories, courses, payments }) => {
     {
       title: "Paiements",
       description: `Total montant des paiements : $${payments
+        ?.filter((payment) => payment.paymentStatus === "SUCCEEDED")
         ?.reduce((total, payment) => total + payment.paymentAmount, 0)
         .toFixed(2)} US`,
-      numbers: payments?.length || 0,
+      numbers:
+        payments?.filter((payment) => payment.paymentStatus === "SUCCEEDED")
+          ?.length || 0,
       icon: <GiTakeMyMoney className="mr-2" size={25} />,
     },
     {
