@@ -95,17 +95,9 @@ const PaymentTable = ({ isLoadingPayments: isLoading, payments }) => {
                     </td>
                     <td className="p-3 border border-base-100">
                       {payment?.paymentStatus === "SUCCEEDED" ? (
-                        <span className="text-success">
-                          {payment?.paymentStatus === "SUCCEEDED" ? (
-                            <span className="text-success">Succès</span>
-                          ) : (
-                            <span className="text-warning">En cours</span>
-                          )}
-                        </span>
+                        <span className="text-success">Succès</span>
                       ) : (
-                        <span className="text-warning">
-                          {payment?.paymentStatus}
-                        </span>
+                        <span className="text-warning">En cours</span>
                       )}
                     </td>
                     <td className="p-3 border border-base-100">
