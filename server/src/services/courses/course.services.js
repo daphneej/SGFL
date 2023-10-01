@@ -111,6 +111,11 @@ export const getCoursesInUserCartService = async (userId) => {
   return coursesInCart;
 };
 
+export const getPaymentsService = async () => {
+  const payments = await prisma.coursePayment.findMany();
+  return payments;
+};
+
 export const addCourseToUserCartService = async (courseId, userId) => {
   const { coursesInCart } = await prisma.user.update({
     where: { id: parseInt(userId) },

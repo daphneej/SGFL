@@ -97,6 +97,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
           error={errors?.email}
           register={register("email")}
           type={"email"}
+          autoComplete={"email"}
         />
 
         <InputText
@@ -115,6 +116,7 @@ const UserUpdateFormModal = ({ selectedUser, modalOpen, setModalOpen }) => {
           error={errors?.phone}
           register={register("phone")}
           type={"tel"}
+          autoComplete={"tel"}
         />
 
         <SelectField

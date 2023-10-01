@@ -1,11 +1,13 @@
 import { FiBook, FiUserCheck } from "react-icons/fi";
 import { PiUsersFour } from "react-icons/pi";
+import { GiTakeMyMoney } from "react-icons/gi";
+
 import BarChart from "@/components/admins/charts/BarChart";
 import PieChart from "@/components/admins/charts/PieChart";
 import StackedBarChart from "@/components/admins/charts/StackedBarChart";
 import ScatterPlot from "@/components/admins/charts/ScatterPlot";
 
-const DashboardChart = ({ users, categories, courses }) => {
+const DashboardChart = ({ users, categories, courses, payments }) => {
   const cardsData = [
     {
       title: "Utilisateurs",
@@ -26,6 +28,14 @@ const DashboardChart = ({ users, categories, courses }) => {
       ).toFixed(2)} %`,
       numbers: courses?.length || 0,
       icon: <FiBook className="mr-2" size={25} />,
+    },
+    {
+      title: "Paiements",
+      description: `Total montant des paiements : $${payments
+        ?.reduce((total, payment) => total + payment.paymentAmount, 0)
+        .toFixed(2)} US`,
+      numbers: payments?.length || 0,
+      icon: <GiTakeMyMoney className="mr-2" size={25} />,
     },
     {
       title: "Formateurs",

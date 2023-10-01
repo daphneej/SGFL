@@ -93,6 +93,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen, userRole }) => {
           error={errors?.email}
           register={register("email")}
           type={"email"}
+          autoComplete={"email"}
         />
 
         <InputText
@@ -111,6 +112,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen, userRole }) => {
           error={errors?.phone}
           register={register("phone")}
           type={"tel"}
+          autoComplete={"tel"}
         />
 
         <SelectField
@@ -130,6 +132,7 @@ const UserAddFormModal = ({ modalOpen, setModalOpen, userRole }) => {
           error={errors?.password}
           register={register("password")}
           type={"password"}
+          autoComplete={"current-password"}
         />
 
         {!userRole && (

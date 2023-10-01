@@ -9,6 +9,8 @@ import { MdOutlineSpaceDashboard, MdOutlineCategory } from "react-icons/md";
 
 import { RiMenuFoldLine } from "react-icons/ri";
 
+import { GiTakeMyMoney } from "react-icons/gi";
+
 import useAuth from "@/hooks/users/useAuth";
 
 import useUserStore from "@/zustand/useUserStore";
@@ -115,6 +117,15 @@ const AsideDashboard = ({
             label={"Etudiants"}
             icon={<PiStudentThin className="mr-2" size={20} />}
             menuItem={"Students"}
+            selectedMenuItem={selectedMenuItem}
+            setSelectedMenuItem={setSelectedMenuItem}
+          />
+
+          <MenuItem
+            setMenuOpen={setMenuOpen}
+            label={"Ventes"}
+            icon={<GiTakeMyMoney className="mr-2" size={20} />}
+            menuItem={"Payments"}
             selectedMenuItem={selectedMenuItem}
             setSelectedMenuItem={setSelectedMenuItem}
           />

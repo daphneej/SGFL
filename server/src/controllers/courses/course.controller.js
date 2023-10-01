@@ -13,6 +13,7 @@ import {
   getCourseByIdService,
   getCoursesService,
   getUserCoursesService,
+  getPaymentsService,
   addCourseToUserCartService,
   removeCourseToUserCartService,
   getPublishedCoursesService,
@@ -104,6 +105,11 @@ export const getUserCourses = asyncHandler(async (req, res) => {
   const courses = await getUserCoursesService(id);
 
   res.status(200).json(courses);
+});
+
+export const getPayments = asyncHandler(async (req, res) => {
+  const payments = await getPaymentsService();
+  res.status(200).json(payments);
 });
 
 export const getCourseInUserCart = asyncHandler(async (req, res) => {

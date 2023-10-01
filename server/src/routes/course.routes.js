@@ -9,6 +9,7 @@ import {
   getCourses,
   getUserCourses,
   getPublishedCourses,
+  getPayments,
   updateCourse,
   checkoutCourseInCart,
   processPaymentSession,
@@ -46,6 +47,7 @@ router.post("/cart-add", protectUserRoutes, addCourseToUserCart);
 router.post("/cart-remove", protectUserRoutes, removeCourseToUserCart);
 router.get("/paid", protectUserRoutes, getUserCourses);
 router.post("/checkout", protectUserRoutes, checkoutCourseInCart);
+router.get("/payments", protectUserRoutes, protectAdminRoutes, getPayments);
 router.get("/session/process/:sessionId", processPaymentSession);
 router.get("/session/cancel/:sessionId", cancelPaymentSession);
 router.get("/:id", protectUserRoutes, getCourse);

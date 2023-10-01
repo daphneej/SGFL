@@ -15,7 +15,6 @@ import UserUpdateFormModal from "@/components/admins/users/UserUpdateFormModal";
 import UserViewModal from "@/components/admins/users/UserViewModal";
 
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import { useEffect } from "react";
 
 const COLUMNS = [
   { label: "ID", key: "id" },
