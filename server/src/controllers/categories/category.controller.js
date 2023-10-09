@@ -24,7 +24,7 @@ export const createCategory = asyncHandler(async (req, res) => {
     throw new Error("La catégorie existe déjà.");
   }
 
-  const createdCategory = await createCategoryService(req.body);
+  const createdCategory = await createCategoryService(name);
 
   if (!createdCategory) {
     res.status(500);
